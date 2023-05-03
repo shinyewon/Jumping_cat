@@ -12,12 +12,14 @@ using namespace sf;
 
 // 필요한 객체와 기능을 생각해보기(어떤 클래스, 어떤 변수, 어떤 함수 ?)
 //스테이지 클래스
-class stage
+class Stage
 {
 private:
-
+	//위치좌표, 크기
 public:
-
+	//생성자, 소멸자 
+	//위치, 크기 등 setter/getter
+	
 };
 
 //발사할 고양이 클래스
