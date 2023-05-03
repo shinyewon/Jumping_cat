@@ -67,24 +67,26 @@ public:
 
 
 //땅 클래스
-class land
+class Land
 {
 private:
 	//위치좌표,크기
 public:
 	//생성자,소멸자
 	//위치좌표,크기
-	//통조림이 땅에 떨어졌을때 점수 부여?
+	//통조림이 땅에 떨어졌을때 점수 부여? or 그냥 고양이와 통조림이 충돌하면 점수 부여
 };
 
 //점수 클래스
-class score
+class Score
 {
 private:
 	//현재점수
 	//최고점수
+	//위치, 크기(글자 크기 등)
 public:
 	//생성자, 소멸자 
+	//위치, 크기 등 setter/getter
 	//현재점수 반환
 	//현재점수 업데이트
 	//최고점수 반환 
@@ -92,7 +94,7 @@ public:
 };
 
 //별 클래스
-class star
+class Star
 {
 private:
 	//현재 별 개수
