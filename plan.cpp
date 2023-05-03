@@ -1,14 +1,25 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <stdlib.h>
+#include <string>
+#include <cmath>
 #include <math.h>
 #include <vector>
 #include <time.h>
+#include <stdlib.h>
 
 using namespace std;
 using namespace sf;
 
 // 필요한 객체와 기능을 생각해보기(어떤 클래스, 어떤 변수, 어떤 함수 ?)
+//스테이지 클래스
+class stage
+{
+private:
+
+public:
+
+};
+
 //발사할 고양이 클래스
 class Jumping_Cat
 {
@@ -38,7 +49,7 @@ public:
   //위치좌표, 크기 setter/getter
 };
 
-//장애물1 클래스
+//장애물1 클래스(츄르로 해도 괜찮을 듯)
 class Obstacle1
 {
 private:
