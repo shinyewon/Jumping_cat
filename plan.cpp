@@ -150,3 +150,37 @@ public:
 	//생성자, 소멸자 
 	//위치, 크기, 레벨, 별개수 setter/getter
 };
+
+int main()
+{
+	// 창 생성
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Jumping cat");
+
+	// 새 그래픽 스프라이트 생성
+	sf::Texture catTexture;
+	catTexture.loadFromFile("cat.png");
+	sf::Sprite catSprite(catTexture);
+
+	// 새 위치 설정
+	catSprite.setPosition(400, 300);
+
+	while (window.isOpen())
+	{
+		// 이벤트 처리
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+		// 게임 로직
+
+		// 그리기
+		window.clear();
+		window.draw(catSprite);
+		window.display();
+	}
+
+	return 0;
+}

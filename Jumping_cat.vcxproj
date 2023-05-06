@@ -112,7 +112,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\User\Desktop\예원\오픈소스\SFML-2.5.0-windows-vc15-64-bit\SFML-2.5.0\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>self-audio-d.lib;self-graphics-d.lib;self-main-d.lib;self-network-d.lib;self-system-d.lib;self-window-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-audio-d.lib;sfml-graphics-d.lib;sfml-main-d.lib;sfml-network-d.lib;sfml-system-d.lib;sfml-window-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
