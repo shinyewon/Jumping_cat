@@ -42,6 +42,19 @@ public:
 	//이동(move)
 };
 
+//고양이를 잡고 있는 사람 클래스
+class Slingshot_Man
+{
+private:
+  //변수(필드)
+  //위치좌표, 크기
+  
+public:
+  //함수(메소드)
+  //생성자, 소멸자?
+  //위치좌표, 크기 setter/getter
+};
+
 //통조림 클래스
 class Canned_Food
 {
