@@ -119,6 +119,7 @@ public:
 class Star
 {
 private:
+	//위치, 크기
 	//현재 별 개수
 	//최대 별 개수
 public:

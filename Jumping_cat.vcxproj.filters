@@ -19,9 +19,4 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\cat.png">
-      <Filter>소스 파일</Filter>
-    </Image>
-  </ItemGroup>
 </Project>
