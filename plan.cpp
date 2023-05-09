@@ -33,7 +33,7 @@ public:
 //포물선 클래스
 class Arc
 {
-    //각도와 파워에 따라 포물선 조절(*파워게이지 따로 안 만들어도 됨)
+    	//각도와 파워에 따라 포물선 조절(*파워게이지 따로 안 만들어도 됨)
 private:
 	//위치좌표, 크기, 각도
 public:
@@ -175,7 +175,7 @@ public:
 	//위치, 크기, 레벨, 별개수 setter/getter
 };
 
-int main()
+int main() //위에서 using namespace sf 를 써줬기 때문에 sf:: <- 필요 없음
 {
 	// 창 생성
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Jumping cat");
