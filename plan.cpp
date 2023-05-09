@@ -175,15 +175,15 @@ public:
 	//위치, 크기, 레벨, 별개수 setter/getter
 };
 
-int main() //위에서 using namespace sf 를 써줬기 때문에 sf:: <- 필요 없음
+int main() 
 {
 	// 창 생성
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Jumping cat");
+	RenderWindow window(VideoMode(800, 600), "Jumping cat");
 
 	// 새 그래픽 스프라이트 생성
-	sf::Texture catTexture;
+	Texture catTexture;
 	catTexture.loadFromFile("cat.png");
-	sf::Sprite catSprite(catTexture);
+	Sprite catSprite(catTexture);
 
 	// 새 위치 설정
 	catSprite.setPosition(400, 300);
@@ -191,10 +191,10 @@ int main() //위에서 using namespace sf 를 써줬기 때문에 sf:: <- 필요
 	while (window.isOpen())
 	{
 		// 이벤트 처리
-		sf::Event event;
+		Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			if (event.type == Event::Closed)
 				window.close();
 		}
 
