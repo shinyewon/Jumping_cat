@@ -147,6 +147,36 @@ public:
 	//별 최대 개수 업데이트
 };
 
+//발사횟수 클래스
+class Jump_number
+{
+private:
+	//최대 발사 횟수
+	//남은 발사 횟수
+	//위치,크기 
+public:
+	//생성자,소멸자 
+	//위치, 크기, 최대 발사 횟수, 남은 발사 횟수 setter/getter
+
+}
+
+//메뉴 클래스
+class Menu
+{
+	// 재생, 일시정지, 다시 시작, 소리조절 등
+private:
+	//위치, 크기
+	//현재상태(플레이중, 일시정지)
+	//소리크기
+public:
+	//생성자,소멸자
+	//위치, 크기, 현재상태 ,소리 크기 setter/getter
+	//다시시작요청
+	//상태변환시 visual,sound effect
+
+
+}
+
 //+ 물체 충돌 감지 함수(직사각형 2개 인자로 받고 충돌이 일어났는지 판단하여 boolean 값 반환)
 //sfml의 Rect class 이용
 bool checkCollision(const FloatRect& rect1, const FloatRect& rect2)
