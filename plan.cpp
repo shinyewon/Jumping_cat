@@ -15,25 +15,42 @@ using namespace sf;
 //발사할 고양이 클래스
 class Jumping_Cat
 {
-  //직사각형으로 구현하면 좋을 듯
-private:
-  //변수(필드)
-  //위치좌표, 크기, 각도, 파워(속도?, 가속도?), 공격력(파워와 같을 수 있음, 장애물을 파괴하기 위함)
-  //고양이의 능력(시간 여유 시 구현, 일정 스테이지 이상 클리어 시 새로운 고양이를 준다, 고양이별로 각자의 능력을 가짐, 충돌 전 화면을 탭하면 고양이의 능력이 발현(ex-분신술))
-  //-> 기본 고양이를 부모 클래스로 해서 여러 능력을 가진 고양이들을 상속으로 구현
+	//직사각형으로 구현
+	RectangleShape rect;
+public:
+	double posX; //왼쪽 아래 x좌표
+	double posY; //왼쪽 아래 y좌표
+	double width;
+	double height;
+	double angle;
+	double power; //많이 당길수록 파워 증가 -> 포물선이 길어진다
+	double velocity;
+	//공격력(파워와 같을 수 있음, 장애물을 파괴하기 위함)
+    //고양이의 능력(시간 여유 시 구현, 일정 스테이지 이상 클리어 시 새로운 고양이를 준다, 고양이별로 각자의 능력을 가짐, 충돌 전 클릭을 하면 고양이의 능력이 발현(ex-분신술))
+    //-> 기본 고양이를 부모 클래스로 해서 여러 능력을 가진 고양이들을 상속으로 구현
 public: 
-  //함수(메소드)
-  //생성자, 소멸자?
-  //위치좌표, 크기, 각도, 파워(속도?, 가속도?), 공격력 setter/getter
-  //이동(move)
-  //고양이 크기 조절(마우스로 당기면 늘어나도록 떼면 줄어들도록)(크기 setter/getter랑 같을 수도)
-  //고양이 각도 조절(마우스 위치에 따라서 변경)(각도 setter/getter랑 같을 수도)
+	//함수(메소드)
+    //생성자
+	Jumping_Cat() {
+		posX = 100;
+		posY = 200;
+		width = 20;
+		height = 8;
+		angle = 45;
+		power = 0;
+		velocity = 2;
+	}
+	//소멸자
+    //위치좌표, 크기, 각도, 파워(속도?, 가속도?), 공격력 setter/getter
+    //이동(move)
+    //고양이 크기 조절(마우스로 당기면 늘어나도록 떼면 줄어들도록)(크기 setter/getter랑 같을 수도)
+    //고양이 각도 조절(마우스 위치에 따라서 변경)(각도 setter/getter랑 같을 수도)
 };
 
 //포물선 클래스
 class Arc
 {
-    	//각도와 파워에 따라 포물선 조절(*파워게이지 따로 안 만들어도 됨)
+	//각도와 파워에 따라 포물선 조절(*파워게이지 따로 안 만들어도 됨)
 private:
 	//위치좌표, 크기, 각도
 public:
@@ -76,7 +93,9 @@ class Obstacle1
   //직사각형으로 구현하면 좋을 듯
 private:
   //변수(필드)
-  //위치좌표, 크기, 장애물과 충돌했을때 장애물의 움직임(각도, 속도/가속도(중력가속도?), 등)->장애물이 움직이지 않고 그냥 장애물이 바로 파괴되는 방식으로 할지 논의 필요
+  //위치좌표, 크기, 
+  // 장애물과 충돌했을때 장애물의 움직임(각도, 속도/가속도(중력가속도?), 등)
+  //->장애물이 움직이지 않고 그냥 장애물이 바로 파괴되는 방식으로 할지 논의 필요
   //+강도(장애물의 체력)
   
 public:
@@ -181,14 +200,6 @@ int main()
 	// 창 생성
 	RenderWindow window(VideoMode(800, 600), "Jumping cat");
 
-	// 새 그래픽 스프라이트 생성
-	Texture catTexture;
-	catTexture.loadFromFile("cat.png");
-	Sprite catSprite(catTexture);
-
-	// 새 위치 설정
-	catSprite.setPosition(400, 300);
-
 	while (window.isOpen())
 	{
 		// 이벤트 처리
@@ -203,7 +214,6 @@ int main()
 
 		// 그리기
 		window.clear();
-		window.draw(catSprite);
 		window.display();
 	}
 
