@@ -177,8 +177,6 @@ public:
 	//위치, 크기, 현재상태 ,소리 크기 setter/getter
 	//다시시작요청
 	//상태변환시 visual,sound effect
-
-
 }
 
 //+ 물체 충돌 감지 함수(직사각형 2개 인자로 받고 충돌이 일어났는지 판단하여 boolean 값 반환)
