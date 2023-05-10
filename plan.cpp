@@ -199,6 +199,7 @@ int main()
 {
 	// 창 생성
 	RenderWindow window(VideoMode(800, 600), "Jumping cat");
+	window.setFramerateLimit(100);
 
 	while (window.isOpen())
 	{
