@@ -180,6 +180,7 @@ int main()
 {
 	// 창 생성
 	RenderWindow window(VideoMode(800, 600), "Jumping cat");
+	window.setFramerateLimit(100);
 
 	// 새 그래픽 스프라이트 생성
 	Texture catTexture;
