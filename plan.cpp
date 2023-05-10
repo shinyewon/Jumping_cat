@@ -45,6 +45,7 @@ public:
     //이동(move)
     //고양이 크기 조절(마우스로 당기면 늘어나도록 떼면 줄어들도록)(크기 setter/getter랑 같을 수도)
     //고양이 각도 조절(마우스 위치에 따라서 변경)(각도 setter/getter랑 같을 수도)
+    //충돌 시 visual,sound effect
 };
 
 //포물선 클래스
@@ -83,7 +84,9 @@ private:
 public:
   //함수(메소드)
   //생성자, 소멸자?
+  //충돌했을때 통조림의 움직임(각도, 속도/가속도 등)
   //위치좌표, 크기 setter/getter
+  //충돌, 획득 시 visual,sound effect
 };
 
 //장애물1 클래스(츄르로 해도 괜찮을 듯)
@@ -104,6 +107,7 @@ public:
   //위치좌표, 크기, 강도, 등 setter/getter
   //이동(move)?
   //데미지 판정(고양이의 공격력으로 장애물의 체력 감소 적용)
+  //충돌,데미지 부여,파괴 시 visual,sound effect
 };
 
 
