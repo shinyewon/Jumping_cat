@@ -114,7 +114,7 @@ public:
 };
 
 
-//바닥 클래스
+//바닥 클래스 -> 바닥을 스프라이트로 만들려면 Sprite 클래스를 상속받아야 하나?
 class Floor
 {
 private:
@@ -122,7 +122,7 @@ private:
 public:
 	//생성자,소멸자
 	//위치좌표,크기
-	//통조림이 땅에 떨어졌을때 점수 부여? or 그냥 고양이와 통조림이 충돌하면 점수 부여
+	//고양이가 바닥에 닿으면 게임 오버
 };
 
 //점수 클래스
@@ -234,8 +234,13 @@ int main()
 {
 	// 창 생성
 	RenderWindow window(VideoMode(800, 600), "Jumping cat");
-	window.setFramerateLimit(100);
+	window.setFramerateLimit(60);	//프레임 정해주기
 
+	// 바닥 스프라이트 생성
+	Texture floorTexture;
+	floorTexture.loadFromFile("images/floor.png");
+	Sprite floorSprite(floorTexture);
+	
 	while (window.isOpen())
 	{
 		// 이벤트 처리
