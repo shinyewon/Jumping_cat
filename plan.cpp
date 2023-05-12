@@ -15,9 +15,10 @@ using namespace sf;
 //발사할 고양이 클래스
 class Jumping_Cat
 {
+
+private:
 	//직사각형으로 구현
-	RectangleShape rect;
-public:
+	RectangleShape jumping_cat;
 	double posX; //왼쪽 아래 x좌표
 	double posY; //왼쪽 아래 y좌표
 	double width;
@@ -29,7 +30,7 @@ public:
     //-> 기본 고양이를 부모 클래스로 해서 여러 능력을 가진 고양이들을 상속으로 구현
 public: 
 	//함수(메소드)
-    //생성자
+	//생성자
 	Jumping_Cat() {
 		posX = 100;
 		posY = 200;
@@ -39,8 +40,16 @@ public:
 		power = 0;
 		velocity = 2;
 	}
+	
+
 	//소멸자
-    //위치좌표, 크기, 각도, 파워(속도?, 가속도?)
+    
+	//직사각형 반환
+	RectangleShape getJumpingCat()
+	{
+		return jumping_cat;
+	}
+	//위치좌표, 크기, 각도, 파워(속도?, 가속도?), 공격력 setter/getter
     //이동(move)
     //고양이 각도 조절(마우스 위치에 따라서 변경)(각도 setter/getter랑 같을 수도)
     //충돌 시 visual,sound effect
