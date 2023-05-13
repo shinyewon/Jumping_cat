@@ -12,7 +12,7 @@ using namespace sf;
 
 // 필요한 객체와 기능을 생각해보기(어떤 클래스, 어떤 변수, 어떤 함수 ?)
 
-//발사할 고양이 클래스
+//점프할 고양이 클래스
 class Jumping_Cat
 {
 
@@ -51,6 +51,7 @@ public:
 	}
 	//위치좌표, 크기, 각도, 파워(속도?, 가속도?), 공격력 setter/getter
     //이동(move)
+	//고양이 크기 조절(마우스로 당기면 늘어나도록 떼면 줄어들도록)(크기 setter/getter랑 같을 수도)
     //고양이 각도 조절(마우스 위치에 따라서 변경)(각도 setter/getter랑 같을 수도)
     //충돌 시 visual,sound effect
 };
@@ -154,17 +155,69 @@ public:
 	//별 최대 개수 업데이트
 };
 
-//발사횟수 클래스
+//점프횟수 클래스
 class Jump_number
 {
 private:
-	//최대 발사 횟수
-	//남은 발사 횟수
-	//위치,크기 
+	int maxJump;  //최대 점프 횟수
+	int leftJump; //남은 점프 횟수
+	int posX;
+	int posY;
+	int size;
 public:
-	//생성자,소멸자 
-	//위치, 크기, 최대 발사 횟수, 남은 발사 횟수 setter/getter
+	Jump_number() {  //기본생성자
+		maxJump = 3;
+		leftJump = 3;
+		posX = 0;
+		posY = 0;
+		size = 20;
+	}
 
+	Jump_number(int mJump, int lJump, int x, int y, int s) {
+		maxJump = mJump;
+		leftJump = lJump;
+		posX = x;
+		posY = y;
+		size = s;
+	}
+
+	//최대 점프 횟수, 남은 점프 횟수, 위치, 크기 setter/getter
+	void setMaxJump(int mJump) {
+		maxJump = mJump;
+	}
+	int getMaxJump() {
+		return maxJump;
+	}
+
+	void setLeftJump(int lJump) {
+		leftJump = lJump;
+	}
+	int getLeftJump() {
+		return leftJump;
+	}
+
+	void setPosition(int x, int y) {
+		posX = x;
+		posY = y;
+	}
+	int getPosX() {
+		return posX;
+	}
+	int getPosY() {
+		return posY;
+	}
+
+	void setSize(int s) {
+		size = s;
+	}
+	int getSize() {
+		return size;
+	}
+
+	//점프 횟수 감소 함수
+	void reduceJump() {
+		leftJump -= 1;
+	}
 };
 
 //메뉴 클래스
@@ -179,7 +232,7 @@ public:
 	//생성자,소멸자
 	//위치, 크기, 현재상태 ,소리 크기 setter/getter
 	//다시시작요청
-	//상태변환시 visual,sound effect
+	//상태변환시 visual,sound effect(sfml 이용해 구현)
 };
 
 //+ 물체 충돌 감지 함수(직사각형 2개 인자로 받고 충돌이 일어났는지 판단하여 boolean 값 반환)
@@ -241,8 +294,24 @@ int main()
 	floorTexture.loadFromFile("images/floor.png");
 	Sprite floorSprite(floorTexture);
 	
+	//남은 점프 횟수 표시할 text 설정
+	Jump_number jn;
+	Text text;
+	Font font;
+
+	if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
+		return 42; // Robust error handling!
+	}
+
+	text.setFont(font);
+	text.setString("Chance: " + to_string(jn.getLeftJump()));
+	text.setCharacterSize(jn.getSize());
+	text.setFillColor(Color::Yellow);
+	text.setPosition(jn.getPosX(), jn.getPosY());
+
 	while (window.isOpen())
 	{
+
 		// 이벤트 처리
 		Event event;
 		while (window.pollEvent(event))
@@ -255,6 +324,9 @@ int main()
 
 		// 그리기
 		window.clear();
+
+		window.draw(text);
+
 		window.display();
 	}
 
