@@ -91,7 +91,7 @@ private:
   
 public:
   //함수(메소드)
-  //생성자, 소멸자?
+  //생성자, 소멸자
   //충돌 시 획득
   //위치좌표, 크기 setter/getter
   //충돌, 획득 시 visual,sound effect
@@ -109,9 +109,9 @@ private:
   
 public:
   //함수(메소드)
-  //생성자, 소멸자?
+  //생성자, 소멸자
   //위치좌표, 크기, 강도, 등 setter/getter
-  //충돌 visual,sound effect
+  //충돌시 visual,sound effect
 };
 
 
@@ -153,9 +153,9 @@ private:
 	//현재 별 개수
 	//최대 별 개수
 public:
-	//현재 별 개수 반환
+	//현재 별 개수 setter/getter
 	//일정 점수 이상을 획득할 때마다 별 하나씩 추가
-	//별 최대 개수 업데이트
+	//별 최대 개수 setter/getter
 };
 
 //점프횟수 클래스
