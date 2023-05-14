@@ -1,5 +1,5 @@
 ﻿  plan.cpp
-C:\Users\User\Desktop\예원\오픈소스\Jumping_cat\plan.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-C:\Users\User\Desktop\예원\오픈소스\Jumping_cat\plan.cpp(310,43): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Desktop\예원\오픈소스\Jumping_cat\plan.cpp(310,29): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Jumping_cat.vcxproj -> C:\Users\User\Desktop\예원\오픈소스\Jumping_cat\x64\Debug\Jumping_cat.exe
+C:\Users\박재성\source\repos\Jumping_cat\plan.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+C:\Users\박재성\source\repos\Jumping_cat\plan.cpp(408,43): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\박재성\source\repos\Jumping_cat\plan.cpp(408,29): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Jumping_cat.vcxproj -> C:\Users\박재성\source\repos\Jumping_cat\x64\Debug\Jumping_cat.exe

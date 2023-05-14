@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <string>
 #include <cmath>
@@ -11,7 +12,8 @@ using namespace std;
 using namespace sf;
 
 // 필요한 객체와 기능을 생각해보기(어떤 클래스, 어떤 변수, 어떤 함수 ?)
-
+void play_sound(const string& filename);
+void delay_ms(int ms);
 //점프할 고양이 클래스
 class Jumping_Cat
 {
@@ -85,17 +87,101 @@ public:
 class Canned_Food
 {
   //직사각형으로 구현하면 좋을 듯
+
 private:
   //변수(필드)
   //위치좌표, 크기
+	int posX;
+	int posY;
+	int size;
   
 public:
   //함수(메소드)
   //생성자, 소멸자
-  //충돌 시 획득
+	Canned_Food()
+	{
+		posX = 50;
+		posY = 50;
+		size = 10;
+    }
+    Canned_Food(int posX, int posY, int size)
+    {
+		this->posX = posX;
+		this->posY = posY;
+		this->size = size;
+    }
   //위치좌표, 크기 setter/getter
-  //충돌, 획득 시 visual,sound effect
+	void setFoodSize()
+	{
+		this->size = size;
+	}
+	int getFoodSize()
+	{
+		return this->size;
+	}
+	void setFoodpos(int posX,int posY)
+	{
+		this->posX = posX;
+		this->posY = posY;
+	}
+	int getFoodposX()
+	{
+		return this->posX;
+	}
+	int getFoodposY()
+	{
+		return this->posY;
+	}
+  
+  //충돌 시 획득
+	void getCannedFood(int size)
+	{
+		//사이즈별로 점수부여
+		//ex) size 10 = 1000점
+		//    size 20 = 3000점
+		//    size 40 = 6000점 ...
+		if (size == 10) {
+			// getScore(1000);
+		}
+		else if (size == 20) {
+			// getScore(3000);
+		}
+		else if (size == 40) {
+			// getScore(6000);
+		}
+
+  }
+
+   //충돌, 획득 시 visual,sound effect
+	void getCannedFoodSound()
+	{
+		play_sound("./Data/Sound/676402__cjspellsfish__score-2.wav");
+	}
+
+	//획득시 제거
 };
+
+//사운드 재생 함수
+void play_sound(const string& filename)
+{
+	SoundBuffer buffer;
+
+	if (!buffer.loadFromFile(filename))
+	{
+		cout << "loadFromFile 에러" << endl;
+		return;
+	}
+	Sound sound;
+	sound.setBuffer(buffer);
+	sound.play();
+	delay_ms(1500);
+}
+
+void delay_ms(int ms)
+{
+	Clock Timer;
+	while (Timer.getElapsedTime().asMilliseconds() < ms);
+}
 
 //장애물1 클래스(새장,전등,컵,그릇,다른 고양이 등)
 class Obstacle1
@@ -296,11 +382,20 @@ int main()
 	Texture floorTexture;
 	floorTexture.loadFromFile("images/floor.png");
 	Sprite floorSprite(floorTexture);
-	
+
+	//캔 스프라이트 생성
+	Texture canTexture;
+	canTexture.loadFromFile("./Data/Image/canned_food.jpg");
+	Vector2u textureSize = canTexture.getSize();
+	Sprite canSprite(canTexture);
+	canSprite.setScale((float)100 / textureSize.x, (float)100/textureSize.y);
+	canSprite.setPosition(100, 100);
+
 	//남은 점프 횟수 표시할 text 설정
 	Jump_number jn;
 	Text text;
 	Font font;
+
 
 	if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
 		return 42; // Robust error handling!
@@ -329,8 +424,13 @@ int main()
 		window.clear();
 
 		window.draw(text);
+		window.draw(canSprite);
 
 		window.display();
+
+		//사운드 수정중...
+		Canned_Food can1;
+		can1.getCannedFoodSound();
 	}
 
 	return 0;
