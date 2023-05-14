@@ -17,7 +17,6 @@ void delay_ms(int ms);
 //점프할 고양이 클래스
 class Jumping_Cat
 {
-
 private:
 	//직사각형으로 구현
 	RectangleShape jumping_cat;
@@ -31,7 +30,6 @@ private:
     //고양이의 능력(시간 여유 시 구현, 일정 스테이지 이상 클리어 시 새로운 고양이를 준다, 고양이별로 각자의 능력을 가짐, 충돌 전 클릭을 하면 고양이의 능력이 발현(ex-분신술))
     //-> 기본 고양이를 부모 클래스로 해서 여러 능력을 가진 고양이들을 상속으로 구현
 public: 
-	//함수(메소드)
 	//생성자
 	Jumping_Cat() {
 		posX = 100;
@@ -45,7 +43,10 @@ public:
 	
 
 	//소멸자
-    
+	~Jumping_Cat() {
+
+	}
+	
 	//직사각형 반환
 	RectangleShape getJumpingCat()
 	{
@@ -268,6 +269,10 @@ public:
 		posX = x;
 		posY = y;
 		size = s;
+	}
+	
+	~Jump_number() {
+
 	}
 
 	//최대 점프 횟수, 남은 점프 횟수, 위치, 크기 setter/getter
