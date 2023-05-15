@@ -207,7 +207,8 @@ class Floor
 {
 private:
 	//위치좌표,크기
-	
+	double posX;
+	double posY;
 public:
 	//생성자,소멸자
 	
