@@ -169,7 +169,7 @@ void play_sound(const string& filename)
 
 	if (!buffer.loadFromFile(filename))
 	{
-		cout << "loadFromFile 에러" << endl;
+		cout << "sound loadFromFile error" << endl;
 		return;
 	}
 	Sound sound;
@@ -197,7 +197,7 @@ private:
 public:
   //함수(메소드)
   //생성자, 소멸자
-  //위치좌표, 크기, 강도, 등 setter/getter
+  //위치좌표, 크기, 등 setter/getter
   //충돌시 visual,sound effect
 };
 
