@@ -65,6 +65,9 @@ class Arc
 	//각도와 파워에 따라 포물선 조절(*파워게이지 따로 안 만들어도 됨)
 private:
 	//위치좌표, 크기, 각도
+	double posX;
+	double posY;
+	double size;
 public:
 	//생성자, 소멸자
 	//위치좌표, 크기, 각도 setter/getter
@@ -209,6 +212,7 @@ private:
 	//위치좌표,크기
 	double posX;
 	double posY;
+	double size;
 public:
 	//생성자,소멸자
 	
@@ -224,6 +228,9 @@ private:
 	//현재점수
 	//최고점수
 	//위치, 크기(글자 크기 등)
+	double posX;
+	double posY;
+	double size;
 public:
 	//생성자, 소멸자 
 	//위치, 크기 등 setter/getter
