@@ -64,12 +64,20 @@ class Arc
 {
 	//각도와 파워에 따라 포물선 조절(*파워게이지 따로 안 만들어도 됨)
 private:
+	CircleShape arc;
 	//위치좌표, 크기, 각도
-	double posX;
-	double posY;
-	double size;
+	float posX;
+	float posY;
+	float radius;
 public:
 	//생성자, 소멸자
+	
+	//
+	CircleShape getArc()
+	{
+		return arc;
+	}
+	
 	//위치좌표, 크기, 각도 setter/getter
 	//이동(move)
 };
@@ -210,9 +218,9 @@ class Floor
 {
 private:
 	//위치좌표,크기
-	double posX;
-	double posY;
-	double size;
+	float posX;
+	float posY;
+	float size;
 public:
 	//생성자,소멸자
 	
@@ -228,9 +236,9 @@ private:
 	//현재점수
 	//최고점수
 	//위치, 크기(글자 크기 등)
-	double posX;
-	double posY;
-	double size;
+	float posX;
+	float posY;
+	float size;
 public:
 	//생성자, 소멸자 
 	//위치, 크기 등 setter/getter
