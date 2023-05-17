@@ -95,20 +95,20 @@ class Canned_Food
 private:
   //변수(필드)
   //위치좌표, 크기
-	int posX;
-	int posY;
-	int size;
+	double posX;
+	double posY;
+	double size;
   
 public:
   //함수(메소드)
   //생성자, 소멸자
 	Canned_Food()
 	{
-		posX = 50;
-		posY = 50;
-		size = 10;
+		posX = 50.0;
+		posY = 50.0;
+		size = 10.0;
     }
-    Canned_Food(int posX, int posY, int size)
+    Canned_Food(double posX, double posY, double size)
     {
 		this->posX = posX;
 		this->posY = posY;
@@ -119,38 +119,38 @@ public:
 	{
 		this->size = size;
 	}
-	int getFoodSize()
+	double getFoodSize()
 	{
 		return this->size;
 	}
-	void setFoodpos(int posX,int posY)
+	void setFoodpos(double posX,double posY)
 	{
 		this->posX = posX;
 		this->posY = posY;
 	}
-	int getFoodposX()
+	double getFoodposX()
 	{
 		return this->posX;
 	}
-	int getFoodposY()
+	double getFoodposY()
 	{
 		return this->posY;
 	}
   
   //충돌 시 획득
-	void getCannedFood(int size)
+	void getCannedFood(double size)
 	{
 		//사이즈별로 점수부여
 		//ex) size 10 = 1000점
 		//    size 20 = 3000점
 		//    size 40 = 6000점 ...
-		if (size == 10) {
+		if (size == 10.0) {
 			// getScore(1000);
 		}
-		else if (size == 20) {
+		else if (size == 20.0) {
 			// getScore(3000);
 		}
-		else if (size == 40) {
+		else if (size == 40.0) {
 			// getScore(6000);
 		}
 
