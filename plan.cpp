@@ -403,6 +403,22 @@ int main()
 	Texture floorTexture;
 	floorTexture.loadFromFile("images/floor.png");
 	Sprite floorSprite(floorTexture);
+	
+	//고양이 스프라이트 생성 수정중...
+	Texture catTexture;
+	catTexture.loadFromFile("./Data/Image/cat.png");
+	Vector2u catTextureSize = catTexture.getSize();
+	Sprite catSprite(catTexture);
+	catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
+	catSprite.setPosition(200, 200);
+
+	//사람 스프라이트 생성 수정중...
+	Texture manTexture;
+	manTexture.loadFromFile("./Data/Image/man.jpg");
+	Vector2u manTextureSize = manTexture.getSize();
+	Sprite manSprite(manTexture);
+	manSprite.setScale((float)100 / manTextureSize.x, (float)100 / manTextureSize.y);
+	manSprite.setPosition(0, 0);
 
 	//캔 스프라이트 생성
 	Texture canTexture;
