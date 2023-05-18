@@ -71,6 +71,15 @@ private:
 	float radius;
 public:
 	//생성자, 소멸자
+	Arc(float x, float y, float r)
+	{
+		posX = x;
+		posY = y;
+		radius = r;
+
+		arc.setPosition(posX, posY);
+		arc.setRadius(radius);
+	}
 	
 	//
 	CircleShape getArc()
@@ -223,6 +232,12 @@ private:
 	float size;
 public:
 	//생성자,소멸자
+	Floor(float x, float y, float s)
+	{
+		posX = x;
+		posY = y;
+		size = s;
+	}
 	
 	//위치좌표,크기
 	
@@ -240,7 +255,14 @@ private:
 	float posY;
 	float size;
 public:
-	//생성자, 소멸자 
+	//생성자, 소멸자
+	Score(float x, float y, float s)
+	{
+		posX = x;
+		posY = y;
+		size = s;
+	}
+	
 	//위치, 크기 등 setter/getter
 	//현재점수 반환
 	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
