@@ -11,17 +11,17 @@
 using namespace std;
 using namespace sf;
 
-// 필요한 객체와 기능을 생각해보기(어떤 클래스, 어떤 변수, 어떤 함수 ?)
 void play_sound(const string& filename);
 void delay_ms(int ms);
+
 //점프할 고양이 클래스
 class Jumping_Cat
 {
 private:
 	//직사각형으로 구현
 	RectangleShape jumping_cat;
-	double posX; //왼쪽 아래 x좌표
-	double posY; //왼쪽 아래 y좌표
+	double posX; //왼쪽 위 x좌표
+	double posY; //왼쪽 위 y좌표
 	double width;
 	double height;
 	double angle;
@@ -41,7 +41,6 @@ public:
 		velocity = 2;
 	}
 	
-
 	//소멸자
 	~Jumping_Cat() {
 
@@ -58,6 +57,7 @@ public:
     //고양이 각도 조절(마우스 위치에 따라서 변경)(각도 setter/getter랑 같을 수도)
     //충돌 시 visual,sound effect
 };
+
 
 //포물선 클래스
 class Arc
@@ -80,19 +80,6 @@ public:
 	
 	//위치좌표, 크기, 각도 setter/getter
 	//이동(move)
-};
-
-//고양이를 잡고 있는 사람 클래스
-class Slingshot_Man
-{
-private:
-  //변수(필드)
-  //위치좌표, 크기
-  
-public:
-  //함수(메소드)
-  //생성자, 소멸자?
-  //위치좌표, 크기 setter/getter
 };
 
 //통조림 클래스
@@ -403,8 +390,8 @@ int main()
 	Texture floorTexture;
 	floorTexture.loadFromFile("images/floor.png");
 	Sprite floorSprite(floorTexture);
-	
-	//고양이 스프라이트 생성 수정중...
+
+	//고양이 스프라이트 생성
 	Texture catTexture;
 	catTexture.loadFromFile("./Data/Image/cat.png");
 	Vector2u catTextureSize = catTexture.getSize();
@@ -412,9 +399,9 @@ int main()
 	catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
 	catSprite.setPosition(200, 200);
 
-	//사람 스프라이트 생성 수정중...
+	//사람 스프라이트 생성
 	Texture manTexture;
-	manTexture.loadFromFile("./Data/Image/man.jpg");
+	manTexture.loadFromFile("./Data/Image/man.png");
 	Vector2u manTextureSize = manTexture.getSize();
 	Sprite manSprite(manTexture);
 	manSprite.setScale((float)100 / manTextureSize.x, (float)100 / manTextureSize.y);
@@ -453,6 +440,29 @@ int main()
 		{
 			if (event.type == Event::Closed)
 				window.close();
+
+			int x = 0, x2 = 0, y = 0, y2 = 0;
+			if (event.type == Event::MouseButtonPressed)
+			{
+				if (event.mouseButton.button == Mouse::Left)
+				{
+					x = event.mouseButton.x;
+					y = event.mouseButton.y;
+				}
+			}
+			if (event.type == Event::MouseButtonReleased)
+			{
+				if (event.mouseButton.button == Mouse::Left)
+				{
+					x2 = event.mouseButton.x;
+					y2 = event.mouseButton.y;
+				}
+			}
+			// 드래그를 너무 조금했을 때는 무시
+			if (abs(x - x2) <= 20 && abs(y - y2) <= 20) { break; }
+			else {
+				cout << "";
+			}
 		}
 
 		// 게임 로직
@@ -461,6 +471,7 @@ int main()
 		window.clear();
 
 		window.draw(text);
+		window.draw(catSprite);
 		window.draw(canSprite);
 
 		window.display();
