@@ -17,7 +17,6 @@ void delay_ms(int ms);
 //점프할 고양이 클래스
 class Jumping_Cat
 {
-
 private:
 	//직사각형으로 구현
 	RectangleShape jumping_cat;
@@ -31,7 +30,6 @@ private:
     //고양이의 능력(시간 여유 시 구현, 일정 스테이지 이상 클리어 시 새로운 고양이를 준다, 고양이별로 각자의 능력을 가짐, 충돌 전 클릭을 하면 고양이의 능력이 발현(ex-분신술))
     //-> 기본 고양이를 부모 클래스로 해서 여러 능력을 가진 고양이들을 상속으로 구현
 public: 
-	//함수(메소드)
 	//생성자
 	Jumping_Cat() {
 		posX = 100;
@@ -45,7 +43,10 @@ public:
 	
 
 	//소멸자
-    
+	~Jumping_Cat() {
+
+	}
+	
 	//직사각형 반환
 	RectangleShape getJumpingCat()
 	{
@@ -63,9 +64,29 @@ class Arc
 {
 	//각도와 파워에 따라 포물선 조절(*파워게이지 따로 안 만들어도 됨)
 private:
+	CircleShape arc;
 	//위치좌표, 크기, 각도
+	float posX;
+	float posY;
+	float radius;
 public:
 	//생성자, 소멸자
+	Arc(float x, float y, float r)
+	{
+		posX = x;
+		posY = y;
+		radius = r;
+
+		arc.setPosition(posX, posY);
+		arc.setRadius(radius);
+	}
+	
+	//
+	CircleShape getArc()
+	{
+		return arc;
+	}
+	
 	//위치좌표, 크기, 각도 setter/getter
 	//이동(move)
 };
@@ -91,20 +112,20 @@ class Canned_Food
 private:
   //변수(필드)
   //위치좌표, 크기
-	int posX;
-	int posY;
-	int size;
+	double posX;
+	double posY;
+	double size;
   
 public:
   //함수(메소드)
   //생성자, 소멸자
 	Canned_Food()
 	{
-		posX = 50;
-		posY = 50;
-		size = 10;
+		posX = 50.0;
+		posY = 50.0;
+		size = 10.0;
     }
-    Canned_Food(int posX, int posY, int size)
+    Canned_Food(double posX, double posY, double size)
     {
 		this->posX = posX;
 		this->posY = posY;
@@ -115,38 +136,38 @@ public:
 	{
 		this->size = size;
 	}
-	int getFoodSize()
+	double getFoodSize()
 	{
 		return this->size;
 	}
-	void setFoodpos(int posX,int posY)
+	void setFoodpos(double posX,double posY)
 	{
 		this->posX = posX;
 		this->posY = posY;
 	}
-	int getFoodposX()
+	double getFoodposX()
 	{
 		return this->posX;
 	}
-	int getFoodposY()
+	double getFoodposY()
 	{
 		return this->posY;
 	}
   
   //충돌 시 획득
-	void getCannedFood(int size)
+	void getCannedFood(double size)
 	{
 		//사이즈별로 점수부여
 		//ex) size 10 = 1000점
 		//    size 20 = 3000점
 		//    size 40 = 6000점 ...
-		if (size == 10) {
+		if (size == 10.0) {
 			// getScore(1000);
 		}
-		else if (size == 20) {
+		else if (size == 20.0) {
 			// getScore(3000);
 		}
-		else if (size == 40) {
+		else if (size == 40.0) {
 			// getScore(6000);
 		}
 
@@ -168,7 +189,7 @@ void play_sound(const string& filename)
 
 	if (!buffer.loadFromFile(filename))
 	{
-		cout << "loadFromFile 에러" << endl;
+		cout << "sound loadFromFile error" << endl;
 		return;
 	}
 	Sound sound;
@@ -196,7 +217,7 @@ private:
 public:
   //함수(메소드)
   //생성자, 소멸자
-  //위치좌표, 크기, 강도, 등 setter/getter
+  //위치좌표, 크기, 등 setter/getter
   //충돌시 visual,sound effect
 };
 
@@ -206,9 +227,17 @@ class Floor
 {
 private:
 	//위치좌표,크기
-	
+	float posX;
+	float posY;
+	float size;
 public:
 	//생성자,소멸자
+	Floor(float x, float y, float s)
+	{
+		posX = x;
+		posY = y;
+		size = s;
+	}
 	
 	//위치좌표,크기
 	
@@ -222,8 +251,18 @@ private:
 	//현재점수
 	//최고점수
 	//위치, 크기(글자 크기 등)
+	float posX;
+	float posY;
+	float size;
 public:
-	//생성자, 소멸자 
+	//생성자, 소멸자
+	Score(float x, float y, float s)
+	{
+		posX = x;
+		posY = y;
+		size = s;
+	}
+	
 	//위치, 크기 등 setter/getter
 	//현재점수 반환
 	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
@@ -268,6 +307,10 @@ public:
 		posX = x;
 		posY = y;
 		size = s;
+	}
+	
+	~Jump_number() {
+
 	}
 
 	//최대 점프 횟수, 남은 점프 횟수, 위치, 크기 setter/getter
@@ -382,6 +425,22 @@ int main()
 	Texture floorTexture;
 	floorTexture.loadFromFile("images/floor.png");
 	Sprite floorSprite(floorTexture);
+	
+	//고양이 스프라이트 생성 수정중...
+	Texture catTexture;
+	catTexture.loadFromFile("./Data/Image/cat.png");
+	Vector2u catTextureSize = catTexture.getSize();
+	Sprite catSprite(catTexture);
+	catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
+	catSprite.setPosition(200, 200);
+
+	//사람 스프라이트 생성 수정중...
+	Texture manTexture;
+	manTexture.loadFromFile("./Data/Image/man.jpg");
+	Vector2u manTextureSize = manTexture.getSize();
+	Sprite manSprite(manTexture);
+	manSprite.setScale((float)100 / manTextureSize.x, (float)100 / manTextureSize.y);
+	manSprite.setPosition(0, 0);
 
 	//캔 스프라이트 생성
 	Texture canTexture;
