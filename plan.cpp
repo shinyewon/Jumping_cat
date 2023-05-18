@@ -71,6 +71,15 @@ private:
 	float radius;
 public:
 	//생성자, 소멸자
+	Arc(float x, float y, float r)
+	{
+		posX = x;
+		posY = y;
+		radius = r;
+
+		arc.setPosition(posX, posY);
+		arc.setRadius(radius);
+	}
 	
 	//
 	CircleShape getArc()
@@ -187,15 +196,55 @@ class Obstacle1
 {
   //장애물 여러 개 만들 때 상속으로 구현할지 논의 필요
   //직사각형으로 구현하면 좋을 듯
+
 private:
   //변수(필드)
-  //위치좌표, 크기, 
+  //위치좌표, 크기
+	double posX;
+	double posY;
+	double sizeX;
+	double sizeY;
   //장애물이 움직이지 않고 고정됨
   
 public:
   //함수(메소드)
   //생성자, 소멸자
+	Obstacle1(){
+		posX=100;
+		posY=200;
+		sizeX=40;
+		sizeY=50;
+	}
+	Obstacle1(double posX, double posY, double sizeX, double sizeY){
+		this->posX=posX;
+		this->posY=posY;
+		this->sizeX=sizeX;
+		this->sizeY=sizeY;
+	}
   //위치좌표, 크기, 등 setter/getter
+	void setobstaclepos(double posX,double posY){
+		this->posX;
+		this->posY;
+	}
+	double getobstacleposX(){
+		return posX;
+	}
+	double getobstacleposY(){
+		return posY;
+	}
+	void setobstaclesizeX(double X){
+		sizeX = X;
+	}
+	void setobstaclesizeY(double Y){
+		sizeY = Y;
+	}
+	double getobstaclesizeX(){
+		return sizeX;
+	}
+	double getobstaclesizeY(){
+		return sizeY;
+	}
+		
   //충돌시 visual,sound effect
 };
 
@@ -210,6 +259,12 @@ private:
 	float size;
 public:
 	//생성자,소멸자
+	Floor(float x, float y, float s)
+	{
+		posX = x;
+		posY = y;
+		size = s;
+	}
 	
 	//위치좌표,크기
 	
@@ -227,7 +282,14 @@ private:
 	float posY;
 	float size;
 public:
-	//생성자, 소멸자 
+	//생성자, 소멸자
+	Score(float x, float y, float s)
+	{
+		posX = x;
+		posY = y;
+		size = s;
+	}
+	
 	//위치, 크기 등 setter/getter
 	//현재점수 반환
 	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
@@ -240,12 +302,45 @@ class Star
 {
 private:
 	//위치, 크기
+	
 	//현재 별 개수
-	//최대 별 개수
+	int curstar;
+	//이 스테이지 누적 최대 별 개수
+	int stagemaxstar;//스테이지 종료시 업데이트
 public:
+	Star(int stagemaxstar){
+		curstar=0;
+		this->stagemaxstar = stagemaxstar;
+	}
 	//현재 별 개수 setter/getter
-	//일정 점수 이상을 획득할 때마다 별 하나씩 추가
+	void setstar(int score){
+		int cs;
+		if(score>=30000) // 일정 점수 이상은 별 3개
+		{
+			cs=3;
+		}else if(score>=20000 && score<30000)
+		{
+			cs=2;
+		}else if(score>=10000 && score<20000)
+		{
+			cs=1;
+		}
+		
+		if(cs>curstar)
+			curstar=cs;
+	}
+	int getstar(){
+		return curstar;
+	}
 	//별 최대 개수 setter/getter
+	void setmaxstar()
+	{
+		if(stagemaxstar<curstar)
+			stagemaxstar=curstar;
+	}
+	int getmaxstar(){
+		return stagemaxstar;
+	}
 };
 
 //점프횟수 클래스
