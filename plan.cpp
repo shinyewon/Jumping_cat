@@ -11,17 +11,17 @@
 using namespace std;
 using namespace sf;
 
-// 필요한 객체와 기능을 생각해보기(어떤 클래스, 어떤 변수, 어떤 함수 ?)
 void play_sound(const string& filename);
 void delay_ms(int ms);
+
 //점프할 고양이 클래스
 class Jumping_Cat
 {
 private:
 	//직사각형으로 구현
 	RectangleShape jumping_cat;
-	double posX; //왼쪽 아래 x좌표
-	double posY; //왼쪽 아래 y좌표
+	double posX; //왼쪽 위 x좌표
+	double posY; //왼쪽 위 y좌표
 	double width;
 	double height;
 	double angle;
@@ -41,7 +41,6 @@ public:
 		velocity = 2;
 	}
 	
-
 	//소멸자
 	~Jumping_Cat() {
 
@@ -58,6 +57,7 @@ public:
     //고양이 각도 조절(마우스 위치에 따라서 변경)(각도 setter/getter랑 같을 수도)
     //충돌 시 visual,sound effect
 };
+
 
 //포물선 클래스
 class Arc
@@ -89,19 +89,6 @@ public:
 	
 	//위치좌표, 크기, 각도 setter/getter
 	//이동(move)
-};
-
-//고양이를 잡고 있는 사람 클래스
-class Slingshot_Man
-{
-private:
-  //변수(필드)
-  //위치좌표, 크기
-  
-public:
-  //함수(메소드)
-  //생성자, 소멸자?
-  //위치좌표, 크기 setter/getter
 };
 
 //통조림 클래스
@@ -209,15 +196,55 @@ class Obstacle1
 {
   //장애물 여러 개 만들 때 상속으로 구현할지 논의 필요
   //직사각형으로 구현하면 좋을 듯
+
 private:
   //변수(필드)
-  //위치좌표, 크기, 
+  //위치좌표, 크기
+	double posX;
+	double posY;
+	double sizeX;
+	double sizeY;
   //장애물이 움직이지 않고 고정됨
   
 public:
   //함수(메소드)
   //생성자, 소멸자
+	Obstacle1(){
+		posX=100;
+		posY=200;
+		sizeX=40;
+		sizeY=50;
+	}
+	Obstacle1(double posX, double posY, double sizeX, double sizeY){
+		this->posX=posX;
+		this->posY=posY;
+		this->sizeX=sizeX;
+		this->sizeY=sizeY;
+	}
   //위치좌표, 크기, 등 setter/getter
+	void setobstaclepos(double posX,double posY){
+		this->posX;
+		this->posY;
+	}
+	double getobstacleposX(){
+		return posX;
+	}
+	double getobstacleposY(){
+		return posY;
+	}
+	void setobstaclesizeX(double X){
+		sizeX = X;
+	}
+	void setobstaclesizeY(double Y){
+		sizeY = Y;
+	}
+	double getobstaclesizeX(){
+		return sizeX;
+	}
+	double getobstaclesizeY(){
+		return sizeY;
+	}
+		
   //충돌시 visual,sound effect
 };
 
@@ -275,12 +302,45 @@ class Star
 {
 private:
 	//위치, 크기
+	
 	//현재 별 개수
-	//최대 별 개수
+	int curstar;
+	//이 스테이지 누적 최대 별 개수
+	int stagemaxstar;//스테이지 종료시 업데이트
 public:
+	Star(int stagemaxstar){
+		curstar=0;
+		this->stagemaxstar = stagemaxstar;
+	}
 	//현재 별 개수 setter/getter
-	//일정 점수 이상을 획득할 때마다 별 하나씩 추가
+	void setstar(int score){
+		int cs;
+		if(score>=30000) // 일정 점수 이상은 별 3개
+		{
+			cs=3;
+		}else if(score>=20000 && score<30000)
+		{
+			cs=2;
+		}else if(score>=10000 && score<20000)
+		{
+			cs=1;
+		}
+		
+		if(cs>curstar)
+			curstar=cs;
+	}
+	int getstar(){
+		return curstar;
+	}
 	//별 최대 개수 setter/getter
+	void setmaxstar()
+	{
+		if(stagemaxstar<curstar)
+			stagemaxstar=curstar;
+	}
+	int getmaxstar(){
+		return stagemaxstar;
+	}
 };
 
 //점프횟수 클래스
@@ -425,8 +485,8 @@ int main()
 	Texture floorTexture;
 	floorTexture.loadFromFile("images/floor.png");
 	Sprite floorSprite(floorTexture);
-	
-	//고양이 스프라이트 생성 수정중...
+
+	//고양이 스프라이트 생성
 	Texture catTexture;
 	catTexture.loadFromFile("./Data/Image/cat.png");
 	Vector2u catTextureSize = catTexture.getSize();
@@ -434,9 +494,9 @@ int main()
 	catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
 	catSprite.setPosition(200, 200);
 
-	//사람 스프라이트 생성 수정중...
+	//사람 스프라이트 생성
 	Texture manTexture;
-	manTexture.loadFromFile("./Data/Image/man.jpg");
+	manTexture.loadFromFile("./Data/Image/man.png");
 	Vector2u manTextureSize = manTexture.getSize();
 	Sprite manSprite(manTexture);
 	manSprite.setScale((float)100 / manTextureSize.x, (float)100 / manTextureSize.y);
@@ -475,6 +535,29 @@ int main()
 		{
 			if (event.type == Event::Closed)
 				window.close();
+
+			int x = 0, x2 = 0, y = 0, y2 = 0;
+			if (event.type == Event::MouseButtonPressed)
+			{
+				if (event.mouseButton.button == Mouse::Left)
+				{
+					x = event.mouseButton.x;
+					y = event.mouseButton.y;
+				}
+			}
+			if (event.type == Event::MouseButtonReleased)
+			{
+				if (event.mouseButton.button == Mouse::Left)
+				{
+					x2 = event.mouseButton.x;
+					y2 = event.mouseButton.y;
+				}
+			}
+			// 드래그를 너무 조금했을 때는 무시
+			if (abs(x - x2) <= 20 && abs(y - y2) <= 20) { break; }
+			else {
+				cout << "";
+			}
 		}
 
 		// 게임 로직
@@ -483,6 +566,7 @@ int main()
 		window.clear();
 
 		window.draw(text);
+		window.draw(catSprite);
 		window.draw(canSprite);
 
 		window.display();
