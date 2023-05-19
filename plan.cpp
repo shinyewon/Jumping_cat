@@ -483,7 +483,7 @@ int main()
 
 	// 바닥 스프라이트 생성
 	Texture floorTexture;
-	floorTexture.loadFromFile("images/floor.png");
+	floorTexture.loadFromFile("./Data/Image/floor.png");
 	Sprite floorSprite(floorTexture);
 
 	//고양이 스프라이트 생성
@@ -566,6 +566,7 @@ int main()
 		window.clear();
 
 		window.draw(text);
+		window.draw(floorSprite);
 		window.draw(catSprite);
 		window.draw(canSprite);
 
