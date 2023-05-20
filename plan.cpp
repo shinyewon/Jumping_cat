@@ -556,7 +556,7 @@ int main()
 			// 드래그를 너무 조금했을 때는 무시
 			if (abs(x - x2) <= 20 && abs(y - y2) <= 20) { break; }
 			else {
-				cout << "";
+				//각도를 구해서 이미지를 setRotation을 통해 회전시킨다.
 			}
 		}
 
