@@ -88,6 +88,20 @@ public:
 	}
 	
 	//위치좌표, 크기, 각도 setter/getter
+	void setArcPos(float x,float y)
+	{
+		posX = x;
+		posY = y;
+	}
+	float getArcPosX()
+	{
+		return posX;
+	}
+	float getArcPosY()
+	{
+		return posY;
+	}
+	
 	//이동(move)
 };
 
