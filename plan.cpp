@@ -236,26 +236,26 @@ public:
 		this->sizeY=sizeY;
 	}
   //위치좌표, 크기, 등 setter/getter
-	void setobstaclepos(double posX,double posY){
+	void setObstaclePos(double posX,double posY){
 		this->posX;
 		this->posY;
 	}
-	double getobstacleposX(){
+	double getObstaclePosX(){
 		return posX;
 	}
-	double getobstacleposY(){
+	double getObstaclePosY(){
 		return posY;
 	}
-	void setobstaclesizeX(double X){
+	void setObstacleSizeX(double X){
 		sizeX = X;
 	}
-	void setobstaclesizeY(double Y){
+	void setObstacleSizeY(double Y){
 		sizeY = Y;
 	}
-	double getobstaclesizeX(){
+	double getObstacleSizeX(){
 		return sizeX;
 	}
-	double getobstaclesizeY(){
+	double getObstacleSizeY(){
 		return sizeY;
 	}
 		
