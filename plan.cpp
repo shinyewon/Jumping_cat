@@ -492,7 +492,7 @@ public:
 int main() 
 {
 	// 창 생성
-	RenderWindow window(VideoMode(800, 600), "Jumping cat");
+	RenderWindow window(VideoMode(960, 540), "Jumping cat");
 	window.setFramerateLimit(60);	//프레임 정해주기
 
 	// 바닥 스프라이트 생성
@@ -550,13 +550,21 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 
-			int x = 0, x2 = 0, y = 0, y2 = 0;
+			int x = 0, x1 = 0, x2 = 0, y = 0, y1 = 0, y2 = 0;
 			if (event.type == Event::MouseButtonPressed)
 			{
 				if (event.mouseButton.button == Mouse::Left)
 				{
 					x = event.mouseButton.x;
 					y = event.mouseButton.y;
+				}
+			}
+			while (event.type == Event::MouseButtonPressed)
+			{
+				if (event.mouseButton.button == Mouse::Left)
+				{
+					x1 = event.mouseButton.x;
+					y1 = event.mouseButton.y;
 				}
 			}
 			if (event.type == Event::MouseButtonReleased)
@@ -567,8 +575,10 @@ int main()
 					y2 = event.mouseButton.y;
 				}
 			}
-			// 드래그를 너무 조금했을 때는 무시
-			if (abs(x - x2) <= 20 && abs(y - y2) <= 20) { break; }
+			// 드래그를 너무 조금했을 때는 무시하고 아니면 실행
+			int diffX = x - x2; 
+			int diffY = y - y2;
+			if (abs(diffX) <= 20 && abs(diffY) <= 20) { break; }
 			else {
 				//각도를 구해서 이미지를 setRotation을 통해 회전시킨다.
 			}
