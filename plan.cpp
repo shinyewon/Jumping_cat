@@ -133,7 +133,7 @@ public:
 		this->size = size;
     }
   //위치좌표, 크기 setter/getter
-	void setFoodSize()
+	void setFoodSize(double size)
 	{
 		this->size = size;
 	}
@@ -328,7 +328,7 @@ public:
 	}
 	//현재 별 개수 setter/getter
 	void setstar(int score){
-		int cs;
+		int cs=0;
 		if(score>=30000) // 일정 점수 이상은 별 3개
 		{
 			cs=3;
