@@ -327,7 +327,7 @@ public:
 		this->stagemaxstar = stagemaxstar;
 	}
 	//현재 별 개수 setter/getter
-	void setstar(int score){
+	void setStar(int score){
 		int cs=0;
 		if(score>=30000) // 일정 점수 이상은 별 3개
 		{
@@ -343,16 +343,16 @@ public:
 		if(cs>curstar)
 			curstar=cs;
 	}
-	int getstar(){
+	int getStar(){
 		return curstar;
 	}
 	//별 최대 개수 setter/getter
-	void setmaxstar()
+	void setMaxStar()
 	{
 		if(stagemaxstar<curstar)
 			stagemaxstar=curstar;
 	}
-	int getmaxstar(){
+	int getMaxStar(){
 		return stagemaxstar;
 	}
 };
