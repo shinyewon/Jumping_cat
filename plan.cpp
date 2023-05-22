@@ -540,9 +540,10 @@ int main()
 	text.setFillColor(Color::Yellow);
 	text.setPosition(jn.getPosX(), jn.getPosY());
 
+	int x = 0, x2 = 0, y = 0, y2 = 0;  //드래그 처리를 위한 좌표 초기화
+	int cat_is_clicked = 0;            //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
-
 		// 이벤트 처리
 		Event event;
 		while (window.pollEvent(event))
@@ -550,37 +551,42 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 
-			int x = 0, x1 = 0, x2 = 0, y = 0, y1 = 0, y2 = 0;
 			if (event.type == Event::MouseButtonPressed)
 			{
 				if (event.mouseButton.button == Mouse::Left)
 				{
 					x = event.mouseButton.x;
 					y = event.mouseButton.y;
+					if (x > 200 && x < 300 && y > 200 && y < 300)
+						cat_is_clicked = 1;
+					cout << x << " " << y << "\n";
 				}
 			}
-			while (event.type == Event::MouseButtonPressed)
-			{
-				if (event.mouseButton.button == Mouse::Left)
-				{
-					x1 = event.mouseButton.x;
-					y1 = event.mouseButton.y;
-				}
-			}
-			if (event.type == Event::MouseButtonReleased)
+			else if (event.type == Event::MouseButtonReleased)
 			{
 				if (event.mouseButton.button == Mouse::Left)
 				{
 					x2 = event.mouseButton.x;
 					y2 = event.mouseButton.y;
+					cout << x2 << " " << y2 << "\n";
+
+					// 드래그를 너무 조금했을 때는 무시하고 아니면 날아감
+					int diffX = x - x2;
+					int diffY = y - y2;
+					if (abs(diffX) <= 20 && abs(diffY) <= 20) {
+						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
+						cat_is_clicked = 0;
+					}
+					else {
+						//고양이를 다시 원본 크기로
+						if (cat_is_clicked == 1) {
+							cat_is_clicked = 0;
+							//날아가는 코드 구현
+							cout << "Flying\n";
+						}
+						cout << "Dragged\n";
+					}
 				}
-			}
-			// 드래그를 너무 조금했을 때는 무시하고 아니면 실행
-			int diffX = x - x2; 
-			int diffY = y - y2;
-			if (abs(diffX) <= 20 && abs(diffY) <= 20) { break; }
-			else {
-				//각도를 구해서 이미지를 setRotation을 통해 회전시킨다.
 			}
 		}
 
