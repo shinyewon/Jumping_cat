@@ -126,7 +126,7 @@ public:
 		posX = 50.0;
 		posY = 50.0;
 		sizeX = 10.0;
-		sizeY = 10.0
+		sizeY = 10.0;
     }
     Canned_Food(double posX, double posY, double sizeX, double sizeY)
     {
@@ -139,7 +139,7 @@ public:
 	void setFoodSize(double sizeX, double sizeY)
 	{
 		this->sizeX = sizeX;
-		this->sizeY = sizeY
+		this->sizeY = sizeY;
 	}
 	double getFoodSizeX()
 	{
