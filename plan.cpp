@@ -115,7 +115,8 @@ private:
   //위치좌표, 크기
 	double posX;
 	double posY;
-	double size;
+	double sizeX;
+	double sizeY;
   
 public:
   //함수(메소드)
@@ -124,20 +125,27 @@ public:
 	{
 		posX = 50.0;
 		posY = 50.0;
-		size = 10.0;
+		sizeX = 10.0;
+		sizeY = 10.0
     }
-    Canned_Food(double posX, double posY, double size)
+    Canned_Food(double posX, double posY, double sizeX, double sizeY)
     {
 		this->posX = posX;
 		this->posY = posY;
-		this->size = size;
+		this->sizeX = sizeX;
+	        this->sizeY = sizeY;
     }
   //위치좌표, 크기 setter/getter
-	void setFoodSize(double size)
+	void setFoodSize(double sizeX, double sizeY)
 	{
-		this->size = size;
+		this->sizeX = sizeX;
+		this->sizeY = sizeY
 	}
-	double getFoodSize()
+	double getFoodSizeX()
+	{
+		return this->size;
+	}
+	double getFoodSizeY()
 	{
 		return this->size;
 	}
@@ -156,7 +164,7 @@ public:
 	}
   
   //충돌 시 획득
-	void getCannedFood(double size)
+	void getFoodScore(double size)
 	{
 		//사이즈별로 점수부여
 		//ex) size 10 = 1000점
