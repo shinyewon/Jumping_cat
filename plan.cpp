@@ -88,6 +88,20 @@ public:
 	}
 	
 	//위치좌표, 크기, 각도 setter/getter
+	void setArcPos(float x,float y)
+	{
+		posX = x;
+		posY = y;
+	}
+	float getArcPosX()
+	{
+		return posX;
+	}
+	float getArcPosY()
+	{
+		return posY;
+	}
+	
 	//이동(move)
 };
 
@@ -119,7 +133,7 @@ public:
 		this->size = size;
     }
   //위치좌표, 크기 setter/getter
-	void setFoodSize()
+	void setFoodSize(double size)
 	{
 		this->size = size;
 	}
@@ -222,26 +236,26 @@ public:
 		this->sizeY=sizeY;
 	}
   //위치좌표, 크기, 등 setter/getter
-	void setobstaclepos(double posX,double posY){
+	void setObstaclePos(double posX,double posY){
 		this->posX;
 		this->posY;
 	}
-	double getobstacleposX(){
+	double getObstaclePosX(){
 		return posX;
 	}
-	double getobstacleposY(){
+	double getObstaclePosY(){
 		return posY;
 	}
-	void setobstaclesizeX(double X){
+	void setObstacleSizeX(double X){
 		sizeX = X;
 	}
-	void setobstaclesizeY(double Y){
+	void setObstacleSizeY(double Y){
 		sizeY = Y;
 	}
-	double getobstaclesizeX(){
+	double getObstacleSizeX(){
 		return sizeX;
 	}
-	double getobstaclesizeY(){
+	double getObstacleSizeY(){
 		return sizeY;
 	}
 		
@@ -313,8 +327,8 @@ public:
 		this->stagemaxstar = stagemaxstar;
 	}
 	//현재 별 개수 setter/getter
-	void setstar(int score){
-		int cs;
+	void setStar(int score){
+		int cs=0;
 		if(score>=30000) // 일정 점수 이상은 별 3개
 		{
 			cs=3;
@@ -329,16 +343,16 @@ public:
 		if(cs>curstar)
 			curstar=cs;
 	}
-	int getstar(){
+	int getStar(){
 		return curstar;
 	}
 	//별 최대 개수 setter/getter
-	void setmaxstar()
+	void setMaxStar()
 	{
 		if(stagemaxstar<curstar)
 			stagemaxstar=curstar;
 	}
-	int getmaxstar(){
+	int getMaxStar(){
 		return stagemaxstar;
 	}
 };
@@ -478,12 +492,12 @@ public:
 int main() 
 {
 	// 창 생성
-	RenderWindow window(VideoMode(800, 600), "Jumping cat");
+	RenderWindow window(VideoMode(960, 540), "Jumping cat");
 	window.setFramerateLimit(60);	//프레임 정해주기
 
 	// 바닥 스프라이트 생성
 	Texture floorTexture;
-	floorTexture.loadFromFile("images/floor.png");
+	floorTexture.loadFromFile("./Data/Image/floor.png");
 	Sprite floorSprite(floorTexture);
 
 	//고양이 스프라이트 생성
@@ -526,9 +540,10 @@ int main()
 	text.setFillColor(Color::Yellow);
 	text.setPosition(jn.getPosX(), jn.getPosY());
 
+	int x = 0, x2 = 0, y = 0, y2 = 0;  //드래그 처리를 위한 좌표 초기화
+	int cat_is_clicked = 0;            //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
-
 		// 이벤트 처리
 		Event event;
 		while (window.pollEvent(event))
@@ -536,27 +551,42 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 
-			int x = 0, x2 = 0, y = 0, y2 = 0;
 			if (event.type == Event::MouseButtonPressed)
 			{
 				if (event.mouseButton.button == Mouse::Left)
 				{
 					x = event.mouseButton.x;
 					y = event.mouseButton.y;
+					if (x > 200 && x < 300 && y > 200 && y < 300)
+						cat_is_clicked = 1;
+					cout << x << " " << y << "\n";
 				}
 			}
-			if (event.type == Event::MouseButtonReleased)
+			else if (event.type == Event::MouseButtonReleased)
 			{
 				if (event.mouseButton.button == Mouse::Left)
 				{
 					x2 = event.mouseButton.x;
 					y2 = event.mouseButton.y;
+					cout << x2 << " " << y2 << "\n";
+
+					// 드래그를 너무 조금했을 때는 무시하고 아니면 날아감
+					int diffX = x - x2;
+					int diffY = y - y2;
+					if (abs(diffX) <= 20 && abs(diffY) <= 20) {
+						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
+						cat_is_clicked = 0;
+					}
+					else {
+						//고양이를 다시 원본 크기로
+						if (cat_is_clicked == 1) {
+							cat_is_clicked = 0;
+							//날아가는 코드 구현
+							cout << "Flying\n";
+						}
+						cout << "Dragged\n";
+					}
 				}
-			}
-			// 드래그를 너무 조금했을 때는 무시
-			if (abs(x - x2) <= 20 && abs(y - y2) <= 20) { break; }
-			else {
-				cout << "";
 			}
 		}
 
@@ -566,6 +596,7 @@ int main()
 		window.clear();
 
 		window.draw(text);
+		window.draw(floorSprite);
 		window.draw(catSprite);
 		window.draw(canSprite);
 
