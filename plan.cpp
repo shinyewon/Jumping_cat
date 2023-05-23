@@ -101,6 +101,14 @@ public:
 	{
 		return posY;
 	}
+	void setRadius(float r)
+	{
+		radius = r;
+	}
+	float getRadius()
+	{
+		return radius;
+	}
 	
 	//이동(move)
 };
