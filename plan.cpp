@@ -244,9 +244,9 @@ public:
 		this->sizeY=sizeY;
 	}
   //위치좌표, 크기, 등 setter/getter
-	void setObstaclePos(double posX,double posY){
-		this->posX;
-		this->posY;
+	void setObstaclePos(double posX, double posY){
+		this->posX = posX;
+		this->posY = posY;
 	}
 	double getObstaclePosX(){
 		return posX;
@@ -330,6 +330,7 @@ private:
 	//이 스테이지 누적 최대 별 개수
 	int stagemaxstar;//스테이지 종료시 업데이트
 public:
+	//생성자
 	Star(int stagemaxstar){
 		curstar=0;
 		this->stagemaxstar = stagemaxstar;
