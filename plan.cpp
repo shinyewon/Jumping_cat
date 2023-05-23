@@ -143,11 +143,11 @@ public:
 	}
 	double getFoodSizeX()
 	{
-		return this->size;
+		return this->sizeX;
 	}
 	double getFoodSizeY()
 	{
-		return this->size;
+		return this->sizeY;
 	}
 	void setFoodpos(double posX,double posY)
 	{
