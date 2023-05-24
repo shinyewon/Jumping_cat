@@ -523,7 +523,8 @@ int main()
 	Vector2u catTextureSize = catTexture.getSize();
 	Sprite catSprite(catTexture);
 	catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
-	catSprite.setPosition(200, 200);
+	catSprite.setOrigin(catSprite.getLocalBounds().width / 2, catSprite.getLocalBounds().height / 2);
+	catSprite.setPosition(250, 250);
 
 	//사람 스프라이트 생성
 	Texture manTexture;
@@ -546,7 +547,6 @@ int main()
 	Text text;
 	Font font;
 
-
 	if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
 		return 42; // Robust error handling!
 	}
@@ -557,8 +557,14 @@ int main()
 	text.setFillColor(Color::Yellow);
 	text.setPosition(jn.getPosX(), jn.getPosY());
 
+	// 게임 오버 또는 클리어 여부 표시할 text 설정
+	Text game_status;
+	game_status.setFont(font);
+	game_status.setCharacterSize(40);
+	game_status.setPosition(350, 260);
+
 	int x = 0, x2 = 0, y = 0, y2 = 0;  //드래그 처리를 위한 좌표 초기화
-	int cat_is_clicked = 0;            //마우스로 고양이를 클릭했는지 저장할 변수
+	bool cat_is_clicked = false;            //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
 		// 이벤트 처리
@@ -568,14 +574,26 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 
+			if (cat_is_clicked == true) {
+				int x1 = Mouse::getPosition(window).x;
+				int y1 = Mouse::getPosition(window).y;
+				int move_pos_x = x - x1;
+				int move_pos_y = y - y1;
+				cout << x1 << " " << y1 << "\n";
+
+				if (abs(move_pos_x) > 20 && abs(move_pos_y) > 20) {
+					
+				}
+			}
+
 			if (event.type == Event::MouseButtonPressed)
 			{
 				if (event.mouseButton.button == Mouse::Left)
 				{
 					x = event.mouseButton.x;
 					y = event.mouseButton.y;
-					if (x > 200 && x < 300 && y > 200 && y < 300)
-						cat_is_clicked = 1;
+					if (x > catSprite.getPosition().x - 50 && x < catSprite.getPosition().x + 50 && y > catSprite.getPosition().y - 50 && y < catSprite.getPosition().y + 50)
+						cat_is_clicked = true;
 					cout << x << " " << y << "\n";
 				}
 			}
@@ -583,6 +601,7 @@ int main()
 			{
 				if (event.mouseButton.button == Mouse::Left)
 				{
+					int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
 					x2 = event.mouseButton.x;
 					y2 = event.mouseButton.y;
 					cout << x2 << " " << y2 << "\n";
@@ -591,15 +610,16 @@ int main()
 					int diffX = x - x2;
 					int diffY = y - y2;
 					if (abs(diffX) <= 20 && abs(diffY) <= 20) {
-						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
-						cat_is_clicked = 0;
+						cat_is_clicked = false;
 					}
 					else {
 						//고양이를 다시 원본 크기로
-						if (cat_is_clicked == 1) {
-							cat_is_clicked = 0;
+						if (cat_is_clicked == true) {
+							cat_is_clicked = false;
 							//날아가는 코드 구현
 							cout << "Flying\n";
+							jn.reduceJump();
+							text.setString("Chance: " + to_string(jn.getLeftJump()));
 						}
 						cout << "Dragged\n";
 					}
@@ -613,9 +633,20 @@ int main()
 		window.clear();
 
 		window.draw(text);
-		window.draw(floorSprite);
-		window.draw(catSprite);
-		window.draw(canSprite);
+		if (jn.getLeftJump() == 0) {
+			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함
+			// 클리어한 경우 ...
+
+			// 클리어하지 못한 경우
+			game_status.setString("Game Over");
+			game_status.setFillColor(Color::Red);
+			window.draw(game_status);
+		}
+		else {
+			window.draw(floorSprite);
+			window.draw(catSprite);
+			window.draw(canSprite); 
+		}
 
 		window.display();
 
