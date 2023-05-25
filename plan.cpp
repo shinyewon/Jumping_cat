@@ -51,11 +51,10 @@ public:
 	{
 		return jumping_cat;
 	}
-	//위치좌표, 크기, 각도, 파워(속도?, 가속도?), 공격력 setter/getter
+	//파워(속도?, 가속도?), 공격력 setter/getter
     //이동(move)
-	//고양이 크기 조절(마우스로 당기면 늘어나도록 떼면 줄어들도록)(크기 setter/getter랑 같을 수도)
-    //고양이 각도 조절(마우스 위치에 따라서 변경)(각도 setter/getter랑 같을 수도)
-    //충돌 시 visual,sound effect
+    //당길 때, 날아갈 때 sound effect
+	//사라질 때 visual effect
 };
 
 
@@ -523,7 +522,7 @@ int main()
 	Vector2u catTextureSize = catTexture.getSize();
 	Sprite catSprite(catTexture);
 	catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
-	catSprite.setOrigin(catSprite.getLocalBounds().width / 2, catSprite.getLocalBounds().height / 2);
+	catSprite.setOrigin(catSprite.getLocalBounds().width / 2, catSprite.getLocalBounds().height / 2); //가운데를 중심점으로 설정
 	catSprite.setPosition(250, 250);
 
 	//사람 스프라이트 생성
@@ -564,7 +563,7 @@ int main()
 	game_status.setPosition(350, 260);
 
 	int x = 0, x2 = 0, y = 0, y2 = 0;  //드래그 처리를 위한 좌표 초기화
-	bool cat_is_clicked = false;            //마우스로 고양이를 클릭했는지 저장할 변수
+	bool cat_is_clicked = false;       //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
 		// 이벤트 처리
@@ -573,18 +572,6 @@ int main()
 		{
 			if (event.type == Event::Closed)
 				window.close();
-
-			if (cat_is_clicked == true) {
-				int x1 = Mouse::getPosition(window).x;
-				int y1 = Mouse::getPosition(window).y;
-				int move_pos_x = x - x1;
-				int move_pos_y = y - y1;
-				cout << x1 << " " << y1 << "\n";
-
-				if (abs(move_pos_x) > 20 && abs(move_pos_y) > 20) {
-					
-				}
-			}
 
 			if (event.type == Event::MouseButtonPressed)
 			{
@@ -606,6 +593,8 @@ int main()
 					y2 = event.mouseButton.y;
 					cout << x2 << " " << y2 << "\n";
 
+					catSprite.setRotation(0);
+					catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
 					// 드래그를 너무 조금했을 때는 무시하고 아니면 날아감
 					int diffX = x - x2;
 					int diffY = y - y2;
@@ -613,12 +602,13 @@ int main()
 						cat_is_clicked = false;
 					}
 					else {
-						//고양이를 다시 원본 크기로
 						if (cat_is_clicked == true) {
 							cat_is_clicked = false;
+
 							//날아가는 코드 구현
 							cout << "Flying\n";
-							jn.reduceJump();
+
+							jn.reduceJump(); //점프횟수 감소
 							text.setString("Chance: " + to_string(jn.getLeftJump()));
 						}
 						cout << "Dragged\n";
@@ -628,12 +618,25 @@ int main()
 		}
 
 		// 게임 로직
+		if (cat_is_clicked == true) {
+			int x1 = Mouse::getPosition(window).x;
+			int y1 = Mouse::getPosition(window).y;
+			int move_pos_x = x - x1;
+			int move_pos_y = y - y1;
+			cout << x1 << " " << y1 << "\n";
 
+			float ang = atan2(double(y1 - y), double(x1 - x)) * 180 / 3.141592;
+			if (ang < 0) ang += 360;
+			catSprite.setRotation(ang+180);
+
+			float drag_dis = sqrt(pow(x - x1, 2) + pow(y - y1, 2)); //드래그한 거리
+			if(drag_dis < 70)
+				catSprite.setScale((float)(100 + drag_dis) / catTextureSize.x, (float)(100 - drag_dis) / catTextureSize.y);
+		}
 		// 그리기
 		window.clear();
 
-		window.draw(text);
-		if (jn.getLeftJump() == 0) {
+		if (jn.getLeftJump() <= 0) {
 			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함
 			// 클리어한 경우 ...
 
@@ -643,6 +646,7 @@ int main()
 			window.draw(game_status);
 		}
 		else {
+			window.draw(text);
 			window.draw(floorSprite);
 			window.draw(catSprite);
 			window.draw(canSprite); 
@@ -652,7 +656,7 @@ int main()
 
 		//사운드 수정중...
 		Canned_Food can1;
-		can1.getCannedFoodSound();
+		//can1.getCannedFoodSound(); 소리가 나는 동안 다음 문장이 실행이 안돼서 수행 속도가 떨어져요! 수정 필요해 보여요!
 	}
 
 	return 0;
