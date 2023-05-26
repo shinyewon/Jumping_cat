@@ -296,6 +296,27 @@ public:
 	}
 	
 	//위치좌표,크기
+	void setFloorPos(float x,float y)
+	{
+		posX = x;
+		posY = y;
+	}
+	float getFloorPosX()
+	{
+		return posX;
+	}
+	float getFloorPosY()
+	{
+		return posY;
+	}
+	void setFloorSize(float s)
+	{
+		size = s;
+	}
+	float getFloorSize()
+	{
+		return size;
+	}
 	
 	//고양이가 바닥에 닿으면 게임 오버
 };
@@ -320,6 +341,28 @@ public:
 	}
 	
 	//위치, 크기 등 setter/getter
+	void setScorePos(float x,float y)
+	{
+		posX = x;
+		posY = y;
+	}
+	float getScorePosX()
+	{
+		return posX;
+	}
+	float getScorePosY()
+	{
+		return posY;
+	}
+	void setScoreSize(float s)
+	{
+		size = s;
+	}
+	float getScoreSize()
+	{
+		return size;
+	}
+	
 	//현재점수 반환
 	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
 	//최고점수 반환 
