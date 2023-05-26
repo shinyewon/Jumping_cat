@@ -624,7 +624,7 @@ int main()
 	Sprite catSprite(catTexture);
 	catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
 	catSprite.setOrigin(catSprite.getLocalBounds().width / 2, catSprite.getLocalBounds().height / 2); //가운데를 중심점으로 설정
-	catSprite.setPosition(250, 250);
+	catSprite.setPosition(250, 250); 
 
 	//사람 스프라이트 생성
 	Texture manTexture;
@@ -674,45 +674,47 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 
-			if (event.type == Event::MouseButtonPressed)
-			{
-				if (event.mouseButton.button == Mouse::Left)
+			if (jn.getLeftJump() > 0) {
+				if (event.type == Event::MouseButtonPressed)
 				{
-					x = event.mouseButton.x;
-					y = event.mouseButton.y;
-					if (x > catSprite.getPosition().x - 50 && x < catSprite.getPosition().x + 50 && y > catSprite.getPosition().y - 50 && y < catSprite.getPosition().y + 50)
-						cat_is_clicked = true;
-					cout << x << " " << y << "\n";
-				}
-			}
-			else if (event.type == Event::MouseButtonReleased)
-			{
-				if (event.mouseButton.button == Mouse::Left)
-				{
-					int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
-					x2 = event.mouseButton.x;
-					y2 = event.mouseButton.y;
-					cout << x2 << " " << y2 << "\n";
-
-					catSprite.setRotation(0);
-					catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
-					// 드래그를 너무 조금했을 때는 무시하고 아니면 날아감
-					int diffX = x - x2;
-					int diffY = y - y2;
-					if (abs(diffX) <= 20 && abs(diffY) <= 20) {
-						cat_is_clicked = false;
+					if (event.mouseButton.button == Mouse::Left)
+					{
+						x = event.mouseButton.x;
+						y = event.mouseButton.y;
+						if (x > catSprite.getPosition().x - 50 && x < catSprite.getPosition().x + 50 && y > catSprite.getPosition().y - 50 && y < catSprite.getPosition().y + 50)
+							cat_is_clicked = true;
+						cout << x << " " << y << "\n";
 					}
-					else {
-						if (cat_is_clicked == true) {
+				}
+				else if (event.type == Event::MouseButtonReleased)
+				{
+					if (event.mouseButton.button == Mouse::Left)
+					{
+						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
+						x2 = event.mouseButton.x;
+						y2 = event.mouseButton.y;
+						cout << x2 << " " << y2 << "\n";
+
+						catSprite.setRotation(0);
+						catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
+						// 드래그를 너무 조금했을 때는 무시하고 아니면 날아감
+						int diffX = x - x2;
+						int diffY = y - y2;
+						if (abs(diffX) <= 20 && abs(diffY) <= 20) {
 							cat_is_clicked = false;
-
-							//날아가는 코드 구현
-							cout << "Flying\n";
-
-							jn.reduceJump(); //점프횟수 감소
-							text.setString("Chance: " + to_string(jn.getLeftJump()));
 						}
-						cout << "Dragged\n";
+						else {
+							if (cat_is_clicked == true) {
+								cat_is_clicked = false;
+
+								//날아가는 코드 구현
+								cout << "Flying\n";
+
+								jn.reduceJump(); //점프횟수 감소
+								text.setString("Chance: " + to_string(jn.getLeftJump()));
+							}
+							cout << "Dragged\n";
+						}
 					}
 				}
 			}
@@ -749,15 +751,15 @@ int main()
 		else {
 			window.draw(text);
 			window.draw(floorSprite);
+			window.draw(canSprite);
 			window.draw(catSprite);
-			window.draw(canSprite); 
 		}
 
 		window.display();
 
 		//사운드 수정중...
 		Canned_Food can1;
-		//can1.getCannedFoodSound(); 소리가 나는 동안 다음 문장이 실행이 안돼서 수행 속도가 떨어져요! 수정 필요해 보여요!
+		//can1.getCannedFoodSound(); //소리가 나는 동안 다음 문장이 실행이 안돼서 수행 속도가 떨어져요! 수정 필요해 보여요!
 	}
 
 	return 0;
