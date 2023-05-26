@@ -68,6 +68,11 @@ private:
 	float posX;
 	float posY;
 	float radius;
+	
+	float velocityX;
+	float velocityY;
+	float acceleration;
+	
 public:
 	//생성자, 소멸자
 	Arc(float x, float y, float r)
@@ -109,7 +114,41 @@ public:
 		return radius;
 	}
 	
+	void setArcVelocityX(float v_x)
+	{
+		velocityX = v_x;
+	}
+	float getArcVelocityX()
+	{
+		return velocityX;
+	}
+
+	void setArcVelocityY(float v_y)
+	{
+		velocityY = v_y;
+	}
+	float getArcVelocityY()
+	{
+		return velocityY;
+	}
+
+	void setArcAcceleration(float a)
+	{
+		acceleration = a;
+	}
+	float getArcAcceleration()
+	{
+		return acceleration;
+	}
+	
 	//이동(move)
+	void moveArc(float dt)
+	{
+		setArcPos(getArcPosX() + getArcVelocityX() * dt, getArcPosY() - getArcVelocityY() * dt);
+
+		setArcVelocityX(getArcVelocityX() + 0 * dt);
+		setArcVelocityY(getArcVelocityY() - getArcAcceleration() * dt);
+	}
 };
 
 //통조림 클래스
@@ -326,7 +365,9 @@ class Score
 {
 private:
 	//현재점수
+	float currScore;
 	//최고점수
+	float maxScore;
 	//위치, 크기(글자 크기 등)
 	float posX;
 	float posY;
@@ -365,8 +406,25 @@ public:
 	
 	//현재점수 반환
 	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
+	void setCurrScore(float c_s)
+	{
+		currScore = c_s;
+	}
+	float getCurrScore()
+	{
+		return currScore;
+	}
+	
 	//최고점수 반환 
 	//최고점수 업데이트
+	void setMaxScore(float m_s)
+	{
+		maxScore = m_s;
+	}
+	float getMaxScore()
+	{
+		return maxScore;
+	}
 };
 
 //별 클래스
