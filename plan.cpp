@@ -281,6 +281,7 @@ private:
 	float posX;
 	float posY;
 	float size;
+	
 public:
 	//생성자,소멸자
 	Floor(float x, float y, float s)
@@ -328,6 +329,7 @@ private:
 	float posX;
 	float posY;
 	float size;
+	
 public:
 	//생성자, 소멸자
 	Score(float x, float y, float s)
@@ -361,22 +363,24 @@ public:
 	}
 	
 	//현재점수 반환
-	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
 	void setCurrScore(float c_s)
 	{
 		currScore = c_s;
 	}
+	
+	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
 	float getCurrScore()
 	{
 		return currScore;
 	}
 	
 	//최고점수 반환 
-	//최고점수 업데이트
 	void setMaxScore(float m_s)
 	{
 		maxScore = m_s;
 	}
+	
+	//최고점수 업데이트
 	float getMaxScore()
 	{
 		return maxScore;
