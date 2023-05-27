@@ -14,50 +14,6 @@ using namespace sf;
 void play_sound(const string& filename);
 void delay_ms(int ms);
 
-//점프할 고양이 클래스
-class Jumping_Cat
-{
-private:
-	//직사각형으로 구현
-	RectangleShape jumping_cat;
-	double posX; //왼쪽 위 x좌표
-	double posY; //왼쪽 위 y좌표
-	double width;
-	double height;
-	double angle;
-	double power; //많이 당길수록 파워 증가 -> 포물선이 길어진다
-	double velocity;
-    //고양이의 능력(시간 여유 시 구현, 일정 스테이지 이상 클리어 시 새로운 고양이를 준다, 고양이별로 각자의 능력을 가짐, 충돌 전 클릭을 하면 고양이의 능력이 발현(ex-분신술))
-    //-> 기본 고양이를 부모 클래스로 해서 여러 능력을 가진 고양이들을 상속으로 구현
-public: 
-	//생성자
-	Jumping_Cat() {
-		posX = 100;
-		posY = 200;
-		width = 20;
-		height = 8;
-		angle = 45;
-		power = 0;
-		velocity = 2;
-	}
-	
-	//소멸자
-	~Jumping_Cat() {
-
-	}
-	
-	//직사각형 반환
-	RectangleShape getJumpingCat()
-	{
-		return jumping_cat;
-	}
-	//파워(속도?, 가속도?), 공격력 setter/getter
-    //이동(move)
-    //당길 때, 날아갈 때 sound effect
-	//사라질 때 visual effect
-};
-
-
 //포물선 클래스
 class Arc
 {
@@ -566,6 +522,8 @@ bool checkCollision(const FloatRect& rect1, const FloatRect& rect2)
 }
 
 //<시간 여유 시 추가로 구현>
+//고양이의 능력(일정 스테이지 이상 클리어 시 새로운 고양이를 준다, 고양이별로 각자의 능력을 가짐, 충돌 전 클릭을 하면 고양이의 능력이 발현(ex-분신술))
+
 //스테이지 클래스
 class Stage
 {
