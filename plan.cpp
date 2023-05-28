@@ -36,6 +36,10 @@ public:
 		posX = x;
 		posY = y;
 		radius = r;
+		
+		velocityX = 0;
+		velocityY = 0;
+		acceleration = 0;
 
 		arc.setPosition(posX, posY);
 		arc.setRadius(radius);
@@ -337,6 +341,9 @@ public:
 		posX = x;
 		posY = y;
 		size = s;
+		
+		currScore = 0;
+		maxScore = 0;
 	}
 	
 	//위치, 크기 등 setter/getter
