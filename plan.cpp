@@ -699,8 +699,7 @@ int main()
 	canSprite.setScale((float)100 / textureSize.x, (float)100/textureSize.y);
 	canSprite.setPosition(800, 100);
 
-	//
-	Score score;
+	//Score score; => 생성자 형식에 맞게 작성해주세요!
 	
 	
 	//남은 점프 횟수 표시할 text 설정
