@@ -665,7 +665,7 @@ int main()
 	window.setFramerateLimit(60);	//프레임 정해주기
 
 	// 바닥 스프라이트 생성
-	Floor floor;
+	//Floor floor; = > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
 	Texture floorTexture;
 	floorTexture.loadFromFile("./Data/Image/floor.png");
 	Sprite floorSprite(floorTexture);
@@ -700,7 +700,7 @@ int main()
 	canSprite.setScale((float)100 / textureSize.x, (float)100/textureSize.y);
 	canSprite.setPosition(800, 100);
 
-	//Score score; => 생성자 형식에 맞게 작성해주세요!
+	//Score score;  = > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
 	
 	
 	//남은 점프 횟수 표시할 text 설정
