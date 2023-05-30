@@ -665,6 +665,7 @@ int main()
 	window.setFramerateLimit(60);	//프레임 정해주기
 
 	// 바닥 스프라이트 생성
+	Floor floor;
 	Texture floorTexture;
 	floorTexture.loadFromFile("./Data/Image/floor.png");
 	Sprite floorSprite(floorTexture);
