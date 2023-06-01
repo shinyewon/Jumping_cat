@@ -855,6 +855,7 @@ int main()
 
 		// 게임 로직
 		float deltaTime = clock.restart().asSeconds();
+		//cout << deltaTime << endl;
 
 		cat.update(deltaTime);
 
