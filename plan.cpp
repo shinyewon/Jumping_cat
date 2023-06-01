@@ -14,6 +14,109 @@ using namespace sf;
 void play_sound(const string& filename);
 void delay_ms(int ms);
 
+//고양이 클래스
+class Cat
+{
+private:
+	Vector2f position;
+	Vector2f velocity;
+	float gravity;
+	bool isJumping;
+	bool isFalling;
+	Texture texture;
+	Sprite sprite;
+
+	// 떨어지는 동작에 대한 변수들
+	float fallSpeed;
+	float rotationSpeed;
+	float rotation;
+
+public:
+	Cat(float x, float y)
+		: position(x, y), velocity(0.f, 0.f), gravity(500.f), isJumping(false), isFalling(false)
+	{
+		texture.loadFromFile("./Data/Image/cat.png");
+		Vector2u catTextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)159.7 / catTextureSize.x, (float)127.7 / catTextureSize.y);
+		sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2); //가운데를 중심점으로 설정
+		sprite.setPosition(position);
+	}
+
+	int getPositionX()
+	{
+		return sprite.getPosition().x;
+	}
+
+	int getPositionY()
+	{
+		return sprite.getPosition().y;
+	}
+
+	float getTextureSizeX() 
+	{
+		return texture.getSize().x;
+	}
+
+	float getTextureSizeY()
+	{
+		return texture.getSize().y;
+	}
+
+	void setRotation(int a)
+	{
+		sprite.setRotation(a);
+	}
+
+	void setScale(float factorX, float factorY)
+	{
+		sprite.setScale((float)factorX, (float)factorY);
+	}
+
+	void changeImage(string path)
+	{
+		texture.loadFromFile(path);
+	}
+
+	void update(float deltaTime)
+	{
+		if (isJumping)
+		{
+			// 위치 업데이트
+			position += velocity * deltaTime;
+			velocity.y += gravity * deltaTime;
+
+			sprite.setPosition(position);
+		}
+	}
+
+	void jump(Vector2f jumpVelocity)
+	{
+		velocity = jumpVelocity;
+		isJumping = true;
+	}
+
+	void startFalling(float speed, float rotateSpeed)
+	{
+		fallSpeed = speed;
+		rotationSpeed = rotateSpeed;
+		isJumping = false;
+		isFalling = true;
+		rotation = 0.f;
+	}
+
+	void draw(RenderWindow& window)
+	{
+		// 고양이 그리기
+		window.draw(sprite);
+	}
+
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
+
 //포물선 클래스
 class Arc
 {
@@ -218,6 +321,57 @@ void delay_ms(int ms)
 	Clock Timer;
 	while (Timer.getElapsedTime().asMilliseconds() < ms);
 }
+
+class Lightbulb
+{
+private:
+	Vector2f position;
+	Vector2f velocity;
+	float gravity;
+	bool isFalling;
+	Texture texture;
+	Sprite sprite;
+
+public:
+	Lightbulb(float x, float y)
+		: position(x, y), velocity(0.f, 0.f), gravity(500.f), isFalling(false)
+	{
+		texture.loadFromFile("./Data/Image/floodlight.png");
+		Vector2u lightTextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)120 / lightTextureSize.x, (float)80 / lightTextureSize.y);
+		sprite.setPosition(position);
+	}
+
+	void update(float deltaTime)
+	{
+		if (isFalling)
+		{
+			// 위치 업데이트
+			position += velocity * deltaTime;
+			velocity.y += gravity * deltaTime;
+
+			sprite.setPosition(position);
+
+			if (position.y >= 600.f) // 전등이 바닥에 닿으면
+			{
+				isFalling = false;
+				velocity = Vector2f(0.f, 0.f);
+				sprite.setRotation(0.f);
+			}
+		}
+	}
+
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
 
 //장애물1 클래스(새장,전등,컵,그릇,다른 고양이 등)
 class Obstacle1
@@ -582,35 +736,46 @@ int main()
 	window.setFramerateLimit(60);	//프레임 정해주기
 
 	// 바닥 스프라이트 생성
+	//Floor floor; = > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
 	Texture floorTexture;
 	floorTexture.loadFromFile("./Data/Image/floor.png");
 	Sprite floorSprite(floorTexture);
 
 	//고양이 스프라이트 생성
-	Texture catTexture;
-	catTexture.loadFromFile("./Data/Image/cat.png");
-	Vector2u catTextureSize = catTexture.getSize();
-	Sprite catSprite(catTexture);
-	catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
-	catSprite.setOrigin(catSprite.getLocalBounds().width / 2, catSprite.getLocalBounds().height / 2); //가운데를 중심점으로 설정
-	catSprite.setPosition(250, 250); 
+	Cat cat(180.f, 450.f);
+	Vector2f dragStartPosition;
+	Vector2f dragEndPosition;
 
 	//사람 스프라이트 생성
-	Texture manTexture;
-	manTexture.loadFromFile("./Data/Image/man.png");
-	Vector2u manTextureSize = manTexture.getSize();
-	Sprite manSprite(manTexture);
-	manSprite.setScale((float)100 / manTextureSize.x, (float)100 / manTextureSize.y);
-	manSprite.setPosition(0, 0);
+	Texture girlTexture;
+	girlTexture.loadFromFile("./Data/Image/girl.png");
+	Vector2u girlTextureSize = girlTexture.getSize();
+	Sprite girlSprite(girlTexture);
+	girlSprite.setScale((float)200 / girlTextureSize.x, (float)200 / girlTextureSize.y);
+	girlSprite.setPosition(0, 340);
+
+	//조명선 스프라이트 생성
+	Texture lineTexture;
+	lineTexture.loadFromFile("./Data/Image/line.png");
+	Vector2u lineTextureSize = lineTexture.getSize();
+	Sprite lineSprite(lineTexture);
+	lineSprite.setScale((float)8.875 / lineTextureSize.x, (float)47.125 / lineTextureSize.y);
+	lineSprite.setPosition(535, 0);
+
+	//조명등 스프라이트 생성
+	Lightbulb lightbulb(480, 40);
 
 	//캔 스프라이트 생성
 	Texture canTexture;
-	canTexture.loadFromFile("./Data/Image/canned_food.jpg");
+	canTexture.loadFromFile("./Data/Image/canned_food.png");
 	Vector2u textureSize = canTexture.getSize();
 	Sprite canSprite(canTexture);
 	canSprite.setScale((float)100 / textureSize.x, (float)100/textureSize.y);
-	canSprite.setPosition(100, 100);
+	canSprite.setPosition(800, 150);
 
+	//Score score;  = > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
+
+	
 	//남은 점프 횟수 표시할 text 설정
 	Jump_number jn;
 	Text text;
@@ -623,7 +788,7 @@ int main()
 	text.setFont(font);
 	text.setString("Chance: " + to_string(jn.getLeftJump()));
 	text.setCharacterSize(jn.getSize());
-	text.setFillColor(Color::Yellow);
+	text.setFillColor(Color::Black);
 	text.setPosition(jn.getPosX(), jn.getPosY());
 
 	// 게임 오버 또는 클리어 여부 표시할 text 설정
@@ -632,8 +797,9 @@ int main()
 	game_status.setCharacterSize(40);
 	game_status.setPosition(350, 260);
 
-	int x = 0, x2 = 0, y = 0, y2 = 0;  //드래그 처리를 위한 좌표 초기화
-	bool cat_is_clicked = false;       //마우스로 고양이를 클릭했는지 저장할 변수
+	Clock clock;
+
+	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
 		// 이벤트 처리
@@ -648,28 +814,25 @@ int main()
 				{
 					if (event.mouseButton.button == Mouse::Left)
 					{
-						x = event.mouseButton.x;
-						y = event.mouseButton.y;
-						if (x > catSprite.getPosition().x - 50 && x < catSprite.getPosition().x + 50 && y > catSprite.getPosition().y - 50 && y < catSprite.getPosition().y + 50)
+						dragStartPosition = Vector2f(event.mouseButton.x, event.mouseButton.y);
+						if (dragStartPosition.x > cat.getPositionX() - 50 && dragStartPosition.x < cat.getPositionX() + 50 && dragStartPosition.y > cat.getPositionY() - 50 && dragStartPosition.y < cat.getPositionY() + 50)
 							cat_is_clicked = true;
-						cout << x << " " << y << "\n";
 					}
 				}
 				else if (event.type == Event::MouseButtonReleased)
 				{
 					if (event.mouseButton.button == Mouse::Left)
 					{
-						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
-						x2 = event.mouseButton.x;
-						y2 = event.mouseButton.y;
-						cout << x2 << " " << y2 << "\n";
+						dragEndPosition = Vector2f(event.mouseButton.x, event.mouseButton.y);
+						Vector2f dragDistance = dragStartPosition - dragEndPosition;
+						
+						float jumpVelocityScale = 7.0f;
+						Vector2f jumpVelocity = jumpVelocityScale * dragDistance; 
 
-						catSprite.setRotation(0);
-						catSprite.setScale((float)100 / catTextureSize.x, (float)100 / catTextureSize.y);
+						cat.setRotation(0);
+						cat.setScale((float)159.7 / cat.getTextureSizeX(), (float)127.7 / cat.getTextureSizeY()); //고양이 크기 원래상태로 되돌리기
 						// 드래그를 너무 조금했을 때는 무시하고 아니면 날아감
-						int diffX = x - x2;
-						int diffY = y - y2;
-						if (abs(diffX) <= 20 && abs(diffY) <= 20) {
+						if (abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20) {
 							cat_is_clicked = false;
 						}
 						else {
@@ -677,36 +840,50 @@ int main()
 								cat_is_clicked = false;
 
 								//날아가는 코드 구현
-								cout << "Flying\n";
+								cat.jump(jumpVelocity);
 
 								jn.reduceJump(); //점프횟수 감소
 								text.setString("Chance: " + to_string(jn.getLeftJump()));
 							}
 							cout << "Dragged\n";
 						}
+						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
 					}
 				}
 			}
 		}
 
 		// 게임 로직
+		float deltaTime = clock.restart().asSeconds();
+		//cout << deltaTime << endl;
+
+		cat.update(deltaTime);
+
 		if (cat_is_clicked == true) {
 			int x1 = Mouse::getPosition(window).x;
 			int y1 = Mouse::getPosition(window).y;
-			int move_pos_x = x - x1;
-			int move_pos_y = y - y1;
-			cout << x1 << " " << y1 << "\n";
+			int move_pos_x = dragStartPosition.x - x1;
+			int move_pos_y = dragStartPosition.y - y1;
 
-			float ang = atan2(double(y1 - y), double(x1 - x)) * 180 / 3.141592;
-			if (ang < 0) ang += 360;
-			catSprite.setRotation(ang+180);
+			float ang = atan2(double(y1 - dragStartPosition.y), double(x1 - dragStartPosition.x)) * 180 / 3.141592;
+			if(ang < 0) ang += 360;
+			if(move_pos_x > 0)
+				cat.setRotation(ang + 180);
 
-			float drag_dis = sqrt(pow(x - x1, 2) + pow(y - y1, 2)); //드래그한 거리
-			if(drag_dis < 70)
-				catSprite.setScale((float)(100 + drag_dis) / catTextureSize.x, (float)(100 - drag_dis) / catTextureSize.y);
+			float drag_dis = sqrt(pow(dragStartPosition.x - x1, 2) + pow(dragStartPosition.y - y1, 2)); //드래그한 거리
+			if (drag_dis <= 70) 
+				cat.setScale((float)(159.7 + drag_dis) / cat.getTextureSizeX(), (float)(127.7 - drag_dis) / cat.getTextureSizeY());
 		}
+
+		//전등과 부딪히면 떨어짐
+		if (cat.getBounds().intersects(lightbulb.getBounds()))
+		{
+			cat.changeImage("./Data/Image/dizzycat.png"); //눈이 빙글빙글 도는 고양이 이미지로 바꿈
+			cat.startFalling(1.f, 1.f); // 고양이가 떨어지는 동작 시작
+		}
+
 		// 그리기
-		window.clear();
+		window.clear(Color::White);
 
 		if (jn.getLeftJump() <= 0) {
 			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함
@@ -720,8 +897,11 @@ int main()
 		else {
 			window.draw(text);
 			window.draw(floorSprite);
+			window.draw(lineSprite);
+			lightbulb.draw(window);
 			window.draw(canSprite);
-			window.draw(catSprite);
+			cat.draw(window);
+			window.draw(girlSprite);
 		}
 
 		window.display();
