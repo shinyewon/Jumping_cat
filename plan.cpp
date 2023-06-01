@@ -62,6 +62,10 @@ public:
 	{
 		return texture.getSize().y;
 	}
+	Vector2f getVelocity()
+	{
+		return velocity;
+	}
 
 	void setRotation(int a)
 	{
@@ -313,7 +317,6 @@ void play_sound(const string& filename)
 	Sound sound;
 	sound.setBuffer(buffer);
 	sound.play();
-	delay_ms(1500);
 }
 
 void delay_ms(int ms)
@@ -429,6 +432,7 @@ public:
 		
   //충돌시 visual,sound effect
 };
+
 
 
 //바닥 클래스 -> 바닥을 스프라이트로 만들려면 Sprite 클래스를 상속받아야 하나?
@@ -775,7 +779,7 @@ int main()
 
 	//Score score;  = > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
 
-	
+
 	//남은 점프 횟수 표시할 text 설정
 	Jump_number jn;
 	Text text;
@@ -798,6 +802,50 @@ int main()
 	game_status.setPosition(350, 260);
 
 	Clock clock;
+
+	//효과음, 배경음악
+	Music music;
+	if (!music.openFromFile("./Data/Sound/background_music.ogg"))
+		return -1;
+	music.play();
+	music.setVolume(50.f);
+	music.setLoop(true);
+
+	//배경화면 스프라이트 생성
+	Texture backgroundTexture;
+	if (!backgroundTexture.loadFromFile("./Data/Image/background.jpg"))
+		return -1;
+	Vector2u backgroundSize = backgroundTexture.getSize();
+	Sprite backgroundSprite;
+	backgroundSprite.setTexture(backgroundTexture);
+	backgroundSprite.setScale((float)window.getSize().x / backgroundSize.x, (float)window.getSize().y / backgroundSize.y);
+
+	//배경 시점
+	View view(Vector2f(0, window.getSize().y/2), Vector2f(window.getSize().x, window.getSize().y));
+	//backgroundSprite.setPosition(-cat.getPositionX(), 0);
+
+	//별 스프라이트 생성
+	Texture staryTexture;
+	staryTexture.loadFromFile("./Data/Image/star_y.png");
+	Vector2u starySize = staryTexture.getSize();
+	Sprite starySprite(staryTexture);
+	starySprite.setScale((float)100 / starySize.x, (float)100 / starySize.y);
+	starySprite.setPosition(800, 150);
+
+	Texture stargTexture;
+	stargTexture.loadFromFile("./Data/Image/star_g.png");
+	Vector2u stargSize = stargTexture.getSize();
+	Sprite stargSprite(stargTexture);
+	stargSprite.setScale((float)100 / stargSize.x, (float)100 / stargSize.y);
+	stargSprite.setPosition(window.getSize().x/2, window.getSize().y*0.3);
+
+	//전등
+	Texture lightTexture;
+	lightTexture.loadFromFile("./Data/Image/light1.png");
+	Vector2u lightSize = lightTexture.getSize();
+	Sprite lightSprite(lightTexture);
+	lightSprite.setScale((float)100 / lightSize.x, (float)100 / lightSize.y);
+	lightSprite.setPosition(800, 150);
 
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
@@ -882,6 +930,11 @@ int main()
 			cat.startFalling(1.f, 1.f); // 고양이가 떨어지는 동작 시작
 		}
 
+		//배경 시점 변경
+		if (cat.getPositionX() > window.getSize().x*0.4 && cat.getPositionX() < window.getSize().x) {
+			backgroundSprite.move(-cat.getVelocity().x/75, 0);
+		}
+
 		// 그리기
 		window.clear(Color::White);
 
@@ -893,8 +946,10 @@ int main()
 			game_status.setString("Game Over");
 			game_status.setFillColor(Color::Red);
 			window.draw(game_status);
+			window.draw(stargSprite);
 		}
 		else {
+			window.draw(backgroundSprite);
 			window.draw(text);
 			window.draw(floorSprite);
 			window.draw(lineSprite);
@@ -906,9 +961,7 @@ int main()
 
 		window.display();
 
-		//사운드 수정중...
-		Canned_Food can1;
-		//can1.getCannedFoodSound(); //소리가 나는 동안 다음 문장이 실행이 안돼서 수행 속도가 떨어져요! 수정 필요해 보여요!
+
 	}
 
 	return 0;
