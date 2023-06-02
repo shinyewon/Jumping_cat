@@ -13,6 +13,7 @@ using namespace sf;
 
 void play_sound(const string& filename);
 void delay_ms(int ms);
+class Score;
 
 //고양이 클래스
 class Cat
@@ -226,6 +227,11 @@ class Canned_Food
 private:
   //변수(필드)
   //위치좌표, 크기
+
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
+
 	double posX;
 	double posY;
 	double sizeX;
@@ -234,21 +240,26 @@ private:
 public:
   //함수(메소드)
   //생성자, 소멸자
-	Canned_Food()
+	Canned_Food(float x, float y)
+		: position(x, y)
 	{
-		posX = 50.0;
-		posY = 50.0;
-		sizeX = 10.0;
-		sizeY = 10.0;
+		//캔 스프라이트 생성
+		texture.loadFromFile("./Data/Image/canned_food.png");
+		Vector2u textureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)50 / textureSize.x, (float)50 / textureSize.y);
+		sprite.setPosition(position);
     }
-    Canned_Food(double posX, double posY, double sizeX, double sizeY)
-    {
-		this->posX = posX;
-		this->posY = posY;
-		this->sizeX = sizeX;
-	        this->sizeY = sizeY;
-    }
+	~Canned_Food()
+	{
+
+	}
   //위치좌표, 크기 setter/getter
+	void setFoodPos(double posX, double posY)
+	{
+		position.x = posX;
+		position.y = posY;
+	}
 	void setFoodSize(double sizeX, double sizeY)
 	{
 		this->sizeX = sizeX;
@@ -262,38 +273,13 @@ public:
 	{
 		return this->sizeY;
 	}
-	void setFoodpos(double posX,double posY)
+	Sprite* getsprite()
 	{
-		this->posX = posX;
-		this->posY = posY;
-	}
-	double getFoodposX()
-	{
-		return this->posX;
-	}
-	double getFoodposY()
-	{
-		return this->posY;
+		return &sprite;
 	}
   
   //충돌 시 획득
-	void getFoodScore(double size)
-	{
-		//사이즈별로 점수부여
-		//ex) size 10 = 1000점
-		//    size 20 = 3000점
-		//    size 40 = 6000점 ...
-		if (size == 10.0) {
-			// getScore(1000);
-		}
-		else if (size == 20.0) {
-			// getScore(3000);
-		}
-		else if (size == 40.0) {
-			// getScore(6000);
-		}
-
-  }
+	void getFoodScore(Score* score, int size);
 
    //충돌, 획득 시 visual,sound effect
 	void getCannedFoodSound()
@@ -302,6 +288,16 @@ public:
 	}
 
 	//획득시 제거
+
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
 };
 
 //사운드 재생 함수
@@ -317,6 +313,7 @@ void play_sound(const string& filename)
 	Sound sound;
 	sound.setBuffer(buffer);
 	sound.play();
+	delay_ms(900);
 }
 
 void delay_ms(int ms)
@@ -433,7 +430,35 @@ public:
   //충돌시 visual,sound effect
 };
 
+class Cup1:Obstacle1
+{
+private:
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
 
+public:
+	Cup1(float x, float y)
+		: position(x, y)
+	{
+		texture.loadFromFile("./Data/Image/cup1.jpg");
+		Vector2u cup1TextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)200 / cup1TextureSize.x, (float)200 / cup1TextureSize.y);
+		sprite.setPosition(position);
+
+	}
+
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
 
 //바닥 클래스 -> 바닥을 스프라이트로 만들려면 Sprite 클래스를 상속받아야 하나?
 class Floor
@@ -551,6 +576,24 @@ public:
 		return maxScore;
 	}
 };
+
+/////
+void Canned_Food::getFoodScore(Score* score, int size)
+{
+	//사이즈별로 점수부여
+	//ex) size 1 = 1000점
+	//    size 2 = 1500점
+	//    size 3 = 3000점 ...
+	if (size == 1) {//파랑
+		score->setCurrScore(1000);
+	}
+	else if (size == 2) {//빨강
+		score->setCurrScore(1500);
+	}
+	else if (size == 3) {//골드
+		score->setCurrScore(3000);
+	}
+}
 
 //별 클래스
 class Star
@@ -769,15 +812,8 @@ int main()
 	//조명등 스프라이트 생성
 	Lightbulb lightbulb(480, 40);
 
-	//캔 스프라이트 생성
-	Texture canTexture;
-	canTexture.loadFromFile("./Data/Image/canned_food.png");
-	Vector2u textureSize = canTexture.getSize();
-	Sprite canSprite(canTexture);
-	canSprite.setScale((float)100 / textureSize.x, (float)100/textureSize.y);
-	canSprite.setPosition(800, 150);
 
-	//Score score;  = > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
+	Score score(0,0,0);  //= > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
 
 
 	//남은 점프 횟수 표시할 text 설정
@@ -813,15 +849,15 @@ int main()
 
 	//배경화면 스프라이트 생성
 	Texture backgroundTexture;
-	if (!backgroundTexture.loadFromFile("./Data/Image/background.jpg"))
+	if (!backgroundTexture.loadFromFile("./Data/Image/background.png"))
 		return -1;
 	Vector2u backgroundSize = backgroundTexture.getSize();
 	Sprite backgroundSprite;
 	backgroundSprite.setTexture(backgroundTexture);
-	backgroundSprite.setScale((float)window.getSize().x / backgroundSize.x, (float)window.getSize().y / backgroundSize.y);
+	backgroundSprite.setScale((float)(window.getSize().x*2) / backgroundSize.x, (float)window.getSize().y / backgroundSize.y);
 
 	//배경 시점
-	View view(Vector2f(0, window.getSize().y/2), Vector2f(window.getSize().x, window.getSize().y));
+	View view(Vector2f(window.getSize().x/2, window.getSize().y / 2), Vector2f(window.getSize().x, window.getSize().y));
 	//backgroundSprite.setPosition(-cat.getPositionX(), 0);
 
 	//별 스프라이트 생성
@@ -846,6 +882,13 @@ int main()
 	Sprite lightSprite(lightTexture);
 	lightSprite.setScale((float)100 / lightSize.x, (float)100 / lightSize.y);
 	lightSprite.setPosition(800, 150);
+
+	//장애물 cup
+	Cup1 cup1(800, 300);
+
+	// can
+	Canned_Food can1(300, 500);
+
 
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
@@ -930,9 +973,27 @@ int main()
 			cat.startFalling(1.f, 1.f); // 고양이가 떨어지는 동작 시작
 		}
 
+		////cup과 충돌
+		//if (cat.getBounds().intersects(cup1.getBounds()))
+		//{
+		//	cat.changeImage("./Data/Image/dizzycat.png");
+		//	cat.startFalling(1.f, 1.f);
+		//}
+
+		//can과 충돌
+		if (cat.getBounds().intersects(can1.getBounds()))
+		{
+			can1.getFoodScore(&score,1);
+			can1.getsprite()->setPosition(5000, 5000);
+			cout << "coll with can1\n";
+			can1.getCannedFoodSound();
+			//can1.~Canned_Food();
+		}
+
 		//배경 시점 변경
-		if (cat.getPositionX() > window.getSize().x*0.4 && cat.getPositionX() < window.getSize().x) {
-			backgroundSprite.move(-cat.getVelocity().x/75, 0);
+		if (cat.getPositionX() > window.getSize().x*0.5 && cat.getPositionX() < window.getSize().x) {
+			//backgroundSprite.move(-cat.getVelocity().x/75, 0);
+			view.setCenter(cat.getPositionX(), window.getSize().y / 2);
 		}
 
 		// 그리기
@@ -949,12 +1010,13 @@ int main()
 			window.draw(stargSprite);
 		}
 		else {
+			window.setView(view);
 			window.draw(backgroundSprite);
 			window.draw(text);
 			window.draw(floorSprite);
 			window.draw(lineSprite);
 			lightbulb.draw(window);
-			window.draw(canSprite);
+			can1.draw(window);
 			cat.draw(window);
 			window.draw(girlSprite);
 		}
