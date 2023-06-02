@@ -11,15 +11,18 @@
 using namespace std;
 using namespace sf;
 
+class Score;
+
 void play_sound(const string& filename);
 void delay_ms(int ms);
-class Score;
 
 //고양이 클래스
 class Cat
 {
 private:
 	Vector2f position;
+	float startPosX = 0;
+	float startPosY = 0;
 	Vector2f velocity;
 	float gravity;
 	bool isJumping;
@@ -28,9 +31,9 @@ private:
 	Sprite sprite;
 
 	// 떨어지는 동작에 대한 변수들
-	float fallSpeed;
-	float rotationSpeed;
-	float rotation;
+	float fallSpeed = 0;
+	float rotationSpeed = 0;
+	float rotation = 0;
 
 public:
 	Cat(float x, float y)
@@ -44,33 +47,56 @@ public:
 		sprite.setPosition(position);
 	}
 
+	void setPosition(float x, float y)
+	{
+		position.x = x;
+		position.y = y;
+
+		sprite.setPosition(position);
+	}
+
 	int getPositionX()
 	{
-		return sprite.getPosition().x;
+		return (int)sprite.getPosition().x;
 	}
 
 	int getPositionY()
 	{
-		return sprite.getPosition().y;
+		return (int)sprite.getPosition().y;
 	}
 
-	float getTextureSizeX() 
+	void setStartPosition(float x, float y)
 	{
-		return texture.getSize().x;
+		startPosX = x;
+		startPosY = y;
+	}
+	float getStartPositionX()
+	{
+		return startPosX;
+	}
+	float getStartPositionY()
+	{
+		return startPosY;
+	}
+
+	float getTextureSizeX()
+	{
+		return (float)texture.getSize().x;
 	}
 
 	float getTextureSizeY()
 	{
-		return texture.getSize().y;
+		return (float)texture.getSize().y;
 	}
-	Vector2f getVelocity()
+
+	float getGravity()
 	{
-		return velocity;
+		return gravity;
 	}
 
 	void setRotation(int a)
 	{
-		sprite.setRotation(a);
+		sprite.setRotation((float)a);
 	}
 
 	void setScale(float factorX, float factorY)
@@ -131,12 +157,18 @@ private:
 	//위치좌표, 크기, 각도
 	float posX;
 	float posY;
+	float startArcPosX = 0;
+	float startArcPosY = 0;
 	float radius;
-	
+
+	Vector2f velocity;
+	Vector2f startArcVelocity;
 	float velocityX;
 	float velocityY;
 	float acceleration;
-	
+
+	Color color;
+
 public:
 	//생성자, 소멸자
 	Arc(float x, float y, float r)
@@ -144,23 +176,26 @@ public:
 		posX = x;
 		posY = y;
 		radius = r;
-		
+
 		velocityX = 0;
 		velocityY = 0;
+		velocity.x = velocityX;
+		velocity.y = velocityY;
 		acceleration = 0;
 
 		arc.setPosition(posX, posY);
 		arc.setRadius(radius);
+		arc.setFillColor(color.Red);
 	}
-	
+
 	//
 	CircleShape getArc()
 	{
 		return arc;
 	}
-	
+
 	//위치좌표, 크기, 각도 setter/getter
-	void setArcPos(float x,float y)
+	void setArcPos(float x, float y)
 	{
 		posX = x;
 		posY = y;
@@ -181,23 +216,34 @@ public:
 	{
 		return radius;
 	}
-	
+
+	void setArcVelocity(Vector2f jumpVelocity)
+	{
+		velocity = jumpVelocity;
+	}
+	Vector2f getArcVelocity()
+	{
+		return velocity;
+	}
+
 	void setArcVelocityX(float v_x)
 	{
 		velocityX = v_x;
+		velocity.x = velocityX;
 	}
 	float getArcVelocityX()
 	{
-		return velocityX;
+		return velocity.x;
 	}
 
 	void setArcVelocityY(float v_y)
 	{
 		velocityY = v_y;
+		velocity.y = velocityY;
 	}
 	float getArcVelocityY()
 	{
-		return velocityY;
+		return velocity.y;
 	}
 
 	void setArcAcceleration(float a)
@@ -208,21 +254,44 @@ public:
 	{
 		return acceleration;
 	}
-	
+
+	void setStartArcPosition(float x, float y)
+	{
+		startArcPosX = x;
+		startArcPosY = y;
+	}
+	float getStartArcPositionX()
+	{
+		return startArcPosX;
+	}
+	float getStartArcPositionY()
+	{
+		return startArcPosY;
+	}
+
+	void setStartArcVelocity(Vector2f startVelocity)
+	{
+		startArcVelocity = startVelocity;
+	}
+	Vector2f getStartArcVelocity()
+	{
+		return startArcVelocity;
+	}
+
 	//이동(move)
 	void moveArc(float dt)
 	{
-		setArcPos(getArcPosX() + getArcVelocityX() * dt, getArcPosY() - getArcVelocityY() * dt);
+		setArcPos(getArcPosX() + getArcVelocityX() * dt, getArcPosY() + getArcVelocityY() * dt);
+		setArcVelocityY(getArcVelocityY() + getArcAcceleration() * dt);
 
-		setArcVelocityX(getArcVelocityX() + 0 * dt);
-		setArcVelocityY(getArcVelocityY() - getArcAcceleration() * dt);
+		arc.setPosition(getArcPosX(), getArcPosY());
 	}
 };
 
 //통조림 클래스
 class Canned_Food
 {
-  //직사각형으로 구현하면 좋을 듯
+	//직사각형으로 구현하면 좋을 듯
 
 private:
   //변수(필드)
@@ -232,11 +301,11 @@ private:
 	Texture texture;
 	Sprite sprite;
 
-	double posX;
-	double posY;
+	//double posX;
+	//double posY;
 	double sizeX;
 	double sizeY;
-  
+
 public:
   //함수(메소드)
   //생성자, 소멸자
@@ -277,11 +346,11 @@ public:
 	{
 		return &sprite;
 	}
-  
-  //충돌 시 획득
+
+	//충돌 시 획득
 	void getFoodScore(Score* score, int size);
 
-   //충돌, 획득 시 visual,sound effect
+	//충돌, 획득 시 visual,sound effect
 	void getCannedFoodSound()
 	{
 		play_sound("./Data/Sound/676402__cjspellsfish__score-2.wav");
@@ -376,58 +445,58 @@ public:
 //장애물1 클래스(새장,전등,컵,그릇,다른 고양이 등)
 class Obstacle1
 {
-  //장애물 여러 개 만들 때 상속으로 구현할지 논의 필요
-  //직사각형으로 구현하면 좋을 듯
+	//장애물 여러 개 만들 때 상속으로 구현할지 논의 필요
+	//직사각형으로 구현하면 좋을 듯
 
 private:
-  //변수(필드)
-  //위치좌표, 크기
+	//변수(필드)
+	//위치좌표, 크기
 	double posX;
 	double posY;
 	double sizeX;
 	double sizeY;
-  //장애물이 움직이지 않고 고정됨
-  
+	//장애물이 움직이지 않고 고정됨
+
 public:
-  //함수(메소드)
-  //생성자, 소멸자
-	Obstacle1(){
-		posX=100;
-		posY=200;
-		sizeX=40;
-		sizeY=50;
+	//함수(메소드)
+	//생성자, 소멸자
+	Obstacle1() {
+		posX = 100;
+		posY = 200;
+		sizeX = 40;
+		sizeY = 50;
 	}
-	Obstacle1(double posX, double posY, double sizeX, double sizeY){
-		this->posX=posX;
-		this->posY=posY;
-		this->sizeX=sizeX;
-		this->sizeY=sizeY;
+	Obstacle1(double posX, double posY, double sizeX, double sizeY) {
+		this->posX = posX;
+		this->posY = posY;
+		this->sizeX = sizeX;
+		this->sizeY = sizeY;
 	}
-  //위치좌표, 크기, 등 setter/getter
-	void setObstaclePos(double posX, double posY){
+	//위치좌표, 크기, 등 setter/getter
+	void setObstaclePos(double posX, double posY) {
 		this->posX = posX;
 		this->posY = posY;
 	}
-	double getObstaclePosX(){
+	double getObstaclePosX() {
 		return posX;
 	}
-	double getObstaclePosY(){
+	double getObstaclePosY() {
 		return posY;
 	}
-	void setObstacleSizeX(double X){
+	void setObstacleSizeX(double X) {
 		sizeX = X;
 	}
-	void setObstacleSizeY(double Y){
+	void setObstacleSizeY(double Y) {
 		sizeY = Y;
 	}
-	double getObstacleSizeX(){
+	double getObstacleSizeX() {
 		return sizeX;
 	}
-	double getObstacleSizeY(){
+	double getObstacleSizeY() {
 		return sizeY;
 	}
-		
-  //충돌시 visual,sound effect
+
+	//충돌시 visual,sound effect
 };
 
 class Cup1:Obstacle1
@@ -464,22 +533,34 @@ public:
 class Floor
 {
 private:
+	RectangleShape floor;
 	//위치좌표,크기
 	float posX;
 	float posY;
-	float size;
-	
+	Vector2f size;
+	Color color;
+
 public:
 	//생성자,소멸자
-	Floor(float x, float y, float s)
+	Floor(float x, float y, float s_x, float s_y)
 	{
 		posX = x;
 		posY = y;
-		size = s;
+		size.x = s_x;
+		size.y = s_y;
+
+		floor.setPosition(posX, posY);
+		floor.setSize(size);
+		floor.setFillColor(color.Black);
 	}
-	
+
+	RectangleShape getFloor()
+	{
+		return floor;
+	}
+
 	//위치좌표,크기
-	void setFloorPos(float x,float y)
+	void setFloorPos(float x, float y)
 	{
 		posX = x;
 		posY = y;
@@ -492,15 +573,15 @@ public:
 	{
 		return posY;
 	}
-	void setFloorSize(float s)
+	void setFloorSize(Vector2f s)
 	{
 		size = s;
 	}
-	float getFloorSize()
+	Vector2f getFloorSize()
 	{
 		return size;
 	}
-	
+
 	//고양이가 바닥에 닿으면 게임 오버
 };
 
@@ -516,7 +597,7 @@ private:
 	float posX;
 	float posY;
 	float size;
-	
+
 public:
 	//생성자, 소멸자
 	Score(float x, float y, float s)
@@ -524,13 +605,13 @@ public:
 		posX = x;
 		posY = y;
 		size = s;
-		
+
 		currScore = 0;
 		maxScore = 0;
 	}
-	
+
 	//위치, 크기 등 setter/getter
-	void setScorePos(float x,float y)
+	void setScorePos(float x, float y)
 	{
 		posX = x;
 		posY = y;
@@ -551,25 +632,25 @@ public:
 	{
 		return size;
 	}
-	
+
 	//현재점수 반환
 	void setCurrScore(float c_s)
 	{
 		currScore = c_s;
 	}
-	
+
 	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
 	float getCurrScore()
 	{
 		return currScore;
 	}
-	
+
 	//최고점수 반환 
 	void setMaxScore(float m_s)
 	{
 		maxScore = m_s;
 	}
-	
+
 	//최고점수 업데이트
 	float getMaxScore()
 	{
@@ -600,44 +681,46 @@ class Star
 {
 private:
 	//위치, 크기
-	
+
 	//현재 별 개수
 	int curstar;
 	//이 스테이지 누적 최대 별 개수
 	int stagemaxstar;//스테이지 종료시 업데이트
 public:
 	//생성자
-	Star(int stagemaxstar){
-		curstar=0;
+	Star(int stagemaxstar) {
+		curstar = 0;
 		this->stagemaxstar = stagemaxstar;
 	}
 	//현재 별 개수 setter/getter
-	void setStar(int score){
-		int cs=0;
-		if(score>=30000) // 일정 점수 이상은 별 3개
+	void setStar(int score) {
+		int cs = 0;
+		if (score >= 30000) // 일정 점수 이상은 별 3개
 		{
-			cs=3;
-		}else if(score>=20000 && score<30000)
-		{
-			cs=2;
-		}else if(score>=10000 && score<20000)
-		{
-			cs=1;
+			cs = 3;
 		}
-		
-		if(cs>curstar)
-			curstar=cs;
+		else if (score >= 20000 && score < 30000)
+		{
+			cs = 2;
+		}
+		else if (score >= 10000 && score < 20000)
+		{
+			cs = 1;
+		}
+
+		if (cs > curstar)
+			curstar = cs;
 	}
-	int getStar(){
+	int getStar() {
 		return curstar;
 	}
 	//별 최대 개수 setter/getter
 	void setMaxStar()
 	{
-		if(stagemaxstar<curstar)
-			stagemaxstar=curstar;
+		if (stagemaxstar < curstar)
+			stagemaxstar = curstar;
 	}
-	int getMaxStar(){
+	int getMaxStar() {
 		return stagemaxstar;
 	}
 };
@@ -667,7 +750,7 @@ public:
 		posY = y;
 		size = s;
 	}
-	
+
 	~Jump_number() {
 
 	}
@@ -776,20 +859,25 @@ public:
 	//위치, 크기, 레벨, 별개수 setter/getter
 };
 
-int main() 
+int main()
 {
 	// 창 생성
 	RenderWindow window(VideoMode(960, 540), "Jumping cat");
 	window.setFramerateLimit(60);	//프레임 정해주기
 
+	//포물선 클래스 생성
+	Arc arc(180, 450, 3);
+	arc.setStartArcPosition(arc.getArcPosX(), arc.getArcPosY());
+
 	// 바닥 스프라이트 생성
-	//Floor floor; = > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
+	Floor floor(430, 510, 100, 20);
 	Texture floorTexture;
-	floorTexture.loadFromFile("./Data/Image/floor.png");
+	//floorTexture.loadFromFile("./Data/Image/floor.png");
 	Sprite floorSprite(floorTexture);
 
 	//고양이 스프라이트 생성
 	Cat cat(180.f, 450.f);
+	cat.setStartPosition(cat.getPositionX(), cat.getPositionY());
 	Vector2f dragStartPosition;
 	Vector2f dragEndPosition;
 
@@ -813,8 +901,7 @@ int main()
 	Lightbulb lightbulb(480, 40);
 
 
-	Score score(0,0,0);  //= > 기본 생성자가 없습니다. 생성자 형식에 맞게 작성해주세요!
-
+	Score score(0, 30, 20);
 
 	//남은 점프 횟수 표시할 text 설정
 	Jump_number jn;
@@ -829,7 +916,14 @@ int main()
 	text.setString("Chance: " + to_string(jn.getLeftJump()));
 	text.setCharacterSize(jn.getSize());
 	text.setFillColor(Color::Black);
-	text.setPosition(jn.getPosX(), jn.getPosY());
+	text.setPosition((float)jn.getPosX(), (float)jn.getPosY());
+
+	Text game_score;
+	game_score.setFont(font);
+	game_score.setString("Score: " + to_string(score.getCurrScore()));
+	game_score.setCharacterSize((int) score.getScoreSize());
+	game_score.setFillColor(Color::Blue);
+	game_score.setPosition(score.getScorePosX(), score.getScorePosY());
 
 	// 게임 오버 또는 클리어 여부 표시할 text 설정
 	Text game_status;
@@ -890,6 +984,9 @@ int main()
 	Canned_Food can1(300, 500);
 
 
+	bool reset = false;
+	bool startFalling = false;
+
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
@@ -905,7 +1002,7 @@ int main()
 				{
 					if (event.mouseButton.button == Mouse::Left)
 					{
-						dragStartPosition = Vector2f(event.mouseButton.x, event.mouseButton.y);
+						dragStartPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
 						if (dragStartPosition.x > cat.getPositionX() - 50 && dragStartPosition.x < cat.getPositionX() + 50 && dragStartPosition.y > cat.getPositionY() - 50 && dragStartPosition.y < cat.getPositionY() + 50)
 							cat_is_clicked = true;
 					}
@@ -914,11 +1011,11 @@ int main()
 				{
 					if (event.mouseButton.button == Mouse::Left)
 					{
-						dragEndPosition = Vector2f(event.mouseButton.x, event.mouseButton.y);
+						dragEndPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
 						Vector2f dragDistance = dragStartPosition - dragEndPosition;
-						
+
 						float jumpVelocityScale = 7.0f;
-						Vector2f jumpVelocity = jumpVelocityScale * dragDistance; 
+						Vector2f jumpVelocity = jumpVelocityScale * dragDistance;
 
 						cat.setRotation(0);
 						cat.setScale((float)159.7 / cat.getTextureSizeX(), (float)127.7 / cat.getTextureSizeY()); //고양이 크기 원래상태로 되돌리기
@@ -929,12 +1026,19 @@ int main()
 						else {
 							if (cat_is_clicked == true) {
 								cat_is_clicked = false;
+								reset = false;
+
+								//포물선 그리기 위한 속도, 가속도, 위치 세팅
+								arc.setArcVelocity(jumpVelocity);
+								arc.setStartArcVelocity(arc.getArcVelocity());
+								arc.setArcAcceleration(cat.getGravity());
+								
+								arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
+								
 
 								//날아가는 코드 구현
 								cat.jump(jumpVelocity);
 
-								jn.reduceJump(); //점프횟수 감소
-								text.setString("Chance: " + to_string(jn.getLeftJump()));
 							}
 							cout << "Dragged\n";
 						}
@@ -946,31 +1050,56 @@ int main()
 
 		// 게임 로직
 		float deltaTime = clock.restart().asSeconds();
-		//cout << deltaTime << endl;
+		cout << deltaTime << endl;
 
-		cat.update(deltaTime);
+		if (cat.getPositionY() >= floor.getFloorPosY())
+		{
+			startFalling = false;
+			reset = true;
+
+			jn.reduceJump(); //점프횟수 감소
+			text.setString("Chance: " + to_string(jn.getLeftJump()));
+		}
+
+		if (reset == false)
+		{
+			cat.update(deltaTime);
+		}
+		else
+		{
+			cat.changeImage("./Data/Image/cat.png");
+
+			cat.setPosition(cat.getStartPositionX(), cat.getStartPositionY());
+			cat.jump(Vector2f(0, 0));
+		}
+		
 
 		if (cat_is_clicked == true) {
 			int x1 = Mouse::getPosition(window).x;
 			int y1 = Mouse::getPosition(window).y;
-			int move_pos_x = dragStartPosition.x - x1;
-			int move_pos_y = dragStartPosition.y - y1;
+			int move_pos_x = (int)dragStartPosition.x - x1;
+			int move_pos_y = (int)dragStartPosition.y - y1;
 
-			float ang = atan2(double(y1 - dragStartPosition.y), double(x1 - dragStartPosition.x)) * 180 / 3.141592;
-			if(ang < 0) ang += 360;
-			if(move_pos_x > 0)
-				cat.setRotation(ang + 180);
+			float ang = (float)(atan2(double(y1 - dragStartPosition.y), double(x1 - dragStartPosition.x)) * 180 / 3.141592);
+			if (ang < 0) ang += 360;
+			if (move_pos_x > 0)
+				cat.setRotation((int)ang + 180);
 
-			float drag_dis = sqrt(pow(dragStartPosition.x - x1, 2) + pow(dragStartPosition.y - y1, 2)); //드래그한 거리
-			if (drag_dis <= 70) 
+			float drag_dis = (float)sqrt(pow(dragStartPosition.x - x1, 2) + pow(dragStartPosition.y - y1, 2)); //드래그한 거리
+			if (drag_dis <= 70)
 				cat.setScale((float)(159.7 + drag_dis) / cat.getTextureSizeX(), (float)(127.7 - drag_dis) / cat.getTextureSizeY());
 		}
 
+		
 		//전등과 부딪히면 떨어짐
-		if (cat.getBounds().intersects(lightbulb.getBounds()))
+		if (cat.getBounds().intersects(lightbulb.getBounds()) && startFalling == false)
 		{
 			cat.changeImage("./Data/Image/dizzycat.png"); //눈이 빙글빙글 도는 고양이 이미지로 바꿈
-			cat.startFalling(1.f, 1.f); // 고양이가 떨어지는 동작 시작
+
+			//고양이 속도 0(떨어짐)
+			cat.jump(Vector2f(0, 0));
+			startFalling = true;
+			//cat.startFalling(1.f, 1.f); // 고양이가 떨어지는 동작 시작
 		}
 
 		////cup과 충돌
@@ -1013,12 +1142,32 @@ int main()
 			window.setView(view);
 			window.draw(backgroundSprite);
 			window.draw(text);
-			window.draw(floorSprite);
+			window.draw(game_score);
+			//window.draw(floorSprite);
+			window.draw(floor.getFloor());
 			window.draw(lineSprite);
 			lightbulb.draw(window);
 			can1.draw(window);
 			cat.draw(window);
 			window.draw(girlSprite);
+
+			//포물선 화면에 그려주기
+			arc.setArcVelocity(arc.getStartArcVelocity());
+
+			arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
+
+			int ArcDrawCount = 0;
+
+			for (float tldt = 0; tldt <= 0.02; tldt += 0.0001)
+			{
+				if (ArcDrawCount == 0 || ArcDrawCount % 10 == 0)
+				{
+					window.draw(arc.getArc());
+				}
+
+				arc.moveArc(tldt);
+				ArcDrawCount++;
+			}
 		}
 
 		window.display();
