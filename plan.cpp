@@ -948,6 +948,7 @@ int main()
 		float deltaTime = clock.restart().asSeconds();
 		//cout << deltaTime << endl;
 
+
 		cat.update(deltaTime);
 
 		if (cat_is_clicked == true) {
