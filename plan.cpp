@@ -1067,7 +1067,7 @@ int main()
 		}
 		else
 		{
-			cat.changeImage("C:\\project\\Jumping_cat\\Data\\Image\\cat.png");
+			cat.changeImage("./Data/Image/cat.png");
 
 			cat.setPosition(cat.getStartPositionX(), cat.getStartPositionY());
 			cat.jump(Vector2f(0, 0));
@@ -1094,7 +1094,7 @@ int main()
 		//전등과 부딪히면 떨어짐
 		if (cat.getBounds().intersects(lightbulb.getBounds()) && startFalling == false)
 		{
-			cat.changeImage("C:\\project\\Jumping_cat\\Data\\Image\\dizzycat.png"); //눈이 빙글빙글 도는 고양이 이미지로 바꿈
+			cat.changeImage("./Data/Image/dizzycat.png"); //눈이 빙글빙글 도는 고양이 이미지로 바꿈
 
 			//고양이 속도 0(떨어짐)
 			cat.jump(Vector2f(0, 0));
