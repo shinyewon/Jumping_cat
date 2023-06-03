@@ -37,8 +37,7 @@ public:
 	Cat(float x, float y)
 		: position(x, y), velocity(0.f, 0.f), gravity(500.f), isJumping(false), isFalling(false)
 	{
-		//texture.loadFromFile("./Data/Image/cat.png");
-		texture.loadFromFile("C:\\project\\Jumping_cat\\Data\\Image\\cat.png");
+		texture.loadFromFile("./Data/Image/cat.png");
 		Vector2u catTextureSize = texture.getSize();
 		sprite.setTexture(texture);
 		sprite.setScale((float)159.7 / catTextureSize.x, (float)127.7 / catTextureSize.y);
@@ -293,31 +292,41 @@ class Canned_Food
 	//직사각형으로 구현하면 좋을 듯
 
 private:
-	//변수(필드)
-	//위치좌표, 크기
+  //변수(필드)
+  //위치좌표, 크기
+
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
+
 	double posX;
 	double posY;
 	double sizeX;
 	double sizeY;
 
 public:
-	//함수(메소드)
-	//생성자, 소멸자
-	Canned_Food()
+  //함수(메소드)
+  //생성자, 소멸자
+	Canned_Food(float x, float y)
+		: position(x, y)
 	{
-		posX = 50.0;
-		posY = 50.0;
-		sizeX = 10.0;
-		sizeY = 10.0;
-	}
-	Canned_Food(double posX, double posY, double sizeX, double sizeY)
+		//캔 스프라이트 생성
+		texture.loadFromFile("./Data/Image/canned_food.png");
+		Vector2u textureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)50 / textureSize.x, (float)50 / textureSize.y);
+		sprite.setPosition(position);
+    }
+	~Canned_Food()
 	{
-		this->posX = posX;
-		this->posY = posY;
-		this->sizeX = sizeX;
-		this->sizeY = sizeY;
+
 	}
-	//위치좌표, 크기 setter/getter
+  //위치좌표, 크기 setter/getter
+	void setFoodPos(double posX, double posY)
+	{
+		position.x = posX;
+		position.y = posY;
+	}
 	void setFoodSize(double sizeX, double sizeY)
 	{
 		this->sizeX = sizeX;
@@ -331,18 +340,9 @@ public:
 	{
 		return this->sizeY;
 	}
-	void setFoodpos(double posX, double posY)
+	Sprite* getsprite()
 	{
-		this->posX = posX;
-		this->posY = posY;
-	}
-	double getFoodposX()
-	{
-		return this->posX;
-	}
-	double getFoodposY()
-	{
-		return this->posY;
+		return &sprite;
 	}
 
 	//충돌 시 획득
@@ -367,13 +367,22 @@ public:
 	//충돌, 획득 시 visual,sound effect
 	void getCannedFoodSound()
 	{
-		//play_sound("./Data/Sound/676402__cjspellsfish__score-2.wav");
+		play_sound("./Data/Sound/676402__cjspellsfish__score-2.wav");
 	}
 
 	//획득시 제거
+
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
 };
 
-/*
 //사운드 재생 함수
 void play_sound(const string& filename)
 {
@@ -387,9 +396,8 @@ void play_sound(const string& filename)
 	Sound sound;
 	sound.setBuffer(buffer);
 	sound.play();
-	delay_ms(1500);
+	delay_ms(900);
 }
-*/
 
 void delay_ms(int ms)
 {
@@ -411,8 +419,7 @@ public:
 	Lightbulb(float x, float y)
 		: position(x, y), velocity(0.f, 0.f), gravity(500.f), isFalling(false)
 	{
-		//texture.loadFromFile("./Data/Image/floodlight.png");
-		texture.loadFromFile("C:\\project\\Jumping_cat\\Data\\Image\\floodlight.png");
+		texture.loadFromFile("./Data/Image/floodlight.png");
 		Vector2u lightTextureSize = texture.getSize();
 		sprite.setTexture(texture);
 		sprite.setScale((float)120 / lightTextureSize.x, (float)80 / lightTextureSize.y);
@@ -506,6 +513,35 @@ public:
 	//충돌시 visual,sound effect
 };
 
+class Cup1:Obstacle1
+{
+private:
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
+
+public:
+	Cup1(float x, float y)
+		: position(x, y)
+	{
+		texture.loadFromFile("./Data/Image/cup1.jpg");
+		Vector2u cup1TextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)200 / cup1TextureSize.x, (float)200 / cup1TextureSize.y);
+		sprite.setPosition(position);
+
+	}
+
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
 
 //바닥 클래스 -> 바닥을 스프라이트로 만들려면 Sprite 클래스를 상속받아야 하나?
 class Floor
@@ -635,6 +671,24 @@ public:
 		return maxScore;
 	}
 };
+
+/////
+void Canned_Food::getFoodScore(Score* score, int size)
+{
+	//사이즈별로 점수부여
+	//ex) size 1 = 1000점
+	//    size 2 = 1500점
+	//    size 3 = 3000점 ...
+	if (size == 1) {//파랑
+		score->setCurrScore(1000);
+	}
+	else if (size == 2) {//빨강
+		score->setCurrScore(1500);
+	}
+	else if (size == 3) {//골드
+		score->setCurrScore(3000);
+	}
+}
 
 //별 클래스
 class Star
@@ -843,8 +897,7 @@ int main()
 
 	//사람 스프라이트 생성
 	Texture girlTexture;
-	//girlTexture.loadFromFile("./Data/Image/girl.png");
-	girlTexture.loadFromFile("C:\\project\\Jumping_cat\\Data\\Image\\girl.png");
+	girlTexture.loadFromFile("./Data/Image/girl.png");
 	Vector2u girlTextureSize = girlTexture.getSize();
 	Sprite girlSprite(girlTexture);
 	girlSprite.setScale((float)200 / girlTextureSize.x, (float)200 / girlTextureSize.y);
@@ -852,8 +905,7 @@ int main()
 
 	//조명선 스프라이트 생성
 	Texture lineTexture;
-	//lineTexture.loadFromFile("./Data/Image/line.png");
-	lineTexture.loadFromFile("C:\\project\\Jumping_cat\\Data\\Image\\line.png");
+	lineTexture.loadFromFile("./Data/Image/line.png");
 	Vector2u lineTextureSize = lineTexture.getSize();
 	Sprite lineSprite(lineTexture);
 	lineSprite.setScale((float)8.875 / lineTextureSize.x, (float)47.125 / lineTextureSize.y);
@@ -862,14 +914,6 @@ int main()
 	//조명등 스프라이트 생성
 	Lightbulb lightbulb(480, 40);
 
-	//캔 스프라이트 생성
-	Texture canTexture;
-	//canTexture.loadFromFile("./Data/Image/canned_food.png");
-	canTexture.loadFromFile("C:\\project\\Jumping_cat\\Data\\Image\\canned_food.png");
-	Vector2u textureSize = canTexture.getSize();
-	Sprite canSprite(canTexture);
-	canSprite.setScale((float)100 / textureSize.x, (float)100 / textureSize.y);
-	canSprite.setPosition(800, 150);
 
 	Score score(0, 30, 20);
 
@@ -878,8 +922,7 @@ int main()
 	Text text;
 	Font font;
 
-	if (!font.loadFromFile("C:\\project\\sfml_ex\\sfml_ex\\x64\\Release\\arial.ttf"))
-	{
+	if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf")) {
 		return 42; // Robust error handling!
 	}
 
@@ -904,8 +947,58 @@ int main()
 
 	Clock clock;
 
+	//효과음, 배경음악
+	Music music;
+	if (!music.openFromFile("./Data/Sound/background_music.ogg"))
+		return -1;
+	music.play();
+	music.setVolume(50.f);
+	music.setLoop(true);
+
+	//배경화면 스프라이트 생성
+	Texture backgroundTexture;
+	if (!backgroundTexture.loadFromFile("./Data/Image/background.png"))
+		return -1;
+	Vector2u backgroundSize = backgroundTexture.getSize();
+	Sprite backgroundSprite;
+	backgroundSprite.setTexture(backgroundTexture);
+	backgroundSprite.setScale((float)(window.getSize().x*2) / backgroundSize.x, (float)window.getSize().y / backgroundSize.y);
+
+	//배경 시점
+	View view(Vector2f(window.getSize().x/2, window.getSize().y / 2), Vector2f(window.getSize().x, window.getSize().y));
+	//backgroundSprite.setPosition(-cat.getPositionX(), 0);
+
+	//별 스프라이트 생성
+	Texture staryTexture;
+	staryTexture.loadFromFile("./Data/Image/star_y.png");
+	Vector2u starySize = staryTexture.getSize();
+	Sprite starySprite(staryTexture);
+	starySprite.setScale((float)100 / starySize.x, (float)100 / starySize.y);
+	starySprite.setPosition(800, 150);
+
+	Texture stargTexture;
+	stargTexture.loadFromFile("./Data/Image/star_g.png");
+	Vector2u stargSize = stargTexture.getSize();
+	Sprite stargSprite(stargTexture);
+	stargSprite.setScale((float)100 / stargSize.x, (float)100 / stargSize.y);
+	stargSprite.setPosition(window.getSize().x/2, window.getSize().y*0.3);
+
+	//전등
+	Texture lightTexture;
+	lightTexture.loadFromFile("./Data/Image/light1.png");
+	Vector2u lightSize = lightTexture.getSize();
+	Sprite lightSprite(lightTexture);
+	lightSprite.setScale((float)100 / lightSize.x, (float)100 / lightSize.y);
+	lightSprite.setPosition(800, 150);
 	bool reset = false;
 	bool startFalling = false;
+
+	//장애물 cup
+	Cup1 cup1(800, 300);
+
+	// can
+	Canned_Food can1(300, 500);
+
 
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
@@ -1022,6 +1115,28 @@ int main()
 			//cat.startFalling(1.f, 1.f); // 고양이가 떨어지는 동작 시작
 		}
 
+		////cup과 충돌
+		//if (cat.getBounds().intersects(cup1.getBounds()))
+		//{
+		//	cat.changeImage("./Data/Image/dizzycat.png");
+		//	cat.startFalling(1.f, 1.f);
+		//}
+
+		//can과 충돌
+		if (cat.getBounds().intersects(can1.getBounds()))
+		{
+			can1.getFoodScore(&score,1);
+			can1.getsprite()->setPosition(5000, 5000);
+			cout << "coll with can1\n";
+			can1.getCannedFoodSound();
+			//can1.~Canned_Food();
+		}
+
+		//배경 시점 변경
+		if (cat.getPositionX() > window.getSize().x*0.5 && cat.getPositionX() < window.getSize().x) {
+			//backgroundSprite.move(-cat.getVelocity().x/75, 0);
+			view.setCenter(cat.getPositionX(), window.getSize().y / 2);
+		}
 
 		// 그리기
 		window.clear(Color::White);
@@ -1034,15 +1149,18 @@ int main()
 			game_status.setString("Game Over");
 			game_status.setFillColor(Color::Red);
 			window.draw(game_status);
+			window.draw(stargSprite);
 		}
 		else {
+			window.setView(view);
+			window.draw(backgroundSprite);
 			window.draw(text);
 			window.draw(game_score);
 			//window.draw(floorSprite);
 			window.draw(floor.getFloor());
 			window.draw(lineSprite);
 			lightbulb.draw(window);
-			window.draw(canSprite);
+			can1.draw(window);
 			cat.draw(window);
 			window.draw(girlSprite);
 
@@ -1067,9 +1185,7 @@ int main()
 
 		window.display();
 
-		//사운드 수정중...
-		Canned_Food can1;
-		//can1.getCannedFoodSound(); //소리가 나는 동안 다음 문장이 실행이 안돼서 수행 속도가 떨어져요! 수정 필요해 보여요!
+
 	}
 
 	return 0;
