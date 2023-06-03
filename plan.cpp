@@ -11,6 +11,8 @@
 using namespace std;
 using namespace sf;
 
+class Score;
+
 void play_sound(const string& filename);
 void delay_ms(int ms);
 
@@ -29,9 +31,9 @@ private:
 	Sprite sprite;
 
 	// 떨어지는 동작에 대한 변수들
-	float fallSpeed;
-	float rotationSpeed;
-	float rotation;
+	float fallSpeed = 0;
+	float rotationSpeed = 0;
+	float rotation = 0;
 
 public:
 	Cat(float x, float y)
@@ -299,8 +301,8 @@ private:
 	Texture texture;
 	Sprite sprite;
 
-	double posX;
-	double posY;
+	//double posX;
+	//double posY;
 	double sizeX;
 	double sizeY;
 
@@ -346,23 +348,7 @@ public:
 	}
 
 	//충돌 시 획득
-	void getFoodScore(double size)
-	{
-		//사이즈별로 점수부여
-		//ex) size 10 = 1000점
-		//    size 20 = 3000점
-		//    size 40 = 6000점 ...
-		if (size == 10.0) {
-			// getScore(1000);
-		}
-		else if (size == 20.0) {
-			// getScore(3000);
-		}
-		else if (size == 40.0) {
-			// getScore(6000);
-		}
-
-	}
+	void getFoodScore(Score* score, int size);
 
 	//충돌, 획득 시 visual,sound effect
 	void getCannedFoodSound()
@@ -990,8 +976,6 @@ int main()
 	Sprite lightSprite(lightTexture);
 	lightSprite.setScale((float)100 / lightSize.x, (float)100 / lightSize.y);
 	lightSprite.setPosition(800, 150);
-	bool reset = false;
-	bool startFalling = false;
 
 	//장애물 cup
 	Cup1 cup1(800, 300);
@@ -999,6 +983,9 @@ int main()
 	// can
 	Canned_Food can1(300, 500);
 
+
+	bool reset = false;
+	bool startFalling = false;
 
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
