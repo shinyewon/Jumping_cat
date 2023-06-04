@@ -601,9 +601,9 @@ class Score
 {
 private:
 	//현재점수
-	float currScore;
+	int currScore;
 	//최고점수
-	float maxScore;
+	int maxScore;
 	//위치, 크기(글자 크기 등)
 	float posX;
 	float posY;
@@ -645,25 +645,25 @@ public:
 	}
 
 	//현재점수 반환
-	void setCurrScore(float c_s)
+	void setCurrScore(int c_s)
 	{
 		currScore = c_s;
 	}
 
 	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
-	float getCurrScore()
+	int getCurrScore()
 	{
 		return currScore;
 	}
 
 	//최고점수 반환 
-	void setMaxScore(float m_s)
+	void setMaxScore(int m_s)
 	{
 		maxScore = m_s;
 	}
 
 	//최고점수 업데이트
-	float getMaxScore()
+	int getMaxScore()
 	{
 		return maxScore;
 	}
