@@ -31,10 +31,9 @@ private:
 	Sprite sprite;
 
 	// 떨어지는 동작에 대한 변수들
-	float fallSpeed = 0;
-	float rotationSpeed = 0;
-	float rotation = 0;
-
+	float fallSpeed;
+	float rotationSpeed;
+	float rotation;
 public:
 	Cat(float x, float y)
 		: position(x, y), velocity(0.f, 0.f), gravity(500.f), isJumping(false), isFalling(false)
@@ -55,58 +54,78 @@ public:
 		sprite.setPosition(position);
 	}
 
-	int getPositionX()
-	{
+	int getPositionX(){
 		return (int)sprite.getPosition().x;
 	}
 
-	int getPositionY()
-	{
+	int getPositionY(){
 		return (int)sprite.getPosition().y;
 	}
 
-	void setStartPosition(float x, float y)
-	{
+	void setStartPosition(float x, float y){
 		startPosX = x;
 		startPosY = y;
 	}
-	float getStartPositionX()
-	{
+	float getStartPositionX(){
 		return startPosX;
 	}
-	float getStartPositionY()
-	{
+	float getStartPositionY(){
 		return startPosY;
 	}
 
-	float getTextureSizeX()
-	{
+	float getTextureSizeX(){
 		return (float)texture.getSize().x;
 	}
 
-	float getTextureSizeY()
-	{
+	float getTextureSizeY(){
 		return (float)texture.getSize().y;
 	}
 
-	float getGravity()
-	{
+	float getGravity(){
 		return gravity;
 	}
 
-	void setRotation(int a)
-	{
+	void setIsJumping(bool Jumping){
+		isJumping = Jumping;
+	}
+
+	bool getIsFalling() {
+		return isFalling;
+	}
+
+	void setRotation(int a){
 		sprite.setRotation((float)a);
 	}
 
-	void setScale(float factorX, float factorY)
-	{
+	void setScale(float factorX, float factorY){
 		sprite.setScale((float)factorX, (float)factorY);
 	}
 
-	void changeImage(string path)
-	{
+	void changeImage(string path){
 		texture.loadFromFile(path);
+	}
+
+	void jump(Vector2f jumpVelocity)
+	{
+		velocity = jumpVelocity;
+		isJumping = true;
+		isFalling = false;
+	}
+
+	void startFalling(float speed, float rotateSpeed)
+	{
+		fallSpeed = speed;
+		rotationSpeed = rotateSpeed;
+		isJumping = false;
+		isFalling = true;
+		velocity = Vector2f(0, speed);
+		rotation = 0.f;
+	}
+
+	void rotateAndFall(float rotateSpeed, float fallSpeed, float deltaTime)
+	{
+		sprite.setRotation(sprite.getRotation() + rotateSpeed * deltaTime);
+		sprite.move(0.f, fallSpeed * deltaTime);
 	}
 
 	void update(float deltaTime)
@@ -118,22 +137,18 @@ public:
 			velocity.y += gravity * deltaTime;
 
 			sprite.setPosition(position);
+
+			if (position.y >= 600.f) // 고양이가 바닥에 닿으면
+			{
+				isFalling = false;
+				velocity = Vector2f(0.f, 0.f);
+				sprite.setRotation(0.f);
+			}
 		}
-	}
-
-	void jump(Vector2f jumpVelocity)
-	{
-		velocity = jumpVelocity;
-		isJumping = true;
-	}
-
-	void startFalling(float speed, float rotateSpeed)
-	{
-		fallSpeed = speed;
-		rotationSpeed = rotateSpeed;
-		isJumping = false;
-		isFalling = true;
-		rotation = 0.f;
+		else if (isFalling)
+		{
+			rotateAndFall(rotationSpeed, fallSpeed, deltaTime);
+		}
 	}
 
 	void draw(RenderWindow& window)
@@ -391,43 +406,39 @@ void delay_ms(int ms)
 	while (Timer.getElapsedTime().asMilliseconds() < ms);
 }
 
-class Lightbulb
+class Floodlight
 {
 private:
 	Vector2f position;
-	Vector2f velocity;
-	float gravity;
-	bool isFalling;
+	bool isMovingRight;
 	Texture texture;
 	Sprite sprite;
 
 public:
-	Lightbulb(float x, float y)
-		: position(x, y), velocity(0.f, 0.f), gravity(500.f), isFalling(false)
+	Floodlight(float x, float y)
+		: position(x, y), isMovingRight(true)
 	{
 		texture.loadFromFile("./Data/Image/floodlight.png");
 		Vector2u lightTextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)120 / lightTextureSize.x, (float)80 / lightTextureSize.y);
+		sprite.setScale((float)113.4 / lightTextureSize.x, (float)107.5 / lightTextureSize.y);
+		sprite.setOrigin(sprite.getLocalBounds().width / 2, 0); //윗변 가운데를 중심점으로 설정 
 		sprite.setPosition(position);
 	}
-
-	void update(float deltaTime)
+	
+	void swing()
 	{
-		if (isFalling)
+		if (isMovingRight)
 		{
-			// 위치 업데이트
-			position += velocity * deltaTime;
-			velocity.y += gravity * deltaTime;
-
-			sprite.setPosition(position);
-
-			if (position.y >= 600.f) // 전등이 바닥에 닿으면
-			{
-				isFalling = false;
-				velocity = Vector2f(0.f, 0.f);
-				sprite.setRotation(0.f);
-			}
+			sprite.setRotation(sprite.getRotation() - 1);
+			if (sprite.getRotation() == 270)
+				isMovingRight = false;
+		}
+		else
+		{
+			sprite.setRotation(sprite.getRotation() + 1);
+			if (sprite.getRotation() == 90)
+				isMovingRight = true;
 		}
 	}
 
@@ -889,16 +900,8 @@ int main()
 	girlSprite.setScale((float)200 / girlTextureSize.x, (float)200 / girlTextureSize.y);
 	girlSprite.setPosition(0, 340);
 
-	//조명선 스프라이트 생성
-	Texture lineTexture;
-	lineTexture.loadFromFile("./Data/Image/line.png");
-	Vector2u lineTextureSize = lineTexture.getSize();
-	Sprite lineSprite(lineTexture);
-	lineSprite.setScale((float)8.875 / lineTextureSize.x, (float)47.125 / lineTextureSize.y);
-	lineSprite.setPosition(535, 0);
-
 	//조명등 스프라이트 생성
-	Lightbulb lightbulb(480, 40);
+	Floodlight floodlight(480, 0); 
 
 
 	Score score(0, 30, 20);
@@ -985,7 +988,6 @@ int main()
 
 
 	bool reset = false;
-	bool startFalling = false;
 
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
@@ -1038,9 +1040,7 @@ int main()
 
 								//날아가는 코드 구현
 								cat.jump(jumpVelocity);
-
 							}
-							cout << "Dragged\n";
 						}
 						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
 					}
@@ -1050,11 +1050,12 @@ int main()
 
 		// 게임 로직
 		float deltaTime = clock.restart().asSeconds();
-		cout << deltaTime << endl;
+
+		floodlight.swing();
 
 		if (cat.getPositionY() >= floor.getFloorPosY())
 		{
-			startFalling = false;
+			cat.changeImage("./Data/Image/cat.png"); //texture 사용은 매우 무거운 작업이므로, 고양이가 떨어진 후 한 번만 실행되어야 함. 그래서 위치 변경함:)
 			reset = true;
 
 			jn.reduceJump(); //점프횟수 감소
@@ -1067,9 +1068,8 @@ int main()
 		}
 		else
 		{
-			cat.changeImage("./Data/Image/cat.png");
-
 			cat.setPosition(cat.getStartPositionX(), cat.getStartPositionY());
+			cat.setRotation(0);
 			cat.jump(Vector2f(0, 0));
 		}
 		
@@ -1092,15 +1092,13 @@ int main()
 
 		
 		//전등과 부딪히면 떨어짐
-		if (cat.getBounds().intersects(lightbulb.getBounds()) && startFalling == false)
+		if (cat.getBounds().intersects(floodlight.getBounds()))
 		{
+			cat.setIsJumping(false);
 			cat.changeImage("./Data/Image/dizzycat.png"); //눈이 빙글빙글 도는 고양이 이미지로 바꿈
-
-			//고양이 속도 0(떨어짐)
-			cat.jump(Vector2f(0, 0));
-			startFalling = true;
-			//cat.startFalling(1.f, 1.f); // 고양이가 떨어지는 동작 시작
+			cat.startFalling(200.f, 300.f);
 		}
+		cat.update(deltaTime);
 
 		////cup과 충돌
 		//if (cat.getBounds().intersects(cup1.getBounds()))
@@ -1110,7 +1108,7 @@ int main()
 		//}
 
 		//can과 충돌
-		if (cat.getBounds().intersects(can1.getBounds()))
+		if (cat.getBounds().intersects(can1.getBounds()) && cat.getIsFalling() == false) //전등에 부딪힌 후 떨어질 때는 통조림 안 먹어짐.
 		{
 			can1.getFoodScore(&score,1);
 			can1.getsprite()->setPosition(5000, 5000);
@@ -1145,8 +1143,7 @@ int main()
 			window.draw(game_score);
 			//window.draw(floorSprite);
 			window.draw(floor.getFloor());
-			window.draw(lineSprite);
-			lightbulb.draw(window);
+			floodlight.draw(window);
 			can1.draw(window);
 			cat.draw(window);
 			window.draw(girlSprite);
