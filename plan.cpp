@@ -136,6 +136,20 @@ public:
 			position += velocity * deltaTime;
 			velocity.y += gravity * deltaTime;
 
+			// 화면 경계 체크 수정중...
+			/*
+			if (position.x <= 0.f || position.x + sprite.getGlobalBounds().width >= 800.f)
+			{
+				velocity.x = -velocity.x;
+				sprite.setScale(-sprite.getScale().x, sprite.getScale().y); // 이미지를 좌우 반전
+			}
+
+			if (position.y <= 0.f || position.y + sprite.getGlobalBounds().height >= 600.f)
+			{
+				velocity.y = -(velocity.y + 20);
+			}
+			*/
+
 			sprite.setPosition(position);
 
 			if (position.y >= 600.f) // 고양이가 바닥에 닿으면
@@ -901,7 +915,7 @@ int main()
 	girlSprite.setPosition(0, 340);
 
 	//조명등 스프라이트 생성
-	Floodlight floodlight(480, 0); 
+	Floodlight floodlight(800, 0); 
 
 
 	Score score(0, 30, 20);
@@ -1021,8 +1035,9 @@ int main()
 
 						cat.setRotation(0);
 						cat.setScale((float)159.7 / cat.getTextureSizeX(), (float)127.7 / cat.getTextureSizeY()); //고양이 크기 원래상태로 되돌리기
-						// 드래그를 너무 조금했을 때는 무시하고 아니면 날아감
-						if (abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20) {
+
+						// 드래그를 너무 조금하거나 오른쪽으로 하면 무시하고 아니면 날아감
+						if (abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20 && dragDistance.x < 0) {
 							cat_is_clicked = false;
 						}
 						else {
