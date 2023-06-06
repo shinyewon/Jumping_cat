@@ -1,6 +1,3 @@
-﻿//Arc class 설명 부탁드립니다!
-//Arc class의 이동 메소드
-
 
 //fortress_ex.cpp 파일의 포물선(arc)조절 및 포탄(고양이) 발사(이동) 방법
 /*
