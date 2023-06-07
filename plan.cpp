@@ -683,7 +683,7 @@ public:
 	}
 };
 
-/////
+//
 void Canned_Food::getFoodScore(Score* score, int size)
 {
 	//사이즈별로 점수부여
@@ -825,11 +825,15 @@ class Menu
 	// 재생, 일시정지, 다시 시작, 소리조절 등
 private:
 	//위치, 크기
+	
 	//현재상태(플레이중, 일시정지)
+	
 	//소리크기
 public:
 	//생성자,소멸자
+	
 	//위치, 크기, 현재상태 ,소리 크기 setter/getter
+	
 	//다시시작요청
 	//상태변환시 visual,sound effect(sfml 이용해 구현)
 };
@@ -1136,12 +1140,13 @@ int main()
 		window.clear(Color::White);
 
 		if (jn.getLeftJump() <= 0) {
-			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함
-			// 클리어한 경우 ...
+			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 메인화면
+			// 클리어한 경우 (새창 사용? or 화면 새로 그리기?)
 
 			// 클리어하지 못한 경우
 			game_status.setString("Game Over");
 			game_status.setFillColor(Color::Red);
+			
 			window.draw(game_status);
 			window.draw(stargSprite);
 		}
