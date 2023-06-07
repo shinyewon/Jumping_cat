@@ -46,6 +46,14 @@ public:
 		sprite.setPosition(position);
 	}
 
+	int getPositionX() {
+		return (int)sprite.getPosition().x;
+	}
+
+	int getPositionY() {
+		return (int)sprite.getPosition().y;
+	}
+
 	void setPosition(float x, float y)
 	{
 		position.x = x;
@@ -54,29 +62,20 @@ public:
 		sprite.setPosition(position);
 	}
 
-	int getPositionX(){
-		return (int)sprite.getPosition().x;
-	}
-
-	int getPositionY(){
-		return (int)sprite.getPosition().y;
-	}
-
-	void setStartPosition(float x, float y){
-		startPosX = x;
-		startPosY = y;
-	}
 	float getStartPositionX(){
 		return startPosX;
 	}
 	float getStartPositionY(){
 		return startPosY;
 	}
+	void setStartPosition(float x, float y) {
+		startPosX = x;
+		startPosY = y;
+	}
 
 	float getTextureSizeX(){
 		return (float)texture.getSize().x;
 	}
-
 	float getTextureSizeY(){
 		return (float)texture.getSize().y;
 	}
@@ -97,6 +96,9 @@ public:
 		sprite.setRotation((float)a);
 	}
 
+	Vector2f getScale() {
+		return sprite.getScale();
+	}
 	void setScale(float factorX, float factorY){
 		sprite.setScale((float)factorX, (float)factorY);
 	}
@@ -136,19 +138,17 @@ public:
 			position += velocity * deltaTime;
 			velocity.y += gravity * deltaTime;
 
-			// 화면 경계 체크 수정중...
-			/*
-			if (position.x <= 0.f || position.x + sprite.getGlobalBounds().width >= 800.f)
+			// 화면 경계 체크
+			if (position.x - sprite.getGlobalBounds().width / 2 <= 0.f || position.x + sprite.getGlobalBounds().width / 2 >= 960.f)
 			{
 				velocity.x = -velocity.x;
 				sprite.setScale(-sprite.getScale().x, sprite.getScale().y); // 이미지를 좌우 반전
 			}
 
-			if (position.y <= 0.f || position.y + sprite.getGlobalBounds().height >= 600.f)
+			if (position.y - sprite.getGlobalBounds().height / 2 <= 0.f || position.y + sprite.getGlobalBounds().height / 2 >= 540.f)
 			{
 				velocity.y = -(velocity.y + 20);
 			}
-			*/
 
 			sprite.setPosition(position);
 
@@ -704,7 +704,7 @@ public:
 	}
 };
 
-/////
+//
 void Canned_Food::getFoodScore(Score* score, int size)
 {
 	//사이즈별로 점수부여
@@ -846,21 +846,19 @@ class Menu
 	// 재생, 일시정지, 다시 시작, 소리조절 등
 private:
 	//위치, 크기
+	
 	//현재상태(플레이중, 일시정지)
+	
 	//소리크기
 public:
 	//생성자,소멸자
+	
 	//위치, 크기, 현재상태 ,소리 크기 setter/getter
+	
 	//다시시작요청
 	//상태변환시 visual,sound effect(sfml 이용해 구현)
 };
 
-//+ 물체 충돌 감지 함수(직사각형 2개 인자로 받고 충돌이 일어났는지 판단하여 boolean 값 반환)
-//sfml의 Rect class 이용
-bool checkCollision(const FloatRect& rect1, const FloatRect& rect2)
-{
-	return rect1.intersects(rect2);
-}
 
 //<시간 여유 시 추가로 구현>
 //고양이의 능력(일정 스테이지 이상 클리어 시 새로운 고양이를 준다, 고양이별로 각자의 능력을 가짐, 충돌 전 클릭을 하면 고양이의 능력이 발현(ex-분신술))
@@ -1067,7 +1065,7 @@ int main()
 						cat.setScale((float)159.7 / cat.getTextureSizeX(), (float)127.7 / cat.getTextureSizeY()); //고양이 크기 원래상태로 되돌리기
 
 						// 드래그를 너무 조금하거나 오른쪽으로 하면 무시하고 아니면 날아감
-						if (abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20 && dragDistance.x < 0) {
+						if ((abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20) || dragDistance.x < 0) {
 							cat_is_clicked = false;
 						}
 						else {
@@ -1193,12 +1191,13 @@ int main()
 		window.clear(Color::White);
 
 		if (jn.getLeftJump() <= 0) {
-			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함
-			// 클리어한 경우 ...
+			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 메인화면
+			// 클리어한 경우 (새창 사용? or 화면 새로 그리기?)
 
 			// 클리어하지 못한 경우
 			game_status.setString("Game Over");
 			game_status.setFillColor(Color::Red);
+			
 			window.draw(game_status);
 			window.draw(stargSprite);
 		}
