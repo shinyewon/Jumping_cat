@@ -368,7 +368,7 @@ public:
 		position.x = posX;
 		position.y = posY;
 	}
-	Vector2f getPosition();
+	Vector2f getPosition();/////////////////////////////////////////////////////수정해야함
 	void setFoodSize(double sizeX, double sizeY)
 	{
 		this->sizeX = sizeX;
