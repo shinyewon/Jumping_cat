@@ -834,12 +834,6 @@ public:
 	//상태변환시 visual,sound effect(sfml 이용해 구현)
 };
 
-//+ 물체 충돌 감지 함수(직사각형 2개 인자로 받고 충돌이 일어났는지 판단하여 boolean 값 반환)
-//sfml의 Rect class 이용
-bool checkCollision(const FloatRect& rect1, const FloatRect& rect2)
-{
-	return rect1.intersects(rect2);
-}
 
 //<시간 여유 시 추가로 구현>
 //고양이의 능력(일정 스테이지 이상 클리어 시 새로운 고양이를 준다, 고양이별로 각자의 능력을 가짐, 충돌 전 클릭을 하면 고양이의 능력이 발현(ex-분신술))
