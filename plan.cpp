@@ -46,14 +46,15 @@ public:
 		sprite.setPosition(position);
 	}
 
+	Vector2f getPosition() {
+		return sprite.getPosition();
+	}
 	int getPositionX() {
 		return (int)sprite.getPosition().x;
 	}
-
 	int getPositionY() {
 		return (int)sprite.getPosition().y;
 	}
-
 	void setPosition(float x, float y)
 	{
 		position.x = x;
@@ -62,15 +63,28 @@ public:
 		sprite.setPosition(position);
 	}
 
-	float getStartPositionX(){
+	float getStartPositionX() {
 		return startPosX;
 	}
-	float getStartPositionY(){
+	float getStartPositionY() {
 		return startPosY;
 	}
 	void setStartPosition(float x, float y) {
 		startPosX = x;
 		startPosY = y;
+	}
+
+	Vector2f getVelocity() {
+		return velocity;
+	}
+	void setVelocity(Vector2f v) {
+		velocity = v;
+	}
+	void setVelocityX(float velX) {
+		velocity.x = velX;
+	}
+	void setVelocityY(float velY) {
+		velocity.y = velY;
 	}
 
 	float getTextureSizeX(){
@@ -139,15 +153,22 @@ public:
 			velocity.y += gravity * deltaTime;
 
 			// 화면 경계 체크
-			if (position.x - sprite.getGlobalBounds().width / 2 <= 0.f || position.x + sprite.getGlobalBounds().width / 2 >= 960.f)
+			if (position.x - sprite.getGlobalBounds().width / 2 <= 0.f) //왼쪽 경계에 닿으면
 			{
 				velocity.x = -velocity.x;
-				sprite.setScale(-sprite.getScale().x, sprite.getScale().y); // 이미지를 좌우 반전
+				if(sprite.getScale().x < 0) //고양이가 왼쪽을 향해 있으면
+					sprite.setScale(-sprite.getScale().x, sprite.getScale().y); // 이미지를 좌우 반전
+			}
+			else if (position.x + sprite.getGlobalBounds().width / 2 >= 1940.f) //오른쪽 경계에 닿으면
+			{
+				velocity.x = -velocity.x;
+				if (sprite.getScale().x > 0) //고양이가 오른쪽을 향해 있으면
+					sprite.setScale(-sprite.getScale().x, sprite.getScale().y); // 이미지를 좌우 반전
 			}
 
 			if (position.y - sprite.getGlobalBounds().height / 2 <= 0.f || position.y + sprite.getGlobalBounds().height / 2 >= 540.f)
 			{
-				velocity.y = -(velocity.y + 20);
+				velocity.y = -(velocity.y + 10);
 			}
 
 			sprite.setPosition(position);
@@ -566,6 +587,9 @@ public:
 		sprite.setPosition(position);
 
 	}
+	Vector2f getPosition() {
+		return sprite.getPosition();
+	}
 	void draw(RenderWindow& window)
 	{
 		window.draw(sprite);
@@ -591,6 +615,9 @@ public:
 		sprite.setScale((float)50 / cup1TextureSize.x, (float)50 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
+	}
+	Vector2f getPosition() {
+		return sprite.getPosition();
 	}
 	void draw(RenderWindow& window)
 	{
@@ -618,6 +645,9 @@ public:
 		sprite.setPosition(position);
 
 	}
+	Vector2f getPosition() {
+		return sprite.getPosition();
+	}
 	void draw(RenderWindow& window)
 	{
 		window.draw(sprite);
@@ -643,6 +673,9 @@ public:
 		sprite.setScale((float)150 / cup1TextureSize.x, (float)100 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
+	}
+	Vector2f getPosition() {
+		return sprite.getPosition();
 	}
 	void draw(RenderWindow& window)
 	{
@@ -670,6 +703,9 @@ public:
 		sprite.setPosition(position);
 
 	}
+	Vector2f getPosition() {
+		return sprite.getPosition();
+	}
 	void draw(RenderWindow& window)
 	{
 		window.draw(sprite);
@@ -695,6 +731,9 @@ public:
 		sprite.setScale((float)100 / cup1TextureSize.x, (float)100 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
+	}
+	Vector2f getPosition() {
+		return sprite.getPosition();
 	}
 	void draw(RenderWindow& window)
 	{
@@ -1107,13 +1146,21 @@ int main()
 	if (!music.openFromFile("./Data/Sound/background_music.ogg"))
 		return -1;
 	music.play();
-	music.setVolume(50.f);
+	music.setVolume(10.f);
 	music.setLoop(true);
 
 	Music cmusic;
 	if (!cmusic.openFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
 		cout << "can sound err\n";
 
+	Music dragSound;
+	if (!dragSound.openFromFile("./Data/Sound/meow.wav"))
+		cout << "drag sound err\n";
+	dragSound.setVolume(70);
+
+	Music jumpSound;
+	if (!jumpSound.openFromFile("./Data/Sound/jump.wav"))
+		cout << "jump sound err\n";
 
 	//배경화면 스프라이트 생성
 	Texture backgroundTexture;
@@ -1175,7 +1222,7 @@ int main()
 	Canned_Food gold_can[4];
 	 /* 1000 * 8 + 1500 * 7 + 3000 * 4 = 30500*/
 	blue_can[0].setinfo(660,290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
-	blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(2000, 400, 1);
+	blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(1800, 400, 1);
 
 	red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1200, 180, 2);
 	red_can[3].setinfo(1300, 250, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600,260, 2);
@@ -1204,8 +1251,9 @@ int main()
 					if (event.mouseButton.button == Mouse::Left)
 					{
 						dragStartPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
-						if (dragStartPosition.x > cat.getPositionX() - 50 && dragStartPosition.x < cat.getPositionX() + 50 && dragStartPosition.y > cat.getPositionY() - 50 && dragStartPosition.y < cat.getPositionY() + 50)
+						if (dragStartPosition.x > cat.getPositionX() - cat.getTextureSizeX() / 2 && dragStartPosition.x < cat.getPositionX() + cat.getTextureSizeX() / 2 && dragStartPosition.y > cat.getPositionY() - cat.getTextureSizeY() / 2 && dragStartPosition.y < cat.getPositionY() + cat.getTextureSizeY() / 2)
 							cat_is_clicked = true;
+						dragSound.play();
 					}
 					mouseispressed = 1;
 				}
@@ -1216,11 +1264,13 @@ int main()
 						dragEndPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
 						Vector2f dragDistance = dragStartPosition - dragEndPosition;
 
-						float jumpVelocityScale = 7.0f;
+						float jumpVelocityScale = 3.5f;
 						Vector2f jumpVelocity = jumpVelocityScale * dragDistance;
 
 						cat.setRotation(0);
 						cat.setScale((float)159.7 / cat.getTextureSizeX(), (float)127.7 / cat.getTextureSizeY()); //고양이 크기 원래상태로 되돌리기
+
+						jumpSound.play();
 
 						// 드래그를 너무 조금하거나 오른쪽으로 하면 무시하고 아니면 날아감
 						if ((abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20) || dragDistance.x < 0) {
@@ -1270,6 +1320,8 @@ int main()
 		}
 		else
 		{
+			if (cat.getScale().x < 0)
+				cat.setScale(abs(cat.getScale().x), cat.getScale().y);
 			cat.setPosition(cat.getStartPositionX(), cat.getStartPositionY());
 			cat.setRotation(0);
 			cat.jump(Vector2f(0, 0));
@@ -1303,13 +1355,44 @@ int main()
 		}
 		cat.update(deltaTime);
 
-		//cup과 충돌
-		if (cat.getBounds().intersects(cup1.getBounds())|| cat.getBounds().intersects(cup2.getBounds())||
-			cat.getBounds().intersects(basket.getBounds())|| cat.getBounds().intersects(bottle.getBounds())||
-			cat.getBounds().intersects(ob_clock.getBounds())|| cat.getBounds().intersects(micro.getBounds()))
+		//장애물과 충돌시 튕겨나감.
+		Vector2f direction;
+		if (cat.getBounds().intersects(cup1.getBounds()) || cat.getBounds().intersects(cup2.getBounds()) ||
+			cat.getBounds().intersects(basket.getBounds()) || cat.getBounds().intersects(bottle.getBounds()) ||
+			cat.getBounds().intersects(ob_clock.getBounds()) || cat.getBounds().intersects(micro.getBounds()))
 		{
-			cat.changeImage("./Data/Image/dizzycat.png");
-			cat.startFalling(200.f, 300.f);
+			// 고양이와 컵1 충돌 체크
+			if (cat.getBounds().intersects(cup1.getBounds())) {
+				// 충돌 방향 계산
+				direction = cat.getPosition() - cup1.getPosition();
+			}
+			// 고양이와 컵2 충돌 체크
+			else if (cat.getBounds().intersects(cup2.getBounds())) 
+				direction = cat.getPosition() - cup2.getPosition();
+
+			// 고양이와 바구니 충돌 체크
+			else if (cat.getBounds().intersects(basket.getBounds())) 
+				direction = cat.getPosition() - basket.getPosition();
+
+			// 고양이와 병 충돌 체크
+			else if (cat.getBounds().intersects(bottle.getBounds()))
+				direction = cat.getPosition() - bottle.getPosition();
+		
+			// 고양이와 시계 충돌 체크
+			else if (cat.getBounds().intersects(ob_clock.getBounds()))
+				direction = cat.getPosition() - ob_clock.getPosition();
+
+			// 고양이와 전자레인지 충돌 체크
+			else if (cat.getBounds().intersects(micro.getBounds()))
+				direction = cat.getPosition() - micro.getPosition();
+
+			// 단위 벡터로 정규화
+			direction = direction / sqrtf(direction.x * direction.x + direction.y * direction.y);
+			// 튕겨나가는 속도 설정
+			float bounceSpeed = 500.0f;
+			Vector2f bounceVelocity = direction * bounceSpeed;
+			// 속도 업데이트
+			cat.setVelocity(bounceVelocity);
 		}
 
 		//can과 충돌
