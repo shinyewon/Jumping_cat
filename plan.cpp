@@ -368,7 +368,10 @@ public:
 		position.x = posX;
 		position.y = posY;
 	}
-	Vector2f getPosition();/////////////////////////////////////////////////////수정해야함
+	int getPosition()
+	{
+		return position.x;
+	}
 	void setFoodSize(double sizeX, double sizeY)
 	{
 		this->sizeX = sizeX;
@@ -397,19 +400,21 @@ public:
 	//충돌, 획득 시 visual,sound effect
 	void getCannedFoodSound()
 	{
-		play_sound("./Data/Sound/676402__cjspellsfish__score-2.wav");
+		/*play_sound("./Data/Sound/676402__cjspellsfish__score-2.wav");*/
+		Music music;
+		if (!music.openFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
+			cout << "can sound err\n";
+		music.play();
+		music.setVolume(50.f);
+		music.setLoop(false);
+
 	}
 
 	//획득시 제거
 
-	void draw(RenderWindow& window, Canned_Food can[],int count)
+	void draw(RenderWindow& window)
 	{
-		for (int i = 0; i < count; i++)
-		{
-
-			if (can[i].position.x != 5000)
-				window.draw(sprite);
-		}
+			window.draw(sprite);
 	}
 
 	FloatRect getBounds() const
@@ -550,7 +555,6 @@ private:
 	Vector2f position;
 	Texture texture;
 	Sprite sprite;
-
 public:
 	Cup1(float x, float y)
 		: position(x, y)
@@ -562,17 +566,146 @@ public:
 		sprite.setPosition(position);
 
 	}
-
 	void draw(RenderWindow& window)
 	{
 		window.draw(sprite);
 	}
-
 	FloatRect getBounds() const
 	{
 		return sprite.getGlobalBounds();
 	}
 };
+class Cup2 :Obstacle1
+{
+private:
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
+public:
+	Cup2(float x, float y)
+		: position(x, y)
+	{
+		texture.loadFromFile("./Data/Image/cup2.jpg");
+		Vector2u cup1TextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)50 / cup1TextureSize.x, (float)50 / cup1TextureSize.y);
+		sprite.setPosition(position);
+
+	}
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
+class Basket :Obstacle1
+{
+private:
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
+public:
+	Basket(float x, float y)
+		: position(x, y)
+	{
+		texture.loadFromFile("./Data/Image/basket.png");
+		Vector2u cup1TextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)100 / cup1TextureSize.x, (float)70 / cup1TextureSize.y);
+		sprite.setPosition(position);
+
+	}
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
+class Micro :Obstacle1
+{
+private:
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
+public:
+	Micro(float x, float y)
+		: position(x, y)
+	{
+		texture.loadFromFile("./Data/Image/micro.jpg");
+		Vector2u cup1TextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)150 / cup1TextureSize.x, (float)100 / cup1TextureSize.y);
+		sprite.setPosition(position);
+
+	}
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
+class Bottle :Obstacle1
+{
+private:
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
+public:
+	Bottle(float x, float y)
+		: position(x, y)
+	{
+		texture.loadFromFile("./Data/Image/bottle.png");
+		Vector2u cup1TextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)50/ cup1TextureSize.x, (float)100 / cup1TextureSize.y);
+		sprite.setPosition(position);
+
+	}
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
+class Ob_Clock :Obstacle1
+{
+private:
+	Vector2f position;
+	Texture texture;
+	Sprite sprite;
+public:
+	Ob_Clock(float x, float y)
+		: position(x, y)
+	{
+		texture.loadFromFile("./Data/Image/clock.png");
+		Vector2u cup1TextureSize = texture.getSize();
+		sprite.setTexture(texture);
+		sprite.setScale((float)100 / cup1TextureSize.x, (float)100 / cup1TextureSize.y);
+		sprite.setPosition(position);
+
+	}
+	void draw(RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
+	FloatRect getBounds() const
+	{
+		return sprite.getGlobalBounds();
+	}
+};
+
 
 //
 //바닥 클래스 -> 바닥을 스프라이트로 만들려면 Sprite 클래스를 상속받아야 하나?
@@ -704,7 +837,7 @@ public:
 	}
 };
 
-//
+// 
 void Canned_Food::getFoodScore(Score* score, int size)
 {
 	//사이즈별로 점수부여
@@ -712,13 +845,13 @@ void Canned_Food::getFoodScore(Score* score, int size)
 	//    size 2 = 1500점
 	//    size 3 = 3000점 ...
 	if (size == 1) {//파랑
-		score->setCurrScore(1000);
+		score->setCurrScore(score->getCurrScore()+1000);
 	}
 	else if (size == 2) {//빨강
-		score->setCurrScore(1500);
+		score->setCurrScore(score->getCurrScore() + 1500);
 	}
 	else if (size == 3) {//골드
-		score->setCurrScore(3000);
+		score->setCurrScore(score->getCurrScore() + 3000);
 	}
 }
 
@@ -977,6 +1110,11 @@ int main()
 	music.setVolume(50.f);
 	music.setLoop(true);
 
+	Music cmusic;
+	if (!cmusic.openFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
+		cout << "can sound err\n";
+
+
 	//배경화면 스프라이트 생성
 	Texture backgroundTexture;
 	if (!backgroundTexture.loadFromFile("./Data/Image/background.png"))
@@ -1013,21 +1151,40 @@ int main()
 	lightSprite.setScale((float)100 / lightSize.x, (float)100 / lightSize.y);
 	lightSprite.setPosition(800, 150);
 
-	//장애물 cup
-	Cup1 cup1(800, 300);
+	//후광
+	Texture backlightTexture;
+	backlightTexture.loadFromFile("./Data/Image/backlight.png");
+	Vector2u backlightSize = backlightTexture.getSize();
+	Sprite backlightSprite(backlightTexture);
+	backlightSprite.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
+	backlightSprite.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
+	backlightSprite.setPosition(660, 290);
+	backlightSprite.setColor(Color(255, 255, 255, 128));
+
+	//장애물
+	Cup1 cup1(50, 100);
+	Cup2 cup2(100, 100);
+	Basket basket(200, 100);
+	Bottle bottle(300, 100);
+	Micro micro(400, 100);
+	Ob_Clock ob_clock(500, 100);
 
 	// can
 	Canned_Food blue_can[8];
 	Canned_Food red_can[7];
 	Canned_Food gold_can[4];
-	 // 1000 * 8 + 1500 * 7 + 3000 * 4 = 30500
-	blue_can[0].setinfo(400, 100, 1); blue_can[0].setinfo(400, 100, 1); blue_can[0].setinfo(400, 150, 1); blue_can[0].setinfo(400, 200, 1);
-	blue_can[0].setinfo(400, 100, 1); blue_can[0].setinfo(400, 250, 1); blue_can[0].setinfo(400, 300, 1); blue_can[0].setinfo(400, 350, 1);
+	 /* 1000 * 8 + 1500 * 7 + 3000 * 4 = 30500*/
+	blue_can[0].setinfo(660,290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
+	blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(2000, 400, 1);
 
-	red_can[0].setinfo(500, 100, 2); red_can[0].setinfo(500, 150, 2); red_can[0].setinfo(500, 200, 2);
-	red_can[0].setinfo(500, 250, 2); red_can[0].setinfo(500, 300, 2); red_can[0].setinfo(500, 350, 2); red_can[0].setinfo(500,400, 2);
+	red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1200, 180, 2);
+	red_can[3].setinfo(1300, 250, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600,260, 2);
 
-	gold_can[0].setinfo(600, 100, 3); gold_can[0].setinfo(600, 150, 3); gold_can[0].setinfo(600, 200, 3); gold_can[0].setinfo(600, 250, 3);
+	gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 220, 3); gold_can[2].setinfo(1500, 410, 3); gold_can[3].setinfo(1800, 180, 3);
+	//마우스
+	Vector2f mcm;
+	mcm = Vector2f(5,0);
+	int mouseispressed = 0;
 
 	bool reset = false;
 
@@ -1050,6 +1207,7 @@ int main()
 						if (dragStartPosition.x > cat.getPositionX() - 50 && dragStartPosition.x < cat.getPositionX() + 50 && dragStartPosition.y > cat.getPositionY() - 50 && dragStartPosition.y < cat.getPositionY() + 50)
 							cat_is_clicked = true;
 					}
+					mouseispressed = 1;
 				}
 				else if (event.type == Event::MouseButtonReleased)
 				{
@@ -1087,6 +1245,7 @@ int main()
 						}
 						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
 					}
+					mouseispressed = 0;
 				}
 			}
 		}
@@ -1114,6 +1273,7 @@ int main()
 			cat.setPosition(cat.getStartPositionX(), cat.getStartPositionY());
 			cat.setRotation(0);
 			cat.jump(Vector2f(0, 0));
+			view.setCenter(window.getSize().x / 2, window.getSize().y / 2); // 화면도 초기화
 		}
 		
 
@@ -1144,41 +1304,47 @@ int main()
 		cat.update(deltaTime);
 
 		//cup과 충돌
-		if (cat.getBounds().intersects(cup1.getBounds()))
+		if (cat.getBounds().intersects(cup1.getBounds())|| cat.getBounds().intersects(cup2.getBounds())||
+			cat.getBounds().intersects(basket.getBounds())|| cat.getBounds().intersects(bottle.getBounds())||
+			cat.getBounds().intersects(ob_clock.getBounds())|| cat.getBounds().intersects(micro.getBounds()))
 		{
 			cat.changeImage("./Data/Image/dizzycat.png");
 			cat.startFalling(200.f, 300.f);
 		}
 
 		//can과 충돌
-		for (int i = 0; i < 8; i++) {
-			if (cat.getBounds().intersects(blue_can[i].getBounds()) && cat.getIsFalling() == false) //전등에 부딪힌 후 떨어질 때는 통조림 안 먹어짐.
-			{
-				blue_can[i].getFoodScore(&score, 1);                //파란캔
-				blue_can[i].getsprite()->setPosition(5000, 5000);
-				cout << "coll with blue can\n";
-				blue_can[i].getCannedFoodSound();
-				//can1.~Canned_Food();
+		if (cat.getIsFalling() == false)//전등에 부딪힌 후 떨어질 때는 통조림 안 먹어짐.
+		{
+			for (int i = 0; i < 8; i++) {
+				if (cat.getBounds().intersects(blue_can[i].getBounds())) 
+				{
+					blue_can[i].getFoodScore(&score, 1);                //파란캔
+					blue_can[i].getsprite()->setPosition(5000, 5000);
+					cout << "coll with blue can\n";
+					blue_can[i].getCannedFoodSound();
+					//can1.~Canned_Food();
+				}
 			}
-		}
-		for (int i = 0; i < 7; i++) {
-			if (cat.getBounds().intersects(red_can[i].getBounds()) && cat.getIsFalling() == false)
-			{
-				red_can[i].getFoodScore(&score, 2);               //빨간캔
-				red_can[i].getsprite()->setPosition(5000, 5000);
-				cout << "coll with red can\n";
-				red_can[i].getCannedFoodSound();
-				//can1.~Canned_Food();
+			for (int i = 0; i < 7; i++) {
+				if (cat.getBounds().intersects(red_can[i].getBounds()))
+				{
+					red_can[i].getFoodScore(&score, 2);               //빨간캔
+					red_can[i].getsprite()->setPosition(5000, 5000);
+					cout << "coll with red can\n";
+					red_can[i].getCannedFoodSound();
+					//can1.~Canned_Food();
+				}
 			}
-		}
-		for (int i = 0; i < 4; i++) {
-			if (cat.getBounds().intersects(gold_can[i].getBounds()) && cat.getIsFalling() == false)
-			{
-				gold_can[i].getFoodScore(&score, 3);               //금캔
-				gold_can[i].getsprite()->setPosition(5000, 5000);
-				cout << "coll with gold can\n";
-				gold_can[i].getCannedFoodSound();
-				//can1.~Canned_Food();
+			for (int i = 0; i < 4; i++) {
+				if (cat.getBounds().intersects(gold_can[i].getBounds()))
+				{
+					gold_can[i].getFoodScore(&score, 3);               //금캔
+					gold_can[i].getsprite()->setPosition(5000, 5000);
+					cout << "coll with gold can\n";
+					cmusic.play();
+					/*gold_can[i].getCannedFoodSound();*/
+					//can1.~Canned_Food();
+				}
 			}
 		}
 		//배경 시점 변경
@@ -1186,6 +1352,21 @@ int main()
 			//backgroundSprite.move(-cat.getVelocity().x/75, 0);
 			view.setCenter(cat.getPositionX(), window.getSize().y / 2);
 		}
+		//if(mouseispressed)
+		//{
+		//	if (event.mouseButton.x > window.getSize().x * 0.7)
+		//	{
+		//		cout << event.mouseButton.x << "\n";
+		//		view.move(mcm);
+		//	}
+		//	else if (event.mouseButton.x < window.getSize().x * 0.3)
+		//	{
+		//		cout << event.mouseButton.x << " --\n\n";
+		//		view.move(-mcm);
+		//	}
+
+		//}
+		backlightSprite.setRotation(backlightSprite.getRotation()-1);
 
 		// 그리기
 		window.clear(Color::White);
@@ -1193,13 +1374,22 @@ int main()
 		if (jn.getLeftJump() <= 0) {
 			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 메인화면
 			// 클리어한 경우 (새창 사용? or 화면 새로 그리기?)
+			if (score.getCurrScore() >= 10000)
+			{
+				game_status.setString("Game Clear");
+				game_status.setFillColor(Color::Blue);
 
-			// 클리어하지 못한 경우
-			game_status.setString("Game Over");
-			game_status.setFillColor(Color::Red);
-			
-			window.draw(game_status);
-			window.draw(stargSprite);
+				window.draw(game_status);
+				window.draw(starySprite);
+			}
+			else {
+				// 클리어하지 못한 경우
+				game_status.setString("Game Over");
+				game_status.setFillColor(Color::Red);
+
+				window.draw(game_status);
+				window.draw(stargSprite);
+			}
 		}
 		else {
 			window.setView(view);
@@ -1208,19 +1398,28 @@ int main()
 			window.draw(game_score);
 			//window.draw(floorSprite);
 			window.draw(floor.getFloor());
+			window.draw(backlightSprite);
 			floodlight.draw(window);
-		/*	blue_can[0].draw(window, blue_can, 8);
-			red_can[0].draw(window, red_can, 7);*/
-			/*gold_can[0].draw(window, gold_can, 4);*/
-			for (int i = 0; i < 4; i++)
-			{
-
-				if (gold_can[i].getP != 5000)
-					window.draw(sprite);
+			for (int i = 0; i < 8; i++){
+				if (blue_can[i].getPosition() != 5000)
+					blue_can[i].draw(window);
+			}
+			for (int i = 0; i < 7; i++){
+				if (red_can[i].getPosition() != 5000)
+					red_can[i].draw(window);
+			}
+			for (int i = 0; i < 4; i++){
+				if (gold_can[i].getPosition() != 5000)
+					gold_can[i].draw(window);
 			}
 			cat.draw(window);
 			window.draw(girlSprite);
 			cup1.draw(window);
+			cup2.draw(window);
+			bottle.draw(window);
+			basket.draw(window);
+			micro.draw(window);
+			ob_clock.draw(window);
 
 			//포물선 화면에 그려주기
 			arc.setArcVelocity(arc.getStartArcVelocity());
