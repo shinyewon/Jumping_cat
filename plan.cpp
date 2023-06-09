@@ -1577,7 +1577,6 @@ int main()
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
-		//렉 발생 원인 찾기 -> 충돌 검사가 렉 발생 시키는 듯
 		//고양이가 날아가는 중에도 마우스 클릭이 작동해버림 bool 추가해서 막아야할 듯
 		// 이벤트 처리
 		Event event;
