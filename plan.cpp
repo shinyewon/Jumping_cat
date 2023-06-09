@@ -431,7 +431,6 @@ public:
 		if (!music.openFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
 			cout << "can sound err\n";
 		music.play();
-		music.setVolume(50.f);
 		music.setLoop(false);
 
 	}
@@ -572,7 +571,74 @@ public:
 		return sizeY;
 	}
 
-	//충돌시 visual,sound effect
+
+};
+class Backlight:Obstacle1
+{
+private:
+	Texture backlightTexture;
+	Vector2u backlightSize;
+	Sprite backlightSprite1;
+	Sprite backlightSprite2;
+	Sprite backlightSprite3;
+	Sprite backlightSprite4;
+	Sprite backlightSprite5;
+	Sprite backlightSprite6;
+public:
+	Backlight()
+	{
+		
+		backlightTexture.loadFromFile("./Data/Image/backlight.png");
+		backlightSize = backlightTexture.getSize();
+		backlightSprite1.setTexture(backlightTexture);
+		backlightSprite1.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
+		backlightSprite1.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
+		backlightSprite1.setPosition(1340, 275);//bottle1
+		backlightSprite1.setColor(Color(255, 0, 0, 128));
+		backlightSprite2.setTexture(backlightTexture);
+		backlightSprite2.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
+		backlightSprite2.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
+		backlightSprite2.setPosition(1650, 219); //bottle2
+		backlightSprite2.setColor(Color(255, 0, 0, 128));
+		backlightSprite3.setTexture(backlightTexture);
+		backlightSprite3.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
+		backlightSprite3.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
+		backlightSprite3.setPosition(590, 310);//basket
+		backlightSprite3.setColor(Color(255, 0, 0, 128));
+		backlightSprite4.setTexture(backlightTexture);
+		backlightSprite4.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
+		backlightSprite4.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
+		backlightSprite4.setPosition(1254, 270);
+		backlightSprite4.setColor(Color(255, 0, 0, 128));
+		backlightSprite5.setTexture(backlightTexture);
+		backlightSprite5.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
+		backlightSprite5.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
+		backlightSprite5.setPosition(1324, 270);
+		backlightSprite5.setColor(Color(255, 0, 0, 128));
+		backlightSprite5.setTexture(backlightTexture);
+		backlightSprite5.setScale((float)150 / backlightSize.x, (float)150 / backlightSize.y);
+		backlightSprite5.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
+		backlightSprite5.setPosition(1370, 119);//clock
+		backlightSprite5.setColor(Color(255, 0, 0, 128));
+	}
+	void drawlight(RenderWindow& window)
+	{
+		window.draw(backlightSprite1);
+		window.draw(backlightSprite2);
+		window.draw(backlightSprite3);
+		window.draw(backlightSprite4);
+		window.draw(backlightSprite5);
+		window.draw(backlightSprite6);
+	}
+	void rotate()
+	{
+		backlightSprite1.setRotation(backlightSprite1.getRotation() - 1);
+		backlightSprite2.setRotation(backlightSprite2.getRotation() - 1);
+		backlightSprite3.setRotation(backlightSprite3.getRotation() - 1);
+		backlightSprite4.setRotation(backlightSprite4.getRotation() - 1);
+		backlightSprite5.setRotation(backlightSprite5.getRotation() - 1);
+		backlightSprite6.setRotation(backlightSprite6.getRotation() - 1);
+	}
 };
 
 class Cup1:Obstacle1
@@ -588,7 +654,7 @@ public:
 		texture.loadFromFile("./Data/Image/cup1.jpg");
 		Vector2u cup1TextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)50 / cup1TextureSize.x, (float)50 / cup1TextureSize.y);
+		sprite.setScale((float)30 / cup1TextureSize.x, (float)30 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
 	}
@@ -617,7 +683,7 @@ public:
 		texture.loadFromFile("./Data/Image/cup2.jpg");
 		Vector2u cup1TextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)50 / cup1TextureSize.x, (float)50 / cup1TextureSize.y);
+		sprite.setScale((float)30 / cup1TextureSize.x, (float)30 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
 	}
@@ -646,7 +712,7 @@ public:
 		texture.loadFromFile("./Data/Image/basket.png");
 		Vector2u cup1TextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)100 / cup1TextureSize.x, (float)70 / cup1TextureSize.y);
+		sprite.setScale((float)120 / cup1TextureSize.x, (float)69 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
 	}
@@ -675,7 +741,7 @@ public:
 		texture.loadFromFile("./Data/Image/micro.jpg");
 		Vector2u cup1TextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)150 / cup1TextureSize.x, (float)100 / cup1TextureSize.y);
+		sprite.setScale((float)130 / cup1TextureSize.x, (float)88 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
 	}
@@ -704,7 +770,7 @@ public:
 		texture.loadFromFile("./Data/Image/bottle.png");
 		Vector2u cup1TextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)50/ cup1TextureSize.x, (float)100 / cup1TextureSize.y);
+		sprite.setScale((float)40/ cup1TextureSize.x, (float)80 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
 	}
@@ -733,7 +799,7 @@ public:
 		texture.loadFromFile("./Data/Image/clock.png");
 		Vector2u cup1TextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)100 / cup1TextureSize.x, (float)100 / cup1TextureSize.y);
+		sprite.setScale((float)140 / cup1TextureSize.x, (float)140 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
 	}
@@ -913,6 +979,10 @@ private:
 	int stagemaxstar;//스테이지 종료시 업데이트
 public:
 	//생성자
+	Star() {
+		curstar = 0;
+		this->stagemaxstar =0;
+	}
 	Star(int stagemaxstar) {
 		curstar = 0;
 		this->stagemaxstar = stagemaxstar;
@@ -948,7 +1018,52 @@ public:
 	int getMaxStar() {
 		return stagemaxstar;
 	}
+	void drawstar(RenderWindow& window)
+	{
+		Texture onestar, twostar, threestar;
+		Texture staryTexture;
+		staryTexture.loadFromFile("./Data/Image/star_y.png");
+		Texture stargTexture;
+		stargTexture.loadFromFile("./Data/Image/star_g.png");
+		Vector2u starySize = staryTexture.getSize();
+		Vector2u stargSize = stargTexture.getSize();
+		if (curstar == 0) {
+			onestar = stargTexture;
+			twostar = stargTexture;
+			threestar = stargTexture;
+		}
+		else if (curstar == 1) {
+			onestar = staryTexture;
+			twostar = stargTexture;
+			threestar = stargTexture;
+		}
+		else if (curstar == 2) {
+			onestar = staryTexture;
+			twostar = staryTexture;
+			threestar = stargTexture;
+		}
+		else if (curstar == 3) {
+			onestar = staryTexture;
+			twostar = staryTexture;
+			threestar = staryTexture;
+		}
+		Sprite starySprite1(onestar);
+		Sprite starySprite2(twostar);
+		Sprite starySprite3(threestar);
+		starySprite1.setScale((float)100 / starySize.x, (float)100 / starySize.y);
+		starySprite1.setPosition(540, 120);
+		starySprite2.setScale((float)100 / starySize.x, (float)100 / starySize.y);
+		starySprite2.setPosition(615, 90);
+		starySprite3.setScale((float)100 / starySize.x, (float)100 / starySize.y);
+		starySprite3.setPosition(690, 120);
+		window.draw(starySprite1);
+		window.draw(starySprite2);
+		window.draw(starySprite3);		
+	}
+	
 };
+
+
 
 //점프횟수 클래스
 class Jump_number
@@ -1410,48 +1525,28 @@ int main()
 
 	//배경 시점
 	View view(Vector2f(window.getSize().x/2, window.getSize().y / 2), Vector2f(window.getSize().x, window.getSize().y));
-	//backgroundSprite.setPosition(-cat.getPositionX(), 0);
 
-	//별 스프라이트 생성
-	Texture staryTexture;
-	staryTexture.loadFromFile("./Data/Image/star_y.png");
-	Vector2u starySize = staryTexture.getSize();
-	Sprite starySprite(staryTexture);
-	starySprite.setScale((float)100 / starySize.x, (float)100 / starySize.y);
-	starySprite.setPosition(800, 150);
+	//별 
+	Star star;
 
-	Texture stargTexture;
-	stargTexture.loadFromFile("./Data/Image/star_g.png");
-	Vector2u stargSize = stargTexture.getSize();
-	Sprite stargSprite(stargTexture);
-	stargSprite.setScale((float)100 / stargSize.x, (float)100 / stargSize.y);
-	stargSprite.setPosition(window.getSize().x/2, window.getSize().y*0.3);
-
-	//전등
-	Texture lightTexture;
-	lightTexture.loadFromFile("./Data/Image/light1.png");
-	Vector2u lightSize = lightTexture.getSize();
-	Sprite lightSprite(lightTexture);
-	lightSprite.setScale((float)100 / lightSize.x, (float)100 / lightSize.y);
-	lightSprite.setPosition(800, 150);
+	////전등
+	//Texture lightTexture;
+	//lightTexture.loadFromFile("./Data/Image/light1.png");
+	//Vector2u lightSize = lightTexture.getSize();
+	//Sprite lightSprite(lightTexture);
+	//lightSprite.setScale((float)100 / lightSize.x, (float)100 / lightSize.y);
+	//lightSprite.setPosition(800, 150);
 
 	//후광
-	Texture backlightTexture;
-	backlightTexture.loadFromFile("./Data/Image/backlight.png");
-	Vector2u backlightSize = backlightTexture.getSize();
-	Sprite backlightSprite(backlightTexture);
-	backlightSprite.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
-	backlightSprite.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
-	backlightSprite.setPosition(660, 290);
-	backlightSprite.setColor(Color(255, 255, 255, 128));
+	//Backlight backlight;
 
 	//장애물
-	Cup1 cup1(50, 100);
-	Cup2 cup2(100, 100);
-	Basket basket(200, 100);
-	Bottle bottle(300, 100);
-	Micro micro(400, 100);
-	Ob_Clock ob_clock(500, 100);
+	Cup1 cup1(1150, 240);
+	Cup2 cup2(1600,269);
+	Basket basket(530, 270);
+	Bottle bottle(1204, 220);
+	Micro micro(1284, 210);
+	Ob_Clock ob_clock(1300, 53);
 
 	// can
 	Canned_Food blue_can[BLUE_CAN];
@@ -1461,7 +1556,7 @@ int main()
 	blue_can[0].setinfo(660,290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
 	blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(1800, 400, 1);
 
-	red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1200, 180, 2);
+	red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1200, 150, 2);
 	red_can[3].setinfo(1300, 250, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600,260, 2);
 
 	gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 220, 3); gold_can[2].setinfo(1500, 410, 3); gold_can[3].setinfo(1800, 180, 3);
@@ -1472,8 +1567,10 @@ int main()
 	
 	//마우스 -> 무슨 역할?
 	Vector2f mcm;
-	mcm = Vector2f(5,0);
+	mcm = Vector2f(1,0);
 	int mouseispressed = 0;
+	Vector2i pixelPos1;
+	Vector2i pixelPos2;
 
 	bool reset = false;
 
@@ -1518,6 +1615,8 @@ int main()
 						dragSound.play();
 					}
 					mouseispressed = 1;
+					pixelPos1 = Mouse::getPosition(window);
+	
 				}
 				else if (event.type == Event::MouseButtonReleased)
 				{
@@ -1685,9 +1784,7 @@ int main()
 					blue_can[i].getFoodScore(&score, 1);                //파란캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					blue_can[i].getsprite()->setPosition(5000, 5000);
-					cout << "coll with blue can\n";
-					blue_can[i].getCannedFoodSound();
-					//can1.~Canned_Food();
+					cmusic.play();
 				}
 			}
 			for (int i = 0; i < 7; i++) {
@@ -1696,9 +1793,7 @@ int main()
 					red_can[i].getFoodScore(&score, 2);               //빨간캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					red_can[i].getsprite()->setPosition(5000, 5000);
-					cout << "coll with red can\n";
-					red_can[i].getCannedFoodSound();
-					//can1.~Canned_Food();
+					cmusic.play();
 				}
 			}
 			for (int i = 0; i < 4; i++) {
@@ -1707,35 +1802,36 @@ int main()
 					gold_can[i].getFoodScore(&score, 3);               //금캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					gold_can[i].getsprite()->setPosition(5000, 5000);
-					cout << "coll with gold can\n";
 					cmusic.play();
-					/*gold_can[i].getCannedFoodSound();*/
-					//can1.~Canned_Food();
 				}
 			}
 		}
 
 		//화면이 변경되면 작동 중지하도록 변경
 		//배경 시점 변경
-		if (cat.getPositionX() > window.getSize().x*0.5 && cat.getPositionX() < (backgroundSize.x-window.getSize().x*0.5)) {
-			//backgroundSprite.move(-cat.getVelocity().x/75, 0);
-			view.setCenter(cat.getPositionX(), window.getSize().y / 2);
-		}
-		//if(mouseispressed)
-		//{
-		//	if (event.mouseButton.x > window.getSize().x * 0.7)
-		//	{
-		//		cout << event.mouseButton.x << "\n";
-		//		view.move(mcm);
-		//	}
-		//	else if (event.mouseButton.x < window.getSize().x * 0.3)
-		//	{
-		//		cout << event.mouseButton.x << " --\n\n";
-		//		view.move(-mcm);
-		//	}
+		if (cat.getPosition().x > window.getSize().x / 2 &&
+			cat.getPosition().x < window.getSize().x*1.503) {
 
-		//}
-		backlightSprite.setRotation(backlightSprite.getRotation()-1);
+			view.setCenter(cat.getPositionX(), window.getSize().y / 2);	
+		}
+		if (view.getCenter().x > window.getSize().x &&
+			view.getCenter().x < window.getSize().x * 1.503) {
+
+			if ((mouseispressed == 1) && (cat_is_clicked == false))
+			{
+				pixelPos2 = Mouse::getPosition(window);
+
+				cout << pixelPos2.x << endl;
+
+				mcm = Vector2f(pixelPos1 - pixelPos2);
+				mcm.x /= 6;
+				mcm.y = 0;
+				view.move(mcm);
+			}
+		}
+	/*	backlight.rotate();*/
+
+		star.setStar(score.getCurrScore());
 
 		// 그리기
 		window.clear(Color::White);
@@ -1752,6 +1848,9 @@ int main()
 		else if (jn.getLeftJump() <= 0) {
 			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 통조림을 다 먹으면
 			// 클리어한 경우
+			
+			view.setCenter(Vector2f(960/ 2, window.getSize().y / 2));
+
 			if (score.getCurrScore() >= score.getMaxScore())
 			{
 				game_status.setString("Game Clear");
@@ -1761,7 +1860,9 @@ int main()
 
 				window.draw(game_status);
 				window.draw(final_score);
-				window.draw(starySprite);
+				//window.draw(starySprite);
+				/*window.draw(starySprite);*/
+				star.drawstar(window);
 			}
 			else {
 				// 클리어하지 못한 경우
@@ -1772,7 +1873,8 @@ int main()
 
 				window.draw(game_status);
 				window.draw(final_score);
-				window.draw(stargSprite);
+				//window.draw(stargSprite);
+				star.drawstar(window);
 			}
 		}
 		else {
@@ -1783,7 +1885,9 @@ int main()
 			//바닥을 따로 그릴 필요 없을 듯
 			//window.draw(floorSprite);
 			//window.draw(floor.getFloor());
-			window.draw(backlightSprite);
+			//window.draw(backlightSprite);
+			//window.draw(floor.getFloor());
+			/*backlight.drawlight(window);*/
 			floodlight.draw(window);
 			for (int i = 0; i < 8; i++) {
 				if (blue_can[i].getPosition() != 5000)
