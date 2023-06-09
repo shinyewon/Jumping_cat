@@ -11,6 +11,11 @@
 using namespace std;
 using namespace sf;
 
+//상수 처리 변경 필요
+#define BLUE_CAN	8
+#define RED_CAN		7
+#define GOLD_CAN	4
+
 class Score;
 
 void play_sound(const string& filename);
@@ -747,11 +752,12 @@ public:
 
 
 //
-//바닥 클래스 -> 바닥을 스프라이트로 만들려면 Sprite 클래스를 상속받아야 하나?
+//바닥 클래스
 class Floor
 {
 private:
-	RectangleShape floor;
+	//바닥을 따로 그릴 필요 없을 듯
+	//RectangleShape floor;
 	//위치좌표,크기
 	float posX;
 	float posY;
@@ -767,15 +773,17 @@ public:
 		size.x = s_x;
 		size.y = s_y;
 
-		floor.setPosition(posX, posY);
-		floor.setSize(size);
-		floor.setFillColor(color.Black);
+		//floor.setPosition(posX, posY);
+		//floor.setSize(size);
+		//floor.setFillColor(color.Black);
 	}
 
+	/*
 	RectangleShape getFloor()
 	{
 		return floor;
 	}
+	*/
 
 	//위치좌표,크기
 	void setFloorPos(float x, float y)
@@ -808,7 +816,7 @@ class Score
 private:
 	//현재점수
 	int currScore;
-	//최고점수
+	//최고점수 + 클리어 가능 점수(clearScore)
 	int maxScore;
 	//위치, 크기(글자 크기 등)
 	float posX;
@@ -912,7 +920,7 @@ public:
 	//현재 별 개수 setter/getter
 	void setStar(int score) {
 		int cs = 0;
-		if (score >= 30000) // 일정 점수 이상은 별 3개
+		if (score >= 30000) // 일정 점수 이상은 별 3개 (이 부분만 내용 추가하면 될 듯)
 		{
 			cs = 3;
 		}
@@ -1011,6 +1019,192 @@ public:
 	}
 };
 
+class MainMenu
+{
+private:
+	RectangleShape StartButton;
+	//위치좌표,크기
+	float SBposX;
+	float SBposY;
+	Vector2f SBsize;
+	Color SBcolor;
+
+	RectangleShape QuitButton;
+	//위치좌표,크기
+	float QBposX;
+	float QBposY;
+	Vector2f QBsize;
+	Color QBcolor;
+
+	float MainTposX;
+	float MainTposY;
+	float MainTsize;
+
+	float SBTposX;
+	float SBTposY;
+	float SBTsize;
+
+	float QBTposX;
+	float QBTposY;
+	float QBTsize;
+
+public:
+	//생성자,소멸자
+	MainMenu()
+	{
+		SBposX = 355;
+		SBposY = 300;
+		SBsize.x = 250;
+		SBsize.y = 60;
+
+		StartButton.setPosition(SBposX, SBposY);
+		StartButton.setSize(SBsize);
+		StartButton.setFillColor(SBcolor.Blue);
+
+		QBposX = 355;
+		QBposY = 400;
+		QBsize.x = 250;
+		QBsize.y = 60;
+
+		QuitButton.setPosition(QBposX, QBposY);
+		QuitButton.setSize(QBsize);
+		QuitButton.setFillColor(QBcolor.Blue);
+
+		MainTposX = 200;
+		MainTposY = 100;
+		MainTsize = 100;
+
+		SBTposX = 435;
+		SBTposY = 300;
+		SBTsize = 40;
+
+		QBTposX = 440;
+		QBTposY = 400;
+		QBTsize = 40;
+	}
+
+	RectangleShape getSB()
+	{
+		return StartButton;
+	}
+
+	RectangleShape getQB()
+	{
+		return QuitButton;
+	}
+
+	//위치좌표,크기
+	void setSBPos(float x, float y)
+	{
+		SBposX = x;
+		SBposY = y;
+	}
+	float getSBPosX()
+	{
+		return SBposX;
+	}
+	float getSBPosY()
+	{
+		return SBposY;
+	}
+	void setSBSize(Vector2f s)
+	{
+		SBsize = s;
+	}
+	Vector2f getSBSize()
+	{
+		return SBsize;
+	}
+
+	void setQBPos(float x, float y)
+	{
+		QBposX = x;
+		QBposY = y;
+	}
+	float getQBPosX()
+	{
+		return QBposX;
+	}
+	float getQBPosY()
+	{
+		return QBposY;
+	}
+	void setQBSize(Vector2f s)
+	{
+		QBsize = s;
+	}
+	Vector2f getQBSize()
+	{
+		return QBsize;
+	}
+
+	void setMainTPos(float x, float y)
+	{
+		MainTposX = x;
+		MainTposY = y;
+	}
+	float getMainTPosX()
+	{
+		return MainTposX;
+	}
+	float getMainTPosY()
+	{
+		return MainTposY;
+	}
+	void setMainTSize(float s)
+	{
+		MainTsize = s;
+	}
+	float getMainTSize()
+	{
+		return MainTsize;
+	}
+
+	void setSBTPos(float x, float y)
+	{
+		SBTposX = x;
+		SBTposY = y;
+	}
+	float getSBTPosX()
+	{
+		return SBTposX;
+	}
+	float getSBTPosY()
+	{
+		return SBTposY;
+	}
+	void setSBTSize(float s)
+	{
+		SBTsize = s;
+	}
+	float getSBTSize()
+	{
+		return SBTsize;
+	}
+
+	void setQBTPos(float x, float y)
+	{
+		QBTposX = x;
+		QBTposY = y;
+	}
+	float getQBTPosX()
+	{
+		return QBTposX;
+	}
+	float getQBTPosY()
+	{
+		return QBTposY;
+	}
+	void setQBTSize(float s)
+	{
+		QBTsize = s;
+	}
+	float getQBTSize()
+	{
+		return QBTsize;
+	}
+};
+
 //메뉴 클래스
 class Menu
 {
@@ -1079,6 +1273,21 @@ int main()
 	// 창 생성
 	RenderWindow window(VideoMode(960, 540), "Jumping cat");
 	window.setFramerateLimit(60);	//프레임 정해주기
+	
+	//window.close();
+
+	/*
+	RenderWindow window2(VideoMode(960, 540), "Jumping cat2");
+	window2.setFramerateLimit(60);	//프레임 정해주기
+	while (window2.isOpen())
+	window2.close()
+	window.create()
+	*/
+
+	//메인메뉴 생성
+	MainMenu mainmenu;
+	bool is_SB_clicked = false;
+	bool is_QB_clicked = false;
 
 	//포물선 클래스 생성
 	Arc arc(180, 450, 3);
@@ -1086,9 +1295,9 @@ int main()
 
 	// 바닥 스프라이트 생성
 	Floor floor(430, 510, 100, 20);
-	Texture floorTexture;
+	//Texture floorTexture;
 	//floorTexture.loadFromFile("./Data/Image/floor.png");
-	Sprite floorSprite(floorTexture);
+	//Sprite floorSprite(floorTexture);
 
 	//고양이 스프라이트 생성
 	Cat cat(180.f, 450.f);
@@ -1125,12 +1334,41 @@ int main()
 	text.setFillColor(Color::Black);
 	text.setPosition((float)jn.getPosX(), (float)jn.getPosY());
 
+	Text main_text;
+	main_text.setFont(font);
+	main_text.setString("Jumping Cat");
+	main_text.setCharacterSize((int)mainmenu.getMainTSize());
+	main_text.setFillColor(Color::Black);
+	main_text.setPosition(mainmenu.getMainTPosX(), mainmenu.getMainTPosY());
+
+	Text SBT;
+	SBT.setFont(font);
+	SBT.setString("Start");
+	SBT.setCharacterSize((int)mainmenu.getSBTSize());
+	SBT.setFillColor(Color::Black);
+	SBT.setPosition(mainmenu.getSBTPosX(), mainmenu.getSBTPosY());
+
+	Text QBT;
+	QBT.setFont(font);
+	QBT.setString("Quit");
+	QBT.setCharacterSize((int)mainmenu.getQBTSize());
+	QBT.setFillColor(Color::Black);
+	QBT.setPosition(mainmenu.getQBTPosX(), mainmenu.getQBTPosY());
+
 	Text game_score;
 	game_score.setFont(font);
 	game_score.setString("Score: " + to_string(score.getCurrScore()));
 	game_score.setCharacterSize((int) score.getScoreSize());
 	game_score.setFillColor(Color::Blue);
 	game_score.setPosition(score.getScorePosX(), score.getScorePosY());
+
+	Text final_score;
+	final_score.setFont(font);
+	final_score.setString("Score: " + to_string(score.getCurrScore()));
+	final_score.setCharacterSize((int)score.getScoreSize());
+	final_score.setFillColor(Color::Blue);
+	//위치 세팅 바꾸기
+	final_score.setPosition(350, 300);
 
 	// 게임 오버 또는 클리어 여부 표시할 text 설정
 	Text game_status;
@@ -1216,9 +1454,9 @@ int main()
 	Ob_Clock ob_clock(500, 100);
 
 	// can
-	Canned_Food blue_can[8];
-	Canned_Food red_can[7];
-	Canned_Food gold_can[4];
+	Canned_Food blue_can[BLUE_CAN];
+	Canned_Food red_can[RED_CAN];
+	Canned_Food gold_can[GOLD_CAN];
 	 /* 1000 * 8 + 1500 * 7 + 3000 * 4 = 30500*/
 	blue_can[0].setinfo(660,290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
 	blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(1800, 400, 1);
@@ -1227,7 +1465,12 @@ int main()
 	red_can[3].setinfo(1300, 250, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600,260, 2);
 
 	gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 220, 3); gold_can[2].setinfo(1500, 410, 3); gold_can[3].setinfo(1800, 180, 3);
-	//마우스
+
+	//클리어 점수 세팅
+	int total_can = BLUE_CAN + RED_CAN + GOLD_CAN;
+	score.setMaxScore(total_can * 1000);
+	
+	//마우스 -> 무슨 역할?
 	Vector2f mcm;
 	mcm = Vector2f(5,0);
 	int mouseispressed = 0;
@@ -1237,6 +1480,8 @@ int main()
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
+		//렉 발생 원인 찾기 -> 충돌 검사가 렉 발생 시키는 듯
+		//고양이가 날아가는 중에도 마우스 클릭이 작동해버림 bool 추가해서 막아야할 듯
 		// 이벤트 처리
 		Event event;
 		while (window.pollEvent(event))
@@ -1244,7 +1489,25 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 
-			if (jn.getLeftJump() > 0) {
+			if (is_SB_clicked == false)
+			{
+				if (event.type == Event::MouseButtonPressed)
+				{
+					if (event.mouseButton.button == Mouse::Left)
+					{
+						Vector2i Mpos = Mouse::getPosition(window);
+						if ((Mpos.x > mainmenu.getSBPosX() && Mpos.x < mainmenu.getSBPosX() + mainmenu.getSBSize().x) && (Mpos.y > mainmenu.getSBPosY() && Mpos.y < mainmenu.getSBPosY() + mainmenu.getSBSize().y))
+						{
+							is_SB_clicked = true;
+						}
+						else if ((Mpos.x > mainmenu.getQBPosX() && Mpos.x < mainmenu.getQBPosX() + mainmenu.getQBSize().x) && (Mpos.y > mainmenu.getQBPosY() && Mpos.y < mainmenu.getQBPosY() + mainmenu.getQBSize().y))
+						{
+							is_QB_clicked = true;
+						}
+					}
+				}
+			}
+			else if (jn.getLeftJump() > 0) {
 				if (event.type == Event::MouseButtonPressed)
 				{
 					if (event.mouseButton.button == Mouse::Left)
@@ -1299,6 +1562,11 @@ int main()
 			}
 		}
 
+		if (is_QB_clicked == true)
+		{
+			window.close();
+		}
+
 		// 게임 로직
 		float deltaTime = clock.restart().asSeconds();
 
@@ -1329,10 +1597,13 @@ int main()
 		
 
 		if (cat_is_clicked == true) {
+			Vector2f move_pos;
 			int x1 = Mouse::getPosition(window).x;
 			int y1 = Mouse::getPosition(window).y;
 			int move_pos_x = (int)dragStartPosition.x - x1;
 			int move_pos_y = (int)dragStartPosition.y - y1;
+			move_pos.x = move_pos_x;
+			move_pos.y = move_pos_y;
 
 			float ang = (float)(atan2(double(y1 - dragStartPosition.y), double(x1 - dragStartPosition.x)) * 180 / 3.141592);
 			if (ang < 0) ang += 360;
@@ -1342,6 +1613,17 @@ int main()
 			float drag_dis = (float)sqrt(pow(dragStartPosition.x - x1, 2) + pow(dragStartPosition.y - y1, 2)); //드래그한 거리
 			if (drag_dis <= 70)
 				cat.setScale((float)(159.7 + drag_dis) / cat.getTextureSizeX(), (float)(127.7 - drag_dis) / cat.getTextureSizeY());
+
+			//최대 속도 제한 필요
+			float jumpVelocityScale = 3.5f;
+			Vector2f jumpVelocity = jumpVelocityScale * move_pos;
+
+			//포물선 그리기 위한 속도, 가속도, 위치 세팅
+			arc.setArcVelocity(jumpVelocity);
+			arc.setStartArcVelocity(arc.getArcVelocity());
+			arc.setArcAcceleration(cat.getGravity());
+
+			arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
 		}
 
 		
@@ -1401,6 +1683,7 @@ int main()
 				if (cat.getBounds().intersects(blue_can[i].getBounds())) 
 				{
 					blue_can[i].getFoodScore(&score, 1);                //파란캔
+					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					blue_can[i].getsprite()->setPosition(5000, 5000);
 					cout << "coll with blue can\n";
 					blue_can[i].getCannedFoodSound();
@@ -1411,6 +1694,7 @@ int main()
 				if (cat.getBounds().intersects(red_can[i].getBounds()))
 				{
 					red_can[i].getFoodScore(&score, 2);               //빨간캔
+					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					red_can[i].getsprite()->setPosition(5000, 5000);
 					cout << "coll with red can\n";
 					red_can[i].getCannedFoodSound();
@@ -1421,6 +1705,7 @@ int main()
 				if (cat.getBounds().intersects(gold_can[i].getBounds()))
 				{
 					gold_can[i].getFoodScore(&score, 3);               //금캔
+					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					gold_can[i].getsprite()->setPosition(5000, 5000);
 					cout << "coll with gold can\n";
 					cmusic.play();
@@ -1429,6 +1714,8 @@ int main()
 				}
 			}
 		}
+
+		//화면이 변경되면 작동 중지하도록 변경
 		//배경 시점 변경
 		if (cat.getPositionX() > window.getSize().x*0.5 && cat.getPositionX() < (backgroundSize.x-window.getSize().x*0.5)) {
 			//backgroundSprite.move(-cat.getVelocity().x/75, 0);
@@ -1453,15 +1740,27 @@ int main()
 		// 그리기
 		window.clear(Color::White);
 
-		if (jn.getLeftJump() <= 0) {
-			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 메인화면
-			// 클리어한 경우 (새창 사용? or 화면 새로 그리기?)
-			if (score.getCurrScore() >= 10000)
+		if (is_SB_clicked == false)
+		{
+			window.draw(mainmenu.getSB());
+			window.draw(mainmenu.getQB());
+
+			window.draw(main_text);
+			window.draw(SBT);
+			window.draw(QBT);
+		}
+		else if (jn.getLeftJump() <= 0) {
+			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 통조림을 다 먹으면
+			// 클리어한 경우
+			if (score.getCurrScore() >= score.getMaxScore())
 			{
 				game_status.setString("Game Clear");
 				game_status.setFillColor(Color::Blue);
 
+				final_score.setString("Score: " + to_string(score.getCurrScore()));
+
 				window.draw(game_status);
+				window.draw(final_score);
 				window.draw(starySprite);
 			}
 			else {
@@ -1469,7 +1768,10 @@ int main()
 				game_status.setString("Game Over");
 				game_status.setFillColor(Color::Red);
 
+				final_score.setString("Score: " + to_string(score.getCurrScore()));
+
 				window.draw(game_status);
+				window.draw(final_score);
 				window.draw(stargSprite);
 			}
 		}
@@ -1478,19 +1780,20 @@ int main()
 			window.draw(backgroundSprite);
 			window.draw(text);
 			window.draw(game_score);
+			//바닥을 따로 그릴 필요 없을 듯
 			//window.draw(floorSprite);
-			window.draw(floor.getFloor());
+			//window.draw(floor.getFloor());
 			window.draw(backlightSprite);
 			floodlight.draw(window);
-			for (int i = 0; i < 8; i++){
+			for (int i = 0; i < 8; i++) {
 				if (blue_can[i].getPosition() != 5000)
 					blue_can[i].draw(window);
 			}
-			for (int i = 0; i < 7; i++){
+			for (int i = 0; i < 7; i++) {
 				if (red_can[i].getPosition() != 5000)
 					red_can[i].draw(window);
 			}
-			for (int i = 0; i < 4; i++){
+			for (int i = 0; i < 4; i++) {
 				if (gold_can[i].getPosition() != 5000)
 					gold_can[i].draw(window);
 			}
@@ -1504,21 +1807,24 @@ int main()
 			ob_clock.draw(window);
 
 			//포물선 화면에 그려주기
-			arc.setArcVelocity(arc.getStartArcVelocity());
-
-			arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
-
-			int ArcDrawCount = 0;
-
-			for (float tldt = 0; tldt <= 0.02; tldt += 0.0001)
+			if (cat_is_clicked == true)
 			{
-				if (ArcDrawCount == 0 || ArcDrawCount % 10 == 0)
-				{
-					window.draw(arc.getArc());
-				}
+				arc.setArcVelocity(arc.getStartArcVelocity());
 
-				arc.moveArc(tldt);
-				ArcDrawCount++;
+				arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
+
+				int ArcDrawCount = 0;
+
+				for (float tldt = 0; tldt <= 0.015; tldt += 0.0001)
+				{
+					if (ArcDrawCount == 0 || ArcDrawCount % 10 == 0)
+					{
+						window.draw(arc.getArc());
+					}
+
+					arc.moveArc(tldt);
+					ArcDrawCount++;
+				}
 			}
 		}
 
