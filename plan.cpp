@@ -1446,7 +1446,7 @@ int main()
 
 	Music dragSound;
 	if (!dragSound.openFromFile("./Data/Sound/meow.wav"))
-		cout << "jump sound err\n";
+		cout << "drag sound err\n";
 	dragSound.setVolume(70);
 
 	Music jumpSound;
@@ -1504,6 +1504,7 @@ int main()
 
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	int collisionNum = 0;         //장애물과 충돌한 횟수를 저장할 변수
+	float jumpVelocityScale = 10.0f;
 	while (window.isOpen())
 	{
 		// 이벤트 처리
@@ -1554,7 +1555,13 @@ int main()
 						dragEndPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
 						Vector2f dragDistance = dragStartPosition - dragEndPosition;
 
-						float jumpVelocityScale = 3.5f;
+						//최대 속도 제한
+						float drag_dis = (float)sqrt(pow(dragDistance.x, 2) + pow(dragDistance.y, 2)); //마우스 버튼을 뗐을 때, 드래그한 거리
+						if (drag_dis > 70) {
+							float drag_ratio = 70 / drag_dis;
+							dragDistance.x *= drag_ratio;
+							dragDistance.y *= drag_ratio;
+						}
 						Vector2f jumpVelocity = jumpVelocityScale * dragDistance;
 
 						cat.setRotation(0);
@@ -1579,6 +1586,7 @@ int main()
 
 								//날아가는 코드 구현
 								cat.jump(jumpVelocity);
+								//날아갈 때 소리 재생
 								jumpSound.openFromFile("./Data/Sound/jump.wav");
 								jumpSound.play(); 
 							}
@@ -1626,7 +1634,7 @@ int main()
 			cat.setIsJumping(false);
 			view.setCenter(window.getSize().x / 2, window.getSize().y / 2); // 화면도 초기화
 		}
-
+		
 		if (cat_is_clicked == true) {
 			Vector2f move_pos;
 			int x1 = Mouse::getPosition(window).x;
@@ -1634,26 +1642,23 @@ int main()
 			int move_pos_x = (int)dragStartPosition.x - x1;
 			int move_pos_y = (int)dragStartPosition.y - y1;
 			move_pos.x = move_pos_x;
-			move_pos.y = move_pos_y;
+			move_pos.y = move_pos_y; 
 
 			float ang = (float)(atan2(double(y1 - dragStartPosition.y), double(x1 - dragStartPosition.x)) * 180 / 3.141592);
 			if (ang < 0) ang += 360;
 			if (move_pos_x > 0)
 				cat.setRotation((int)ang + 180);
 
-			float drag_dis = (float)sqrt(pow(dragStartPosition.x - x1, 2) + pow(dragStartPosition.y - y1, 2)); //드래그한 거리
+			float drag_dis = (float)sqrt(pow(dragStartPosition.x - x1, 2) + pow(dragStartPosition.y - y1, 2)); //실시간으로 드래그한 거리
 			if (drag_dis <= 70)
 				cat.setScale((float)(1597 * 0.07 + drag_dis) / cat.getTextureSizeX(), (float)(1277 * 0.07 - drag_dis) / cat.getTextureSizeY());
 
-			//최대 속도 제한 수정중...
-			float jumpVelocityScale = 3.5f;
-			/*
+			//최대 속도 제한 수정
 			if (drag_dis > 70) {
 				float drag_ratio = 70 / drag_dis;
 				move_pos.x *= drag_ratio;
 				move_pos.y *= drag_ratio;
 			}
-			*/
 			Vector2f jumpVelocity = jumpVelocityScale * move_pos;
 
 
