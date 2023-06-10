@@ -249,7 +249,6 @@ public:
 		arc.setFillColor(color.Red);
 	}
 
-	//
 	CircleShape getArc()
 	{
 		return arc;
@@ -1447,7 +1446,7 @@ int main()
 
 	Music dragSound;
 	if (!dragSound.openFromFile("./Data/Sound/meow.wav"))
-		cout << "drag sound err\n";
+		cout << "jump sound err\n";
 	dragSound.setVolume(70);
 
 	Music jumpSound;
@@ -1540,6 +1539,7 @@ int main()
 						dragStartPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
 						if (dragStartPosition.x > cat.getPositionX() - cat.getTextureSizeX() * cat.getScale().x / 2 && dragStartPosition.x < cat.getPositionX() + cat.getTextureSizeX() * cat.getScale().x / 2 && dragStartPosition.y > cat.getPositionY() - cat.getTextureSizeY() * cat.getScale().y / 2 && dragStartPosition.y < cat.getPositionY() + cat.getTextureSizeY() * cat.getScale().y / 2) {
 							cat_is_clicked = true;
+							dragSound.openFromFile("./Data/Sound/meow.wav");
 							dragSound.play();
 						}
 					}
@@ -1579,7 +1579,8 @@ int main()
 
 								//날아가는 코드 구현
 								cat.jump(jumpVelocity);
-								jumpSound.play();
+								jumpSound.openFromFile("./Data/Sound/jump.wav");
+								jumpSound.play(); 
 							}
 						}
 						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
@@ -1598,11 +1599,11 @@ int main()
 		float deltaTime = clock.restart().asSeconds();
 
 		floodlight.swing();
-
-		if (cat.getPositionY() > window.getSize().y /*|| collisionNum == 5*/) //고양이가 밑으로 떨어지거나 (충돌횟수가 5번이면)
+		
+		if (cat.getPositionY() > window.getSize().y || collisionNum == 9) //고양이가 밑으로 떨어지거나 충돌횟수가 9번이면
 		{
 			collisionNum = 0; //장애물 충돌 횟수 초기화
-			
+
 			cat.changeImage("./Data/Image/cat.png");
 			reset = true;
 
@@ -1654,7 +1655,7 @@ int main()
 			}
 			*/
 			Vector2f jumpVelocity = jumpVelocityScale * move_pos;
-			
+
 
 			//포물선 그리기 위한 속도, 가속도, 위치 세팅
 			arc.setArcVelocity(jumpVelocity);
@@ -1668,7 +1669,6 @@ int main()
 		//전등과 부딪히면 떨어짐
 		if (cat.getBounds().intersects(floodlight.getBounds()))
 		{
-			cat.setIsJumping(false);
 			cat.changeImage("./Data/Image/dizzycat.png"); //눈이 빙글빙글 도는 고양이 이미지로 바꿈
 			cat.startFalling(200.f, 300.f);
 		}
@@ -1714,7 +1714,8 @@ int main()
 			cat.setVelocity(bounceVelocity);
 
 			//장애물 충돌 횟수 증가
-			collisionNum++;
+			if (cat.getIsFalling() == false) //전등에 부딪혀서 떨어지는 경우는 제외
+				collisionNum += 1;
 		}
 
 		//can과 충돌
