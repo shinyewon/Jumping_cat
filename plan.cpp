@@ -46,7 +46,7 @@ public:
 		texture.loadFromFile("./Data/Image/cat.png");
 		Vector2u catTextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)159.7 / catTextureSize.x, (float)127.7 / catTextureSize.y);
+		sprite.setScale(0.07f, 0.07f);
 		sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2); //가운데를 중심점으로 설정
 		sprite.setPosition(position);
 	}
@@ -92,18 +92,18 @@ public:
 		velocity.y = velY;
 	}
 
-	float getTextureSizeX(){
+	float getTextureSizeX() {
 		return (float)texture.getSize().x;
 	}
-	float getTextureSizeY(){
+	float getTextureSizeY() {
 		return (float)texture.getSize().y;
 	}
 
-	float getGravity(){
+	float getGravity() {
 		return gravity;
 	}
 
-	void setIsJumping(bool Jumping){
+	void setIsJumping(bool Jumping) {
 		isJumping = Jumping;
 	}
 
@@ -111,18 +111,18 @@ public:
 		return isFalling;
 	}
 
-	void setRotation(int a){
+	void setRotation(int a) {
 		sprite.setRotation((float)a);
 	}
 
 	Vector2f getScale() {
 		return sprite.getScale();
 	}
-	void setScale(float factorX, float factorY){
+	void setScale(float factorX, float factorY) {
 		sprite.setScale((float)factorX, (float)factorY);
 	}
 
-	void changeImage(string path){
+	void changeImage(string path) {
 		texture.loadFromFile(path);
 	}
 
@@ -161,7 +161,7 @@ public:
 			if (position.x - sprite.getGlobalBounds().width / 2 <= 0.f) //왼쪽 경계에 닿으면
 			{
 				velocity.x = -velocity.x;
-				if(sprite.getScale().x < 0) //고양이가 왼쪽을 향해 있으면
+				if (sprite.getScale().x < 0) //고양이가 왼쪽을 향해 있으면
 					sprite.setScale(-sprite.getScale().x, sprite.getScale().y); // 이미지를 좌우 반전
 			}
 			else if (position.x + sprite.getGlobalBounds().width / 2 >= 1940.f) //오른쪽 경계에 닿으면
@@ -349,8 +349,8 @@ class Canned_Food
 	//직사각형으로 구현하면 좋을 듯
 
 private:
-  //변수(필드)
-  //위치좌표, 크기
+	//변수(필드)
+	//위치좌표, 크기
 
 	Vector2f position;
 	Texture texture;
@@ -364,31 +364,31 @@ private:
 	int sp;
 
 public:
-  //함수(메소드)
-  //생성자, 소멸자
-	Canned_Food(){}
-	void setinfo(float x, float y,int sp)
+	//함수(메소드)
+	//생성자, 소멸자
+	Canned_Food() {}
+	void setinfo(float x, float y, int sp)
 	{
 		position.x = x;
 		position.y = y;
 		//캔 스프라이트 생성
 		this->sp = sp;
-		if(sp == 1)
-		    texture.loadFromFile("./Data/Image/canned_food.png"); // 파랑 캔
-		else if(sp==2)
+		if (sp == 1)
+			texture.loadFromFile("./Data/Image/canned_food.png"); // 파랑 캔
+		else if (sp == 2)
 			texture.loadFromFile("./Data/Image/canned_food_red.png"); // 빨간 캔
-		else if(sp==3)
+		else if (sp == 3)
 			texture.loadFromFile("./Data/Image/canned_food_gold.png"); // 금색 캔
 		Vector2u textureSize = texture.getSize();
 		sprite.setTexture(texture);
 		sprite.setScale((float)50 / textureSize.x, (float)50 / textureSize.y);
 		sprite.setPosition(position);
-    }
+	}
 	~Canned_Food()
 	{
 
 	}
-  //위치좌표, 크기 setter/getter
+	//위치좌표, 크기 setter/getter
 	void setFoodPos(double posX, double posY)
 	{
 		position.x = posX;
@@ -439,7 +439,7 @@ public:
 
 	void draw(RenderWindow& window)
 	{
-			window.draw(sprite);
+		window.draw(sprite);
 	}
 
 	FloatRect getBounds() const
@@ -489,7 +489,7 @@ public:
 		sprite.setOrigin(sprite.getLocalBounds().width / 2, 0); //윗변 가운데를 중심점으로 설정 
 		sprite.setPosition(position);
 	}
-	
+
 	void swing()
 	{
 		if (isMovingRight)
@@ -573,7 +573,7 @@ public:
 
 
 };
-class Backlight:Obstacle1
+class Backlight :Obstacle1
 {
 private:
 	Texture backlightTexture;
@@ -587,7 +587,7 @@ private:
 public:
 	Backlight()
 	{
-		
+
 		backlightTexture.loadFromFile("./Data/Image/backlight.png");
 		backlightSize = backlightTexture.getSize();
 		backlightSprite1.setTexture(backlightTexture);
@@ -641,7 +641,7 @@ public:
 	}
 };
 
-class Cup1:Obstacle1
+class Cup1 :Obstacle1
 {
 private:
 	Vector2f position;
@@ -770,7 +770,7 @@ public:
 		texture.loadFromFile("./Data/Image/bottle.png");
 		Vector2u cup1TextureSize = texture.getSize();
 		sprite.setTexture(texture);
-		sprite.setScale((float)40/ cup1TextureSize.x, (float)80 / cup1TextureSize.y);
+		sprite.setScale((float)40 / cup1TextureSize.x, (float)80 / cup1TextureSize.y);
 		sprite.setPosition(position);
 
 	}
@@ -957,7 +957,7 @@ void Canned_Food::getFoodScore(Score* score, int size)
 	//    size 2 = 1500점
 	//    size 3 = 3000점 ...
 	if (size == 1) {//파랑
-		score->setCurrScore(score->getCurrScore()+1000);
+		score->setCurrScore(score->getCurrScore() + 1000);
 	}
 	else if (size == 2) {//빨강
 		score->setCurrScore(score->getCurrScore() + 1500);
@@ -981,7 +981,7 @@ public:
 	//생성자
 	Star() {
 		curstar = 0;
-		this->stagemaxstar =0;
+		this->stagemaxstar = 0;
 	}
 	Star(int stagemaxstar) {
 		curstar = 0;
@@ -1058,9 +1058,9 @@ public:
 		starySprite3.setPosition(690, 120);
 		window.draw(starySprite1);
 		window.draw(starySprite2);
-		window.draw(starySprite3);		
+		window.draw(starySprite3);
 	}
-	
+
 };
 
 
@@ -1326,15 +1326,15 @@ class Menu
 	// 재생, 일시정지, 다시 시작, 소리조절 등
 private:
 	//위치, 크기
-	
+
 	//현재상태(플레이중, 일시정지)
-	
+
 	//소리크기
 public:
 	//생성자,소멸자
-	
+
 	//위치, 크기, 현재상태 ,소리 크기 setter/getter
-	
+
 	//다시시작요청
 	//상태변환시 visual,sound effect(sfml 이용해 구현)
 };
@@ -1388,7 +1388,7 @@ int main()
 	// 창 생성
 	RenderWindow window(VideoMode(960, 540), "Jumping cat");
 	window.setFramerateLimit(60);	//프레임 정해주기
-	
+
 	//window.close();
 
 	/*
@@ -1415,7 +1415,7 @@ int main()
 	//Sprite floorSprite(floorTexture);
 
 	//고양이 스프라이트 생성
-	Cat cat(180.f, 450.f);
+	Cat cat(180.f, 465.f);
 	cat.setStartPosition(cat.getPositionX(), cat.getPositionY());
 	Vector2f dragStartPosition;
 	Vector2f dragEndPosition;
@@ -1429,7 +1429,7 @@ int main()
 	girlSprite.setPosition(0, 340);
 
 	//조명등 스프라이트 생성
-	Floodlight floodlight(800, 0); 
+	Floodlight floodlight(800, 0);
 
 
 	Score score(0, 30, 20);
@@ -1473,7 +1473,7 @@ int main()
 	Text game_score;
 	game_score.setFont(font);
 	game_score.setString("Score: " + to_string(score.getCurrScore()));
-	game_score.setCharacterSize((int) score.getScoreSize());
+	game_score.setCharacterSize((int)score.getScoreSize());
 	game_score.setFillColor(Color::Blue);
 	game_score.setPosition(score.getScorePosX(), score.getScorePosY());
 
@@ -1521,10 +1521,10 @@ int main()
 	Vector2u backgroundSize = backgroundTexture.getSize();
 	Sprite backgroundSprite;
 	backgroundSprite.setTexture(backgroundTexture);
-	backgroundSprite.setScale((float)(window.getSize().x*2) / backgroundSize.x, (float)window.getSize().y / backgroundSize.y);
+	backgroundSprite.setScale((float)(window.getSize().x * 2) / backgroundSize.x, (float)window.getSize().y / backgroundSize.y);
 
 	//배경 시점
-	View view(Vector2f(window.getSize().x/2, window.getSize().y / 2), Vector2f(window.getSize().x, window.getSize().y));
+	View view(Vector2f(window.getSize().x / 2, window.getSize().y / 2), Vector2f(window.getSize().x, window.getSize().y));
 
 	//별 
 	Star star;
@@ -1542,7 +1542,7 @@ int main()
 
 	//장애물
 	Cup1 cup1(1150, 240);
-	Cup2 cup2(1600,269);
+	Cup2 cup2(1600, 269);
 	Basket basket(530, 270);
 	Bottle bottle(1204, 220);
 	Micro micro(1284, 210);
@@ -1552,22 +1552,22 @@ int main()
 	Canned_Food blue_can[BLUE_CAN];
 	Canned_Food red_can[RED_CAN];
 	Canned_Food gold_can[GOLD_CAN];
-	 /* 1000 * 8 + 1500 * 7 + 3000 * 4 = 30500*/
-	blue_can[0].setinfo(660,290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
+	/* 1000 * 8 + 1500 * 7 + 3000 * 4 = 30500*/
+	blue_can[0].setinfo(660, 290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
 	blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(1800, 400, 1);
 
 	red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1200, 150, 2);
-	red_can[3].setinfo(1300, 250, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600,260, 2);
+	red_can[3].setinfo(1300, 250, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600, 260, 2);
 
 	gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 220, 3); gold_can[2].setinfo(1500, 410, 3); gold_can[3].setinfo(1800, 180, 3);
 
 	//클리어 점수 세팅
 	int total_can = BLUE_CAN + RED_CAN + GOLD_CAN;
 	score.setMaxScore(total_can * 1000);
-	
+
 	//마우스 -> 무슨 역할?
 	Vector2f mcm;
-	mcm = Vector2f(1,0);
+	mcm = Vector2f(1, 0);
 	int mouseispressed = 0;
 	Vector2i pixelPos1;
 	Vector2i pixelPos2;
@@ -1577,7 +1577,6 @@ int main()
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
 	while (window.isOpen())
 	{
-		//고양이가 날아가는 중에도 마우스 클릭이 작동해버림 bool 추가해서 막아야할 듯
 		// 이벤트 처리
 		Event event;
 		while (window.pollEvent(event))
@@ -1587,7 +1586,7 @@ int main()
 
 			if (is_SB_clicked == false)
 			{
-				if (event.type == Event::MouseButtonPressed)
+				if (event.type == Event::MouseButtonReleased)
 				{
 					if (event.mouseButton.button == Mouse::Left)
 					{
@@ -1609,13 +1608,14 @@ int main()
 					if (event.mouseButton.button == Mouse::Left)
 					{
 						dragStartPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
-						if (dragStartPosition.x > cat.getPositionX() - cat.getTextureSizeX() / 2 && dragStartPosition.x < cat.getPositionX() + cat.getTextureSizeX() / 2 && dragStartPosition.y > cat.getPositionY() - cat.getTextureSizeY() / 2 && dragStartPosition.y < cat.getPositionY() + cat.getTextureSizeY() / 2)
+						if (dragStartPosition.x > cat.getPositionX() - cat.getTextureSizeX() * cat.getScale().x / 2 && dragStartPosition.x < cat.getPositionX() + cat.getTextureSizeX() * cat.getScale().x / 2 && dragStartPosition.y > cat.getPositionY() - cat.getTextureSizeY() * cat.getScale().y / 2 && dragStartPosition.y < cat.getPositionY() + cat.getTextureSizeY() * cat.getScale().y / 2) {
 							cat_is_clicked = true;
-						dragSound.play();
+							dragSound.play();
+						}
 					}
 					mouseispressed = 1;
 					pixelPos1 = Mouse::getPosition(window);
-	
+
 				}
 				else if (event.type == Event::MouseButtonReleased)
 				{
@@ -1628,9 +1628,7 @@ int main()
 						Vector2f jumpVelocity = jumpVelocityScale * dragDistance;
 
 						cat.setRotation(0);
-						cat.setScale((float)159.7 / cat.getTextureSizeX(), (float)127.7 / cat.getTextureSizeY()); //고양이 크기 원래상태로 되돌리기
-
-						jumpSound.play();
+						cat.setScale(0.07f, 0.07f); //고양이 크기 원래상태로 되돌리기
 
 						// 드래그를 너무 조금하거나 오른쪽으로 하면 무시하고 아니면 날아감
 						if ((abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20) || dragDistance.x < 0) {
@@ -1645,12 +1643,13 @@ int main()
 								arc.setArcVelocity(jumpVelocity);
 								arc.setStartArcVelocity(arc.getArcVelocity());
 								arc.setArcAcceleration(cat.getGravity());
-								
+
 								arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
-								
+
 
 								//날아가는 코드 구현
 								cat.jump(jumpVelocity);
+								jumpSound.play();
 							}
 						}
 						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
@@ -1672,7 +1671,7 @@ int main()
 
 		if (cat.getPositionY() >= floor.getFloorPosY())
 		{
-			cat.changeImage("./Data/Image/cat.png"); //texture 사용은 매우 무거운 작업이므로, 고양이가 떨어진 후 한 번만 실행되어야 함. 그래서 위치 변경함:)
+			cat.changeImage("./Data/Image/cat.png");
 			reset = true;
 
 			jn.reduceJump(); //점프횟수 감소
@@ -1692,7 +1691,7 @@ int main()
 			cat.jump(Vector2f(0, 0));
 			view.setCenter(window.getSize().x / 2, window.getSize().y / 2); // 화면도 초기화
 		}
-		
+
 
 		if (cat_is_clicked == true) {
 			Vector2f move_pos;
@@ -1710,11 +1709,19 @@ int main()
 
 			float drag_dis = (float)sqrt(pow(dragStartPosition.x - x1, 2) + pow(dragStartPosition.y - y1, 2)); //드래그한 거리
 			if (drag_dis <= 70)
-				cat.setScale((float)(159.7 + drag_dis) / cat.getTextureSizeX(), (float)(127.7 - drag_dis) / cat.getTextureSizeY());
+				cat.setScale((float)(1597 * 0.07 + drag_dis) / cat.getTextureSizeX(), (float)(1277 * 0.07 - drag_dis) / cat.getTextureSizeY());
 
-			//최대 속도 제한 필요
+			//최대 속도 제한 수정중...
 			float jumpVelocityScale = 3.5f;
+			/*
+			if (drag_dis > 70) {
+				float drag_ratio = 70 / drag_dis;
+				move_pos.x *= drag_ratio;
+				move_pos.y *= drag_ratio;
+			}
+			*/
 			Vector2f jumpVelocity = jumpVelocityScale * move_pos;
+			
 
 			//포물선 그리기 위한 속도, 가속도, 위치 세팅
 			arc.setArcVelocity(jumpVelocity);
@@ -1724,7 +1731,7 @@ int main()
 			arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
 		}
 
-		
+
 		//전등과 부딪히면 떨어짐
 		if (cat.getBounds().intersects(floodlight.getBounds()))
 		{
@@ -1746,17 +1753,17 @@ int main()
 				direction = cat.getPosition() - cup1.getPosition();
 			}
 			// 고양이와 컵2 충돌 체크
-			else if (cat.getBounds().intersects(cup2.getBounds())) 
+			else if (cat.getBounds().intersects(cup2.getBounds()))
 				direction = cat.getPosition() - cup2.getPosition();
 
 			// 고양이와 바구니 충돌 체크
-			else if (cat.getBounds().intersects(basket.getBounds())) 
+			else if (cat.getBounds().intersects(basket.getBounds()))
 				direction = cat.getPosition() - basket.getPosition();
 
 			// 고양이와 병 충돌 체크
 			else if (cat.getBounds().intersects(bottle.getBounds()))
 				direction = cat.getPosition() - bottle.getPosition();
-		
+
 			// 고양이와 시계 충돌 체크
 			else if (cat.getBounds().intersects(ob_clock.getBounds()))
 				direction = cat.getPosition() - ob_clock.getPosition();
@@ -1778,7 +1785,7 @@ int main()
 		if (cat.getIsFalling() == false)//전등에 부딪힌 후 떨어질 때는 통조림 안 먹어짐.
 		{
 			for (int i = 0; i < 8; i++) {
-				if (cat.getBounds().intersects(blue_can[i].getBounds())) 
+				if (cat.getBounds().intersects(blue_can[i].getBounds()))
 				{
 					blue_can[i].getFoodScore(&score, 1);                //파란캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
@@ -1809,9 +1816,9 @@ int main()
 		//화면이 변경되면 작동 중지하도록 변경
 		//배경 시점 변경
 		if (cat.getPosition().x > window.getSize().x / 2 &&
-			cat.getPosition().x < window.getSize().x*1.503) {
+			cat.getPosition().x < window.getSize().x * 1.503) {
 
-			view.setCenter(cat.getPositionX(), window.getSize().y / 2);	
+			view.setCenter(cat.getPositionX(), window.getSize().y / 2);
 		}
 		if (view.getCenter().x > window.getSize().x &&
 			view.getCenter().x < window.getSize().x * 1.503) {
@@ -1828,7 +1835,7 @@ int main()
 				view.move(mcm);
 			}
 		}
-	/*	backlight.rotate();*/
+		/*	backlight.rotate();*/
 
 		star.setStar(score.getCurrScore());
 
@@ -1839,7 +1846,7 @@ int main()
 		{
 			window.draw(mainmenu.getSB());
 			window.draw(mainmenu.getQB());
-
+			
 			window.draw(main_text);
 			window.draw(SBT);
 			window.draw(QBT);
@@ -1847,8 +1854,8 @@ int main()
 		else if (jn.getLeftJump() <= 0) {
 			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 통조림을 다 먹으면
 			// 클리어한 경우
-			
-			view.setCenter(Vector2f(960/ 2, window.getSize().y / 2));
+
+			view.setCenter(Vector2f(960 / 2, window.getSize().y / 2));
 
 			if (score.getCurrScore() >= score.getMaxScore())
 			{
