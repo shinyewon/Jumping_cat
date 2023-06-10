@@ -1493,7 +1493,7 @@ int main()
 	int total_can = BLUE_CAN + RED_CAN + GOLD_CAN;
 	score.setMaxScore(total_can * 1000);
 
-	//마우스 -> 무슨 역할?
+	//마우스
 	Vector2f mcm;
 	mcm = Vector2f(1, 0);
 	int mouseispressed = 0;
