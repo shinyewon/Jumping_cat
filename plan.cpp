@@ -102,13 +102,19 @@ public:
 	float getGravity() {
 		return gravity;
 	}
-
+	 
+	bool getIsJumping() {
+		return isJumping;
+	}
 	void setIsJumping(bool Jumping) {
 		isJumping = Jumping;
 	}
 
 	bool getIsFalling() {
 		return isFalling;
+	}
+	void setIsFalling(bool isfalling) {
+		isFalling = isfalling;
 	}
 
 	void setRotation(int a) {
@@ -816,66 +822,6 @@ public:
 	}
 };
 
-
-//
-//바닥 클래스
-class Floor
-{
-private:
-	//바닥을 따로 그릴 필요 없을 듯
-	//RectangleShape floor;
-	//위치좌표,크기
-	float posX;
-	float posY;
-	Vector2f size;
-	Color color;
-
-public:
-	//생성자,소멸자
-	Floor(float x, float y, float s_x, float s_y)
-	{
-		posX = x;
-		posY = y;
-		size.x = s_x;
-		size.y = s_y;
-
-		//floor.setPosition(posX, posY);
-		//floor.setSize(size);
-		//floor.setFillColor(color.Black);
-	}
-
-	/*
-	RectangleShape getFloor()
-	{
-		return floor;
-	}
-	*/
-
-	//위치좌표,크기
-	void setFloorPos(float x, float y)
-	{
-		posX = x;
-		posY = y;
-	}
-	float getFloorPosX()
-	{
-		return posX;
-	}
-	float getFloorPosY()
-	{
-		return posY;
-	}
-	void setFloorSize(Vector2f s)
-	{
-		size = s;
-	}
-	Vector2f getFloorSize()
-	{
-		return size;
-	}
-
-};
-
 //점수 클래스
 class Score
 {
@@ -1408,12 +1354,6 @@ int main()
 	Arc arc(180, 450, 3);
 	arc.setStartArcPosition(arc.getArcPosX(), arc.getArcPosY());
 
-	// 바닥 스프라이트 생성
-	Floor floor(430, 510, 100, 20);
-	//Texture floorTexture;
-	//floorTexture.loadFromFile("./Data/Image/floor.png");
-	//Sprite floorSprite(floorTexture);
-
 	//고양이 스프라이트 생성
 	Cat cat(180.f, 465.f);
 	cat.setStartPosition(cat.getPositionX(), cat.getPositionY());
@@ -1529,17 +1469,6 @@ int main()
 	//별 
 	Star star;
 
-	////전등
-	//Texture lightTexture;
-	//lightTexture.loadFromFile("./Data/Image/light1.png");
-	//Vector2u lightSize = lightTexture.getSize();
-	//Sprite lightSprite(lightTexture);
-	//lightSprite.setScale((float)100 / lightSize.x, (float)100 / lightSize.y);
-	//lightSprite.setPosition(800, 150);
-
-	//후광
-	//Backlight backlight;
-
 	//장애물
 	Cup1 cup1(1150, 240);
 	Cup2 cup2(1600, 269);
@@ -1575,6 +1504,7 @@ int main()
 	bool reset = false;
 
 	bool cat_is_clicked = false;  //마우스로 고양이를 클릭했는지 저장할 변수
+	int collisionNum = 0;         //장애물과 충돌한 횟수를 저장할 변수
 	while (window.isOpen())
 	{
 		// 이벤트 처리
@@ -1602,7 +1532,7 @@ int main()
 					}
 				}
 			}
-			else if (jn.getLeftJump() > 0) {
+			else if (jn.getLeftJump() > 0 && cat.getIsJumping() == false) { //날아가는 도중에는 고양이 드래그 안 되도록 조건 추가
 				if (event.type == Event::MouseButtonPressed)
 				{
 					if (event.mouseButton.button == Mouse::Left)
@@ -1669,8 +1599,10 @@ int main()
 
 		floodlight.swing();
 
-		if (cat.getPositionY() >= floor.getFloorPosY())
+		if (cat.getPositionY() > window.getSize().y /*|| collisionNum == 5*/) //고양이가 밑으로 떨어지거나 (충돌횟수가 5번이면)
 		{
+			collisionNum = 0; //장애물 충돌 횟수 초기화
+			
 			cat.changeImage("./Data/Image/cat.png");
 			reset = true;
 
@@ -1688,10 +1620,11 @@ int main()
 				cat.setScale(abs(cat.getScale().x), cat.getScale().y);
 			cat.setPosition(cat.getStartPositionX(), cat.getStartPositionY());
 			cat.setRotation(0);
-			cat.jump(Vector2f(0, 0));
+			cat.setVelocity(Vector2f(0, 0));
+			cat.setIsFalling(false);
+			cat.setIsJumping(false);
 			view.setCenter(window.getSize().x / 2, window.getSize().y / 2); // 화면도 초기화
 		}
-
 
 		if (cat_is_clicked == true) {
 			Vector2f move_pos;
@@ -1779,6 +1712,9 @@ int main()
 			Vector2f bounceVelocity = direction * bounceSpeed;
 			// 속도 업데이트
 			cat.setVelocity(bounceVelocity);
+
+			//장애물 충돌 횟수 증가
+			collisionNum++;
 		}
 
 		//can과 충돌
@@ -1888,11 +1824,7 @@ int main()
 			window.draw(backgroundSprite);
 			window.draw(text);
 			window.draw(game_score);
-			//바닥을 따로 그릴 필요 없을 듯
-			//window.draw(floorSprite);
-			//window.draw(floor.getFloor());
 			//window.draw(backlightSprite);
-			//window.draw(floor.getFloor());
 			/*backlight.drawlight(window);*/
 			floodlight.draw(window);
 			for (int i = 0; i < 8; i++) {
