@@ -794,7 +794,9 @@ class Score
 private:
 	//현재점수
 	int currScore;
-	//최고점수 + 클리어 가능 점수(clearScore)
+	//클리어 가능 점수(clearScore)
+	
+	//최고점수
 	int maxScore;
 	//위치, 크기(글자 크기 등)
 	float posX;
