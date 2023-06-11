@@ -1451,12 +1451,12 @@ int main()
 	Canned_Food gold_can[GOLD_CAN];
 	/* 1000 * 8 + 1500 * 7 + 3000 * 4 = 30500*/
 	blue_can[0].setinfo(660, 290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
-	blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(1800, 400, 1);
+	blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(1500, 70, 1);
 
-	red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1200, 150, 2);
-	red_can[3].setinfo(1300, 250, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600, 260, 2);
+	red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1300, 360, 2);
+	red_can[3].setinfo(1040, 300, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600, 90, 2);
 
-	gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 220, 3); gold_can[2].setinfo(1500, 410, 3); gold_can[3].setinfo(1800, 180, 3);
+	gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 120, 3); gold_can[2].setinfo(1200, 150, 3); gold_can[3].setinfo(1800, 180, 3);
 
 	Canned_Food can;
 	//클리어 점수 세팅
