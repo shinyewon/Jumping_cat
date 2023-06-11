@@ -1465,10 +1465,13 @@ int main()
 
 	//마우스
 	Vector2f mcm;
-	mcm = Vector2f(1, 0);
+	mcm = Vector2f(0, 0);
 	int mouseispressed = 0;
 	Vector2i pixelPos1;
 	Vector2i pixelPos2;
+	
+	//준비상태인가 0=발사전 1=발사후
+	int ready = 0;
 
 	bool reset = false;
 
@@ -1503,68 +1506,74 @@ int main()
 				}
 			}
 			else if (jn.getLeftJump() > 0 && cat.getIsJumping() == false) { //날아가는 도중에는 고양이 드래그 안 되도록 조건 추가
-				if (event.type == Event::MouseButtonPressed)
-				{
-					if (event.mouseButton.button == Mouse::Left)
+				
+					if (event.type == Event::MouseButtonPressed)
 					{
-						dragStartPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
-						if (dragStartPosition.x > cat.getPositionX() - cat.getTextureSizeX() * cat.getScale().x / 2 && dragStartPosition.x < cat.getPositionX() + cat.getTextureSizeX() * cat.getScale().x / 2 && dragStartPosition.y > cat.getPositionY() - cat.getTextureSizeY() * cat.getScale().y / 2 && dragStartPosition.y < cat.getPositionY() + cat.getTextureSizeY() * cat.getScale().y / 2) {
-							cat_is_clicked = true;
-							dragSound.openFromFile("./Data/Sound/meow.wav");
-							dragSound.play();
-						}
-					}
-					mouseispressed = 1;
-					pixelPos1 = Mouse::getPosition(window);
-
-				}
-				else if (event.type == Event::MouseButtonReleased)
-				{
-					if (event.mouseButton.button == Mouse::Left)
-					{
-						dragEndPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
-						Vector2f dragDistance = dragStartPosition - dragEndPosition;
-
-						//최대 속도 제한
-						float drag_dis = (float)sqrt(pow(dragDistance.x, 2) + pow(dragDistance.y, 2)); //마우스 버튼을 뗐을 때, 드래그한 거리
-						if (drag_dis > 70) {
-							float drag_ratio = 70 / drag_dis;
-							dragDistance.x *= drag_ratio;
-							dragDistance.y *= drag_ratio;
-						}
-						Vector2f jumpVelocity = jumpVelocityScale * dragDistance;
-
-						cat.setRotation(0);
-						cat.setScale(0.07f, 0.07f); //고양이 크기 원래상태로 되돌리기
-
-						// 드래그를 너무 조금하거나 오른쪽으로 하면 무시하고 아니면 날아감
-						if ((abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20) || dragDistance.x < 0) {
-							cat_is_clicked = false;
-						}
-						else {
-							if (cat_is_clicked == true) {
-								cat_is_clicked = false;
-								reset = false;
-
-								//포물선 그리기 위한 속도, 가속도, 위치 세팅
-								arc.setArcVelocity(jumpVelocity);
-								arc.setStartArcVelocity(arc.getArcVelocity());
-								arc.setArcAcceleration(cat.getGravity());
-
-								arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
-
-
-								//날아가는 코드 구현
-								cat.jump(jumpVelocity);
-								//날아갈 때 소리 재생
-								jumpSound.openFromFile("./Data/Sound/jump.wav");
-								jumpSound.play(); 
+						if (event.mouseButton.button == Mouse::Left)
+						{
+							if (view.getCenter().x < window.getSize().x * 0.6) { //준비상태에서 화면이 다른곳 보고있으면 드래그 안됨
+								dragStartPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
+								if (dragStartPosition.x > cat.getPositionX() - cat.getTextureSizeX() * cat.getScale().x / 2 && dragStartPosition.x < cat.getPositionX() + cat.getTextureSizeX() * cat.getScale().x / 2 && dragStartPosition.y > cat.getPositionY() - cat.getTextureSizeY() * cat.getScale().y / 2 && dragStartPosition.y < cat.getPositionY() + cat.getTextureSizeY() * cat.getScale().y / 2) {
+									cat_is_clicked = true;
+									dragSound.openFromFile("./Data/Sound/meow.wav");
+									dragSound.play();
+								}
 							}
 						}
-						int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
+						mouseispressed = 1;
+						pixelPos1 = Mouse::getPosition(window);
+
 					}
-					mouseispressed = 0;
-				}
+					else if (event.type == Event::MouseButtonReleased)
+					{
+						if (event.mouseButton.button == Mouse::Left)
+						{
+							if (view.getCenter().x < window.getSize().x * 0.6) { //준비상태에서 화면이 다른곳 보고있으면 드래그 안됨
+								dragEndPosition = Vector2f((float)event.mouseButton.x, (float)event.mouseButton.y);
+								Vector2f dragDistance = dragStartPosition - dragEndPosition;
+
+								//최대 속도 제한
+								float drag_dis = (float)sqrt(pow(dragDistance.x, 2) + pow(dragDistance.y, 2)); //마우스 버튼을 뗐을 때, 드래그한 거리
+								if (drag_dis > 70) {
+									float drag_ratio = 70 / drag_dis;
+									dragDistance.x *= drag_ratio;
+									dragDistance.y *= drag_ratio;
+								}
+								Vector2f jumpVelocity = jumpVelocityScale * dragDistance;
+
+								cat.setRotation(0);
+								cat.setScale(0.07f, 0.07f); //고양이 크기 원래상태로 되돌리기
+
+								// 드래그를 너무 조금하거나 오른쪽으로 하면 무시하고 아니면 날아감
+								if ((abs(dragDistance.x) <= 20 && abs(dragDistance.y) <= 20) || dragDistance.x < 0) {
+									cat_is_clicked = false;
+								}
+								else {
+									if (cat_is_clicked == true) {
+										cat_is_clicked = false;
+										reset = false;
+
+										//포물선 그리기 위한 속도, 가속도, 위치 세팅
+										arc.setArcVelocity(jumpVelocity);
+										arc.setStartArcVelocity(arc.getArcVelocity());
+										arc.setArcAcceleration(cat.getGravity());
+
+										arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
+
+
+										//날아가는 코드 구현
+										cat.jump(jumpVelocity);
+										//날아갈 때 소리 재생
+										jumpSound.openFromFile("./Data/Sound/jump.wav");
+										jumpSound.play();
+										ready = 1;
+									}
+								}
+								int x = 0, x2 = 0, y = 0, y2 = 0;  //좌표 초기화
+							}
+						}
+						mouseispressed = 0;
+					}
 			}
 		}
 
@@ -1602,7 +1611,10 @@ int main()
 			cat.setVelocity(Vector2f(0, 0));
 			cat.setIsFalling(false);
 			cat.setIsJumping(false);
-			view.setCenter(window.getSize().x / 2, window.getSize().y / 2); // 화면도 초기화
+			if (ready == 1) {
+				view.setCenter(window.getSize().x / 2, window.getSize().y / 2); // 화면도 초기화
+				ready = 0;
+			}
 		}
 		
 		if (cat_is_clicked == true) {
@@ -1639,7 +1651,7 @@ int main()
 
 			arc.setArcPos(arc.getStartArcPositionX(), arc.getStartArcPositionY());
 		}
-
+		
 
 		//전등과 부딪히면 떨어짐
 		if (cat.getBounds().intersects(floodlight.getBounds()))
@@ -1728,22 +1740,32 @@ int main()
 		//화면이 변경되면 작동 중지하도록 변경
 		//배경 시점 변경
 		if (cat.getPosition().x > window.getSize().x / 2 &&
-			cat.getPosition().x < window.getSize().x * 1.503) {
+			cat.getPosition().x < window.getSize().x * 1.503 && cat.getIsJumping()==true) {
 
 			view.setCenter(cat.getPositionX(), window.getSize().y / 2);
 		}
-		if (view.getCenter().x > window.getSize().x &&
-			view.getCenter().x < window.getSize().x * 1.503) {
 
-			if ((mouseispressed == 1) && (cat_is_clicked == false))
+		if (cat.getIsJumping() == false) {
+
+			if ((mouseispressed == 1) && (cat_is_clicked == false) && pixelPos1.x > 0 && pixelPos1.x < backgroundSize.x)
 			{
 				pixelPos2 = Mouse::getPosition(window);
 
-				cout << pixelPos2.x << endl;
-
 				mcm = Vector2f(pixelPos1 - pixelPos2);
-				mcm.x /= 6;
+				mcm.x /=3;
 				mcm.y = 0;
+
+				if (view.getCenter().x < window.getSize().x / 2 - mcm.x) // 화면이 배경 왼-밖으로 나가면 안됨
+				{
+					if(mcm.x<0)
+					    mcm.x = 0;
+				}
+				if (view.getCenter().x > window.getSize().x * 2 - window.getSize().x / 2 - mcm.x) // 화면이 배경 오-밖으로 나가면 안됨
+				{
+					if (mcm.x >0)
+						mcm.x = 0;
+				}
+
 				view.move(mcm);
 			}
 		}
