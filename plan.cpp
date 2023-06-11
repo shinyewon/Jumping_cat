@@ -1433,8 +1433,15 @@ int main()
 
 	//배경 시점
 	View view(Vector2f(window.getSize().x / 2, window.getSize().y / 2), Vector2f(window.getSize().x, window.getSize().y));
+	//게임 진행 중 점수 표시 이동,배경
 	View scoreview;
 	scoreview.setViewport(FloatRect(0, 0,1,1.6));
+	RectangleShape scoreboard;
+	scoreboard.setPosition(0, 0);
+	scoreboard.setSize(Vector2f(135, 60));
+	scoreboard.setFillColor(Color(150, 15, 40 ,200));
+	scoreboard.setOutlineColor(Color(120, 25, 20, 200));
+	scoreboard.setOutlineThickness(1);
 
 	//별 
 	Star star;
@@ -1867,6 +1874,7 @@ int main()
 				}
 			}
 			window.setView(scoreview);
+			window.draw(scoreboard);
 			window.draw(game_score);
 			window.draw(text);
 		}
