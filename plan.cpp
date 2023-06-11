@@ -1409,9 +1409,25 @@ int main()
 
 	SoundBuffer buffer;
 	if (!buffer.loadFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
-		cout << "can sound err\n" << endl;
+		cout << "ccan sound err\n" << endl;
 	Sound csound;
 	csound.setBuffer(buffer);
+
+	SoundBuffer gbuffer;
+	if (!gbuffer.loadFromFile("./Data/Sound/Coin-2.wav"))
+		cout << "gccan sound err\n" << endl;
+	Sound gcsound;
+	gcsound.setBuffer(gbuffer);
+	gcsound.setVolume(30);
+	gcsound.setPitch(1.4);
+
+	SoundBuffer bbuffer;
+	if (!bbuffer.loadFromFile("./Data/Sound/Coin-3.wav"))
+		cout << "gccan sound err\n" << endl;
+	Sound bcsound;
+	bcsound.setBuffer(bbuffer);
+	bcsound.setVolume(30);
+	bcsound.setPitch(1.1);
 
 	Music dragSound;
 	if (!dragSound.openFromFile("./Data/Sound/meow.wav"))
@@ -1732,7 +1748,7 @@ int main()
 					red_can[i].getFoodScore(&score, 2);               //빨간캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					red_can[i].getsprite()->setPosition(5000, 5000);
-					csound.play();
+					bcsound.play();
 				}
 			}
 			for (int i = 0; i < 4; i++) {
@@ -1741,7 +1757,7 @@ int main()
 					gold_can[i].getFoodScore(&score, 3);               //금캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					gold_can[i].getsprite()->setPosition(5000, 5000);
-					csound.play();
+					gcsound.play();
 				}
 			}
 		}
