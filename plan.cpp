@@ -429,17 +429,6 @@ public:
 	void getFoodScore(Score* score, int size);
 
 	//충돌, 획득 시 visual,sound effect
-	void getCannedFoodSound()
-	{
-		/*play_sound("./Data/Sound/676402__cjspellsfish__score-2.wav");*/
-		Music music;
-		if (!music.openFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
-			cout << "can sound err\n";
-		music.play();
-		music.setLoop(false);
-
-	}
-
 	//획득시 제거
 
 	void draw(RenderWindow& window)
@@ -452,28 +441,6 @@ public:
 		return sprite.getGlobalBounds();
 	}
 };
-
-//사운드 재생 함수
-void play_sound(const string& filename)
-{
-	SoundBuffer buffer;
-
-	if (!buffer.loadFromFile(filename))
-	{
-		cout << "sound loadFromFile error" << endl;
-		return;
-	}
-	Sound sound;
-	sound.setBuffer(buffer);
-	sound.play();
-	delay_ms(900);
-}
-
-void delay_ms(int ms)
-{
-	Clock Timer;
-	while (Timer.getElapsedTime().asMilliseconds() < ms);
-}
 
 class Floodlight
 {
@@ -1440,9 +1407,11 @@ int main()
 	music.setVolume(10.f);
 	music.setLoop(true);
 
-	Music cmusic;
-	if (!cmusic.openFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
-		cout << "can sound err\n";
+	SoundBuffer buffer;
+	if (!buffer.loadFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
+		cout << "can sound err\n" << endl;
+	Sound csound;
+	csound.setBuffer(buffer);
 
 	Music dragSound;
 	if (!dragSound.openFromFile("./Data/Sound/meow.wav"))
@@ -1489,6 +1458,7 @@ int main()
 
 	gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 220, 3); gold_can[2].setinfo(1500, 410, 3); gold_can[3].setinfo(1800, 180, 3);
 
+	Canned_Food can;
 	//클리어 점수 세팅
 	int total_can = BLUE_CAN + RED_CAN + GOLD_CAN;
 	score.setMaxScore(total_can * 1000);
@@ -1732,7 +1702,7 @@ int main()
 					blue_can[i].getFoodScore(&score, 1);                //파란캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					blue_can[i].getsprite()->setPosition(5000, 5000);
-					cmusic.play();
+					csound.play();
 				}
 			}
 			for (int i = 0; i < 7; i++) {
@@ -1741,7 +1711,7 @@ int main()
 					red_can[i].getFoodScore(&score, 2);               //빨간캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					red_can[i].getsprite()->setPosition(5000, 5000);
-					cmusic.play();
+					csound.play();
 				}
 			}
 			for (int i = 0; i < 4; i++) {
@@ -1750,7 +1720,7 @@ int main()
 					gold_can[i].getFoodScore(&score, 3);               //금캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					gold_can[i].getsprite()->setPosition(5000, 5000);
-					cmusic.play();
+					csound.play();
 				}
 			}
 		}
