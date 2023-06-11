@@ -963,11 +963,11 @@ public:
 		Sprite starySprite2(twostar);
 		Sprite starySprite3(threestar);
 		starySprite1.setScale((float)100 / starySize.x, (float)100 / starySize.y);
-		starySprite1.setPosition(540, 120);
+		starySprite1.setPosition(340, 120);
 		starySprite2.setScale((float)100 / starySize.x, (float)100 / starySize.y);
-		starySprite2.setPosition(615, 90);
+		starySprite2.setPosition(415, 90);
 		starySprite3.setScale((float)100 / starySize.x, (float)100 / starySize.y);
-		starySprite3.setPosition(690, 120);
+		starySprite3.setPosition(490, 120);
 		window.draw(starySprite1);
 		window.draw(starySprite2);
 		window.draw(starySprite3);
@@ -1767,7 +1767,8 @@ int main()
 			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 통조림을 다 먹으면
 			// 클리어한 경우
 
-			view.setCenter(Vector2f(960 / 2, window.getSize().y / 2));
+			view.setCenter(Vector2f(960 / 2, 540 / 2));
+			window.setView(view);
 
 			if (score.getCurrScore() >= score.getMaxScore())
 			{
@@ -1778,8 +1779,6 @@ int main()
 
 				window.draw(game_status);
 				window.draw(final_score);
-				//window.draw(starySprite);
-				/*window.draw(starySprite);*/
 				star.drawstar(window);
 			}
 			else {
@@ -1791,7 +1790,6 @@ int main()
 
 				window.draw(game_status);
 				window.draw(final_score);
-				//window.draw(stargSprite);
 				star.drawstar(window);
 			}
 		}
