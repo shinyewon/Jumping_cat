@@ -1433,6 +1433,8 @@ int main()
 
 	//배경 시점
 	View view(Vector2f(window.getSize().x / 2, window.getSize().y / 2), Vector2f(window.getSize().x, window.getSize().y));
+	View scoreview;
+	scoreview.setViewport(FloatRect(0, 0,1,1.6));
 
 	//별 
 	Star star;
@@ -1752,7 +1754,7 @@ int main()
 				pixelPos2 = Mouse::getPosition(window);
 
 				mcm = Vector2f(pixelPos1 - pixelPos2);
-				mcm.x /=3;
+				mcm.x /=5;
 				mcm.y = 0;
 
 				if (view.getCenter().x < window.getSize().x / 2 - mcm.x) // 화면이 배경 왼-밖으로 나가면 안됨
@@ -1818,8 +1820,7 @@ int main()
 		else {
 			window.setView(view);
 			window.draw(backgroundSprite);
-			window.draw(text);
-			window.draw(game_score);
+			//window.draw(game_score);
 			//window.draw(backlightSprite);
 			/*backlight.drawlight(window);*/
 			floodlight.draw(window);
@@ -1844,6 +1845,7 @@ int main()
 			micro.draw(window);
 			ob_clock.draw(window);
 
+
 			//포물선 화면에 그려주기
 			if (cat_is_clicked == true)
 			{
@@ -1864,6 +1866,9 @@ int main()
 					ArcDrawCount++;
 				}
 			}
+			window.setView(scoreview);
+			window.draw(game_score);
+			window.draw(text);
 		}
 
 		window.display();
