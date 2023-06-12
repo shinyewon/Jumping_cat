@@ -841,7 +841,7 @@ public:
 		currScore = c_s;
 	}
 
-	//현재점수 업데이트(통조림의 크기, 개수, 파괴한 장애물에 따라 점수 부여)
+	//현재점수 업데이트(통조림의 크기, 개수에 따라 점수 부여)
 	int getCurrScore()
 	{
 		return currScore;
@@ -1299,16 +1299,6 @@ int main()
 	// 창 생성
 	RenderWindow window(VideoMode(960, 540), "Jumping cat");
 	window.setFramerateLimit(60);	//프레임 정해주기
-
-	//window.close();
-
-	/*
-	RenderWindow window2(VideoMode(960, 540), "Jumping cat2");
-	window2.setFramerateLimit(60);	//프레임 정해주기
-	while (window2.isOpen())
-	window2.close()
-	window.create()
-	*/
 
 	//메인메뉴 생성
 	MainMenu mainmenu;
