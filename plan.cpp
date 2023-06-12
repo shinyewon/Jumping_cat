@@ -18,9 +18,6 @@ using namespace sf;
 
 class Score;
 
-void play_sound(const string& filename);
-void delay_ms(int ms);
-
 //고양이 클래스
 class Cat
 {
