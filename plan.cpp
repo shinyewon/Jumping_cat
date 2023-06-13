@@ -542,73 +542,6 @@ public:
 
 
 };
-class Backlight :Obstacle1
-{
-private:
-	Texture backlightTexture;
-	Vector2u backlightSize;
-	Sprite backlightSprite1;
-	Sprite backlightSprite2;
-	Sprite backlightSprite3;
-	Sprite backlightSprite4;
-	Sprite backlightSprite5;
-	Sprite backlightSprite6;
-public:
-	Backlight()
-	{
-
-		backlightTexture.loadFromFile("./Data/Image/backlight.png");
-		backlightSize = backlightTexture.getSize();
-		backlightSprite1.setTexture(backlightTexture);
-		backlightSprite1.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
-		backlightSprite1.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
-		backlightSprite1.setPosition(1340, 275);//bottle1
-		backlightSprite1.setColor(Color(255, 0, 0, 128));
-		backlightSprite2.setTexture(backlightTexture);
-		backlightSprite2.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
-		backlightSprite2.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
-		backlightSprite2.setPosition(1650, 219); //bottle2
-		backlightSprite2.setColor(Color(255, 0, 0, 128));
-		backlightSprite3.setTexture(backlightTexture);
-		backlightSprite3.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
-		backlightSprite3.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
-		backlightSprite3.setPosition(590, 310);//basket
-		backlightSprite3.setColor(Color(255, 0, 0, 128));
-		backlightSprite4.setTexture(backlightTexture);
-		backlightSprite4.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
-		backlightSprite4.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
-		backlightSprite4.setPosition(1254, 270);
-		backlightSprite4.setColor(Color(255, 0, 0, 128));
-		backlightSprite5.setTexture(backlightTexture);
-		backlightSprite5.setScale((float)100 / backlightSize.x, (float)100 / backlightSize.y);
-		backlightSprite5.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
-		backlightSprite5.setPosition(1324, 270);
-		backlightSprite5.setColor(Color(255, 0, 0, 128));
-		backlightSprite5.setTexture(backlightTexture);
-		backlightSprite5.setScale((float)150 / backlightSize.x, (float)150 / backlightSize.y);
-		backlightSprite5.setOrigin(backlightSize.x / 2, backlightSize.y / 2);
-		backlightSprite5.setPosition(1370, 119);//clock
-		backlightSprite5.setColor(Color(255, 0, 0, 128));
-	}
-	void drawlight(RenderWindow& window)
-	{
-		window.draw(backlightSprite1);
-		window.draw(backlightSprite2);
-		window.draw(backlightSprite3);
-		window.draw(backlightSprite4);
-		window.draw(backlightSprite5);
-		window.draw(backlightSprite6);
-	}
-	void rotate()
-	{
-		backlightSprite1.setRotation(backlightSprite1.getRotation() - 1);
-		backlightSprite2.setRotation(backlightSprite2.getRotation() - 1);
-		backlightSprite3.setRotation(backlightSprite3.getRotation() - 1);
-		backlightSprite4.setRotation(backlightSprite4.getRotation() - 1);
-		backlightSprite5.setRotation(backlightSprite5.getRotation() - 1);
-		backlightSprite6.setRotation(backlightSprite6.getRotation() - 1);
-	}
-};
 
 class Cup1 :Obstacle1
 {
@@ -1783,7 +1716,6 @@ int main()
 				view.move(mcm);
 			}
 		}
-		/*	backlight.rotate();*/
 
 		star.setStar(score.getCurrScore());
 
@@ -1832,9 +1764,6 @@ int main()
 		else {
 			window.setView(view);
 			window.draw(backgroundSprite);
-			//window.draw(game_score);
-			//window.draw(backlightSprite);
-			/*backlight.drawlight(window);*/
 			floodlight.draw(window);
 			for (int i = 0; i < 8; i++) {
 				if (blue_can[i].getPosition() != 5000)
