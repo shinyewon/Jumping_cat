@@ -725,7 +725,7 @@ private:
 	//현재점수
 	int currScore;
 	//클리어 가능 점수(clearScore)
-	
+	int clearScore;
 	//최고점수
 	int maxScore;
 	//위치, 크기(글자 크기 등)
@@ -742,6 +742,7 @@ public:
 		size = s;
 
 		currScore = 0;
+		clearScore = 0;
 		maxScore = 0;
 	}
 
@@ -768,25 +769,37 @@ public:
 		return size;
 	}
 
-	//현재점수 반환
+	//현재점수 업데이트(통조림의 크기, 개수에 따라 점수 부여)
 	void setCurrScore(int c_s)
 	{
 		currScore = c_s;
 	}
 
-	//현재점수 업데이트(통조림의 크기, 개수에 따라 점수 부여)
+	//현재점수 반환
 	int getCurrScore()
 	{
 		return currScore;
 	}
 
-	//최고점수 반환 
+	//클리어 가능 점수 업데이트
+	void setClearScore(int c_s)
+	{
+		clearScore = c_s;
+	}
+
+	//클리어 가능 점수 반환
+	int getClearScore()
+	{
+		return clearScore;
+	}
+	
+	//최고점수 업데이트
 	void setMaxScore(int m_s)
 	{
 		maxScore = m_s;
 	}
 
-	//최고점수 업데이트
+	//최고점수 반환
 	int getMaxScore()
 	{
 		return maxScore;
@@ -1406,9 +1419,10 @@ int main()
 	gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 120, 3); gold_can[2].setinfo(1200, 150, 3); gold_can[3].setinfo(1800, 180, 3);
 
 	Canned_Food can;
+	
 	//클리어 점수 세팅
 	int total_can = BLUE_CAN + RED_CAN + GOLD_CAN;
-	score.setMaxScore(total_can * 1000);
+	score.setClearScore(total_can * 1000);
 
 	//마우스
 	Vector2f mcm;
@@ -1738,7 +1752,7 @@ int main()
 			view.setCenter(Vector2f(960 / 2, 540 / 2));
 			window.setView(view);
 
-			if (score.getCurrScore() >= score.getMaxScore())
+			if (score.getCurrScore() >= score.getClearScore())
 			{
 				game_status.setString("Game Clear");
 				game_status.setFillColor(Color::Blue);
@@ -1764,6 +1778,9 @@ int main()
 		else {
 			window.setView(view);
 			window.draw(backgroundSprite);
+			//window.draw(game_score);
+			//window.draw(backlightSprite);
+			/*backlight.drawlight(window);*/
 			floodlight.draw(window);
 			for (int i = 0; i < 8; i++) {
 				if (blue_can[i].getPosition() != 5000)
