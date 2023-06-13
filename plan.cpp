@@ -348,7 +348,6 @@ public:
 //통조림 클래스
 class Canned_Food
 {
-	//직사각형으로 구현하면 좋을 듯
 
 private:
 	//변수(필드)
@@ -425,9 +424,6 @@ public:
 	//충돌 시 획득
 	void getFoodScore(Score* score, int size);
 
-	//충돌, 획득 시 visual,sound effect
-	//획득시 제거
-
 	void draw(RenderWindow& window)
 	{
 		window.draw(sprite);
@@ -489,8 +485,6 @@ public:
 //장애물1 클래스(새장,전등,컵,그릇,다른 고양이 등)
 class Obstacle1
 {
-	//장애물 여러 개 만들 때 상속으로 구현할지 논의 필요
-	//직사각형으로 구현하면 좋을 듯
 
 private:
 	//변수(필드)
@@ -1342,27 +1336,27 @@ int main()
 	music.setVolume(10.f);
 	music.setLoop(true);
 
-	SoundBuffer buffer;
-	if (!buffer.loadFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
-		cout << "ccan sound err\n" << endl;
-	Sound csound;
-	csound.setBuffer(buffer);
+	SoundBuffer bbuffer;
+	if (!bbuffer.loadFromFile("./Data/Sound/676402__cjspellsfish__score-2.wav"))
+		cout << "can sound err\n" << endl;
+	Sound bcsound;
+	bcsound.setBuffer(bbuffer);
 
 	SoundBuffer gbuffer;
 	if (!gbuffer.loadFromFile("./Data/Sound/Coin-2.wav"))
-		cout << "gccan sound err\n" << endl;
+		cout << "gcan sound err\n" << endl;
 	Sound gcsound;
 	gcsound.setBuffer(gbuffer);
 	gcsound.setVolume(30);
 	gcsound.setPitch(1.4);
 
-	SoundBuffer bbuffer;
-	if (!bbuffer.loadFromFile("./Data/Sound/Coin-3.wav"))
-		cout << "gccan sound err\n" << endl;
-	Sound bcsound;
-	bcsound.setBuffer(bbuffer);
-	bcsound.setVolume(30);
-	bcsound.setPitch(1.1);
+	SoundBuffer rbuffer;
+	if (!rbuffer.loadFromFile("./Data/Sound/Coin-3.wav"))
+		cout << "bcan sound err\n" << endl;
+	Sound rcsound;
+	rcsound.setBuffer(rbuffer);
+	rcsound.setVolume(30);
+	rcsound.setPitch(1.1);
 
 	Music dragSound;
 	if (!dragSound.openFromFile("./Data/Sound/meow.wav"))
@@ -1675,7 +1669,7 @@ int main()
 					blue_can[i].getFoodScore(&score, 1);                //파란캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					blue_can[i].getsprite()->setPosition(5000, 5000);
-					csound.play();
+					bcsound.play();
 				}
 			}
 			for (int i = 0; i < 7; i++) {
@@ -1684,7 +1678,7 @@ int main()
 					red_can[i].getFoodScore(&score, 2);               //빨간캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					red_can[i].getsprite()->setPosition(5000, 5000);
-					bcsound.play();
+					rcsound.play();
 				}
 			}
 			for (int i = 0; i < 4; i++) {
@@ -1778,9 +1772,6 @@ int main()
 		else {
 			window.setView(view);
 			window.draw(backgroundSprite);
-			//window.draw(game_score);
-			//window.draw(backlightSprite);
-			/*backlight.drawlight(window);*/
 			floodlight.draw(window);
 			for (int i = 0; i < 8; i++) {
 				if (blue_can[i].getPosition() != 5000)
