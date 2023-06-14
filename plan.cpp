@@ -853,8 +853,8 @@ public:
 			cs = 1;
 		}
 
-		if (cs > curstar)
-			curstar = cs;
+		//if (cs > curstar)
+		curstar = cs;
 	}
 	int getStar() {
 		return curstar;
@@ -901,11 +901,11 @@ public:
 		Sprite starySprite2(twostar);
 		Sprite starySprite3(threestar);
 		starySprite1.setScale((float)100 / starySize.x, (float)100 / starySize.y);
-		starySprite1.setPosition(340, 120);
+		starySprite1.setPosition(340, 100);
 		starySprite2.setScale((float)100 / starySize.x, (float)100 / starySize.y);
-		starySprite2.setPosition(415, 90);
+		starySprite2.setPosition(415, 70);
 		starySprite3.setScale((float)100 / starySize.x, (float)100 / starySize.y);
-		starySprite3.setPosition(490, 120);
+		starySprite3.setPosition(490, 100);
 		window.draw(starySprite1);
 		window.draw(starySprite2);
 		window.draw(starySprite3);
@@ -1170,6 +1170,7 @@ public:
 	}
 };
 
+/*
 //메뉴 클래스
 class Menu
 {
@@ -1232,6 +1233,7 @@ public:
 	//생성자, 소멸자 
 	//위치, 크기, 레벨, 별개수 setter/getter
 };
+*/
 
 int main()
 {
@@ -1243,6 +1245,24 @@ int main()
 	MainMenu mainmenu;
 	bool is_SB_clicked = false;
 	bool is_QB_clicked = false;
+	//bool is_RB_clicked = false;
+	bool is_MB_clicked = false;
+
+	RectangleShape RestartButton;
+	Vector2f RBSize;
+	RBSize.x = 150;
+	RBSize.y = 50;
+	RestartButton.setPosition(485, 400);
+	RestartButton.setSize(RBSize);
+	RestartButton.setFillColor(Color::Blue);
+
+	RectangleShape MenuButton;
+	Vector2f MBSize;
+	MBSize.x = 150;
+	MBSize.y = 50;
+	MenuButton.setPosition(295, 400);
+	MenuButton.setSize(MBSize);
+	MenuButton.setFillColor(Color::Blue);
 
 	//포물선 클래스 생성
 	Arc arc(180, 450, 3);
@@ -1294,15 +1314,29 @@ int main()
 	SBT.setFont(font);
 	SBT.setString("Start");
 	SBT.setCharacterSize((int)mainmenu.getSBTSize());
-	SBT.setFillColor(Color::Black);
+	SBT.setFillColor(Color::White);
 	SBT.setPosition(mainmenu.getSBTPosX(), mainmenu.getSBTPosY());
 
 	Text QBT;
 	QBT.setFont(font);
 	QBT.setString("Quit");
 	QBT.setCharacterSize((int)mainmenu.getQBTSize());
-	QBT.setFillColor(Color::Black);
+	QBT.setFillColor(Color::White);
 	QBT.setPosition(mainmenu.getQBTPosX(), mainmenu.getQBTPosY());
+
+	Text RBT;
+	RBT.setFont(font);
+	RBT.setString("Restart");
+	RBT.setCharacterSize(30);
+	RBT.setFillColor(Color::White);
+	RBT.setPosition(505, 405);
+
+	Text MBT;
+	MBT.setFont(font);
+	MBT.setString("Menu");
+	MBT.setCharacterSize(30);
+	MBT.setFillColor(Color::White);
+	MBT.setPosition(330, 405);
 
 	Text game_score;
 	game_score.setFont(font);
@@ -1317,13 +1351,13 @@ int main()
 	final_score.setCharacterSize((int)score.getScoreSize());
 	final_score.setFillColor(Color::Blue);
 	//위치 세팅 바꾸기
-	final_score.setPosition(350, 300);
+	final_score.setPosition(400, 320);
 
 	// 게임 오버 또는 클리어 여부 표시할 text 설정
 	Text game_status;
 	game_status.setFont(font);
-	game_status.setCharacterSize(40);
-	game_status.setPosition(350, 260);
+	game_status.setCharacterSize(50);
+	game_status.setPosition(335, 220);
 
 	Clock clock;
 
@@ -1453,10 +1487,63 @@ int main()
 						if ((Mpos.x > mainmenu.getSBPosX() && Mpos.x < mainmenu.getSBPosX() + mainmenu.getSBSize().x) && (Mpos.y > mainmenu.getSBPosY() && Mpos.y < mainmenu.getSBPosY() + mainmenu.getSBSize().y))
 						{
 							is_SB_clicked = true;
+							is_MB_clicked = true;
+
+							view.setCenter(window.getSize().x / 2, window.getSize().y / 2);
+							jn.setLeftJump(jn.getMaxJump());
+							text.setString("Chance: " + to_string(jn.getLeftJump()));
+							score.setCurrScore(0);
+							game_score.setString("Score: " + to_string(score.getCurrScore()));
+
+							star.setStar(&score);
+
+							blue_can[0].setinfo(660, 290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
+							blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(1500, 70, 1);
+
+							red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1300, 360, 2);
+							red_can[3].setinfo(1040, 300, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600, 90, 2);
+
+							gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 120, 3); gold_can[2].setinfo(1200, 150, 3); gold_can[3].setinfo(1800, 180, 3);
 						}
 						else if ((Mpos.x > mainmenu.getQBPosX() && Mpos.x < mainmenu.getQBPosX() + mainmenu.getQBSize().x) && (Mpos.y > mainmenu.getQBPosY() && Mpos.y < mainmenu.getQBPosY() + mainmenu.getQBSize().y))
 						{
 							is_QB_clicked = true;
+						}
+					}
+				}
+			}
+			else if (is_MB_clicked == false)
+			{
+				if (event.type == Event::MouseButtonReleased)
+				{
+					if (event.mouseButton.button == Mouse::Left)
+					{
+						Vector2i Mpos = Mouse::getPosition(window);
+						if ((Mpos.x > MenuButton.getPosition().x && Mpos.x < MenuButton.getPosition().x + MenuButton.getSize().x) && (Mpos.y > MenuButton.getPosition().y && Mpos.y < MenuButton.getPosition().y + MenuButton.getSize().y))
+						{
+							is_MB_clicked = true;
+							is_SB_clicked = false;
+						}
+						else if ((Mpos.x > RestartButton.getPosition().x && Mpos.x < RestartButton.getPosition().x + RestartButton.getSize().x) && (Mpos.y > RestartButton.getPosition().y && Mpos.y < RestartButton.getPosition().y + RestartButton.getSize().y))
+						{
+							is_MB_clicked = true;
+							is_SB_clicked = true;
+
+							view.setCenter(window.getSize().x / 2, window.getSize().y / 2);
+							jn.setLeftJump(jn.getMaxJump());
+							text.setString("Chance: " + to_string(jn.getLeftJump()));
+							score.setCurrScore(0);
+							game_score.setString("Score: " + to_string(score.getCurrScore()));
+
+							star.setStar(&score);
+
+							blue_can[0].setinfo(660, 290, 1); blue_can[1].setinfo(800, 400, 1); blue_can[2].setinfo(750, 250, 1); blue_can[3].setinfo(900, 100, 1);
+							blue_can[4].setinfo(860, 230, 1); blue_can[5].setinfo(940, 240, 1); blue_can[6].setinfo(1100, 350, 1); blue_can[7].setinfo(1500, 70, 1);
+
+							red_can[0].setinfo(1000, 200, 2); red_can[1].setinfo(1100, 170, 2); red_can[2].setinfo(1300, 360, 2);
+							red_can[3].setinfo(1040, 300, 2); red_can[4].setinfo(1400, 330, 2); red_can[5].setinfo(1500, 300, 2); red_can[6].setinfo(1600, 90, 2);
+
+							gold_can[0].setinfo(1200, 400, 3); gold_can[1].setinfo(1700, 120, 3); gold_can[2].setinfo(1200, 150, 3); gold_can[3].setinfo(1800, 180, 3);
 						}
 					}
 				}
@@ -1776,6 +1863,13 @@ int main()
 				window.draw(game_status);
 				window.draw(final_score);
 				star.drawstar(window);
+
+				window.draw(RestartButton);
+				window.draw(RBT);
+				window.draw(MenuButton);
+				window.draw(MBT);
+
+				is_MB_clicked = false;
 			}
 			else {
 				// 클리어하지 못한 경우
@@ -1787,6 +1881,13 @@ int main()
 				window.draw(game_status);
 				window.draw(final_score);
 				star.drawstar(window);
+
+				window.draw(RestartButton);
+				window.draw(RBT);
+				window.draw(MenuButton);
+				window.draw(MBT);
+
+				is_MB_clicked = false;
 			}
 		}
 		else {
