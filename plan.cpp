@@ -11,7 +11,6 @@
 using namespace std;
 using namespace sf;
 
-//상수 처리 변경 필요
 #define BLUE_CAN	8
 #define RED_CAN		7
 #define GOLD_CAN	4
@@ -181,12 +180,14 @@ public:
 
 			sprite.setPosition(position);
 
+			/* 필요 없는 코드인 듯
 			if (position.y >= 600.f) // 고양이가 바닥에 닿으면
 			{
 				isFalling = false;
 				velocity = Vector2f(0.f, 0.f);
 				sprite.setRotation(0.f);
 			}
+			*/
 		}
 		else if (isFalling)
 		{
@@ -357,8 +358,6 @@ private:
 	Texture texture;
 	Sprite sprite;
 
-	//double posX;
-	//double posY;
 	double sizeX;
 	double sizeY;
 
@@ -839,17 +838,17 @@ public:
 		this->stagemaxstar = stagemaxstar;
 	}
 	//현재 별 개수 setter/getter
-	void setStar(int score) {
+	void setStar(Score* score) {
 		int cs = 0;
-		if (score >= 30000) // 일정 점수 이상은 별 3개 (이 부분만 내용 추가하면 될 듯)
+		if (score->getCurrScore() >= score->getMaxScore()) // 일정 점수 이상은 별 3개
 		{
 			cs = 3;
 		}
-		else if (score >= 20000 && score < 30000)
+		else if (score->getCurrScore() >= score->getMaxScore()-(score->getMaxScore() - score->getClearScore())/2)
 		{
 			cs = 2;
 		}
-		else if (score >= 10000 && score < 20000)
+		else if (score->getCurrScore() >= score->getClearScore())
 		{
 			cs = 1;
 		}
@@ -1416,6 +1415,8 @@ int main()
 	
 	//클리어 점수 세팅
 	int total_can = BLUE_CAN + RED_CAN + GOLD_CAN;
+	//int curr_can = total_can;
+	score.setMaxScore(BLUE_CAN * 1000 + RED_CAN * 1500 + GOLD_CAN * 3000);
 	score.setClearScore(total_can * 1000);
 
 	//마우스
@@ -1542,7 +1543,7 @@ int main()
 
 		floodlight.swing();
 		
-		if (cat.getPositionY() > window.getSize().y || collisionNum == 9) //고양이가 밑으로 떨어지거나 충돌횟수가 9번이면
+		if (cat.getPositionY() > window.getSize().y) //고양이가 밑으로 떨어지거나 충돌횟수가 9번이면
 		{
 			collisionNum = 0; //장애물 충돌 횟수 초기화
 
@@ -1600,7 +1601,16 @@ int main()
 
 
 			//포물선 그리기 위한 속도, 가속도, 위치 세팅
-			arc.setArcVelocity(jumpVelocity);
+			if (move_pos.x > 0)
+			{
+				arc.setArcVelocity(jumpVelocity);
+			}
+			else
+			{
+				move_pos.x = 0;
+				jumpVelocity = jumpVelocityScale * move_pos;
+				arc.setArcVelocity(jumpVelocity);
+			}
 			arc.setStartArcVelocity(arc.getArcVelocity());
 			arc.setArcAcceleration(cat.getGravity());
 
@@ -1609,85 +1619,95 @@ int main()
 		
 
 		//전등과 부딪히면 떨어짐
-		if (cat.getBounds().intersects(floodlight.getBounds()))
+		if (cat.getIsFalling() == false)
 		{
-			cat.changeImage("./Data/Image/dizzycat.png"); //눈이 빙글빙글 도는 고양이 이미지로 바꿈
-			cat.startFalling(200.f, 300.f);
+			if (cat.getBounds().intersects(floodlight.getBounds()) || collisionNum >= 9)
+			{
+				cat.changeImage("./Data/Image/dizzycat.png"); //눈이 빙글빙글 도는 고양이 이미지로 바꿈
+				cat.startFalling(200.f, 300.f);
+			}
 		}
 		cat.update(deltaTime);
 
 		//장애물과 충돌시 튕겨나감.
-		Vector2f direction;
-		if (cat.getBounds().intersects(cup1.getBounds()) || cat.getBounds().intersects(cup2.getBounds()) ||
-			cat.getBounds().intersects(basket.getBounds()) || cat.getBounds().intersects(bottle.getBounds()) ||
-			cat.getBounds().intersects(ob_clock.getBounds()) || cat.getBounds().intersects(micro.getBounds()))
+		if (cat.getIsFalling() == false)
 		{
-			// 고양이와 컵1 충돌 체크
-			if (cat.getBounds().intersects(cup1.getBounds())) {
-				// 충돌 방향 계산
-				direction = cat.getPosition() - cup1.getPosition();
-			}
-			// 고양이와 컵2 충돌 체크
-			else if (cat.getBounds().intersects(cup2.getBounds()))
-				direction = cat.getPosition() - cup2.getPosition();
+			Vector2f direction;
+			if (cat.getBounds().intersects(cup1.getBounds()) || cat.getBounds().intersects(cup2.getBounds()) ||
+				cat.getBounds().intersects(basket.getBounds()) || cat.getBounds().intersects(bottle.getBounds()) ||
+				cat.getBounds().intersects(ob_clock.getBounds()) || cat.getBounds().intersects(micro.getBounds()))
+			{
+				// 고양이와 컵1 충돌 체크
+				if (cat.getBounds().intersects(cup1.getBounds())) {
+					// 충돌 방향 계산
+					direction = cat.getPosition() - cup1.getPosition();
+				}
+				// 고양이와 컵2 충돌 체크
+				else if (cat.getBounds().intersects(cup2.getBounds()))
+					direction = cat.getPosition() - cup2.getPosition();
 
-			// 고양이와 바구니 충돌 체크
-			else if (cat.getBounds().intersects(basket.getBounds()))
-				direction = cat.getPosition() - basket.getPosition();
+				// 고양이와 바구니 충돌 체크
+				else if (cat.getBounds().intersects(basket.getBounds()))
+					direction = cat.getPosition() - basket.getPosition();
 
-			// 고양이와 병 충돌 체크
-			else if (cat.getBounds().intersects(bottle.getBounds()))
-				direction = cat.getPosition() - bottle.getPosition();
+				// 고양이와 병 충돌 체크
+				else if (cat.getBounds().intersects(bottle.getBounds()))
+					direction = cat.getPosition() - bottle.getPosition();
 
-			// 고양이와 시계 충돌 체크
-			else if (cat.getBounds().intersects(ob_clock.getBounds()))
-				direction = cat.getPosition() - ob_clock.getPosition();
+				// 고양이와 시계 충돌 체크
+				else if (cat.getBounds().intersects(ob_clock.getBounds()))
+					direction = cat.getPosition() - ob_clock.getPosition();
 
-			// 고양이와 전자레인지 충돌 체크
-			else if (cat.getBounds().intersects(micro.getBounds()))
-				direction = cat.getPosition() - micro.getPosition();
+				// 고양이와 전자레인지 충돌 체크
+				else if (cat.getBounds().intersects(micro.getBounds()))
+					direction = cat.getPosition() - micro.getPosition();
 
-			// 단위 벡터로 정규화
-			direction = direction / sqrtf(direction.x * direction.x + direction.y * direction.y);
-			// 튕겨나가는 속도 설정
-			float bounceSpeed = 500.0f;
-			Vector2f bounceVelocity = direction * bounceSpeed;
-			// 속도 업데이트
-			cat.setVelocity(bounceVelocity);
+				// 단위 벡터로 정규화
+				direction = direction / sqrtf(direction.x * direction.x + direction.y * direction.y);
+				// 튕겨나가는 속도 설정
+				float bounceSpeed = 500.0f;
+				Vector2f bounceVelocity = direction * bounceSpeed;
+				// 속도 업데이트
+				cat.setVelocity(bounceVelocity);
 
-			//장애물 충돌 횟수 증가
-			if (cat.getIsFalling() == false) //전등에 부딪혀서 떨어지는 경우는 제외
+				//장애물 충돌 횟수 증가
+				//if (cat.getIsFalling() == false) //전등에 부딪혀서 떨어지는 경우는 제외
+				//고양이 속도가 너무 빠르면 (눈으로 보기에) 한 번 충돌에 횟수 여러번 증가해버림
 				collisionNum += 1;
+			}
 		}
 
 		//can과 충돌
 		if (cat.getIsFalling() == false)//전등에 부딪힌 후 떨어질 때는 통조림 안 먹어짐.
 		{
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < BLUE_CAN; i++) {
 				if (cat.getBounds().intersects(blue_can[i].getBounds()))
 				{
 					blue_can[i].getFoodScore(&score, 1);                //파란캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					blue_can[i].getsprite()->setPosition(5000, 5000);
 					bcsound.play();
+					//curr_can--;
 				}
 			}
-			for (int i = 0; i < 7; i++) {
+			for (int i = 0; i < RED_CAN; i++) {
 				if (cat.getBounds().intersects(red_can[i].getBounds()))
 				{
 					red_can[i].getFoodScore(&score, 2);               //빨간캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					red_can[i].getsprite()->setPosition(5000, 5000);
 					rcsound.play();
+					//curr_can--;
 				}
 			}
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < GOLD_CAN; i++) {
 				if (cat.getBounds().intersects(gold_can[i].getBounds()))
 				{
 					gold_can[i].getFoodScore(&score, 3);               //금캔
 					game_score.setString("Score: " + to_string(score.getCurrScore()));
 					gold_can[i].getsprite()->setPosition(5000, 5000);
 					gcsound.play();
+					//curr_can--;
 				}
 			}
 		}
@@ -1725,7 +1745,7 @@ int main()
 			}
 		}
 
-		star.setStar(score.getCurrScore());
+		star.setStar(&score);
 
 		// 그리기
 		window.clear(Color::White);
@@ -1739,13 +1759,13 @@ int main()
 			window.draw(SBT);
 			window.draw(QBT);
 		}
-		else if (jn.getLeftJump() <= 0) {
-			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 통조림을 다 먹으면
-			// 클리어한 경우
-
+		else if (jn.getLeftJump() <= 0 || score.getCurrScore() >= score.getMaxScore()) {
+			
 			view.setCenter(Vector2f(960 / 2, 540 / 2));
 			window.setView(view);
 
+			// 일정 점수 이상이면 게임 클리어라고 뜨도록 해야함 + 통조림을 다 먹으면
+			// 클리어한 경우
 			if (score.getCurrScore() >= score.getClearScore())
 			{
 				game_status.setString("Game Clear");
@@ -1772,21 +1792,22 @@ int main()
 		else {
 			window.setView(view);
 			window.draw(backgroundSprite);
+
 			floodlight.draw(window);
-			for (int i = 0; i < 8; i++) {
+
+			for (int i = 0; i < BLUE_CAN; i++) {
 				if (blue_can[i].getPosition() != 5000)
 					blue_can[i].draw(window);
 			}
-			for (int i = 0; i < 7; i++) {
+			for (int i = 0; i < RED_CAN; i++) {
 				if (red_can[i].getPosition() != 5000)
 					red_can[i].draw(window);
 			}
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < GOLD_CAN; i++) {
 				if (gold_can[i].getPosition() != 5000)
 					gold_can[i].draw(window);
 			}
-			cat.draw(window);
-			window.draw(girlSprite);
+			
 			cup1.draw(window);
 			cup2.draw(window);
 			bottle.draw(window);
@@ -1806,15 +1827,19 @@ int main()
 
 				for (float tldt = 0; tldt <= 0.015; tldt += 0.0001)
 				{
-					if (ArcDrawCount == 0 || ArcDrawCount % 10 == 0)
+					arc.moveArc(tldt);
+					ArcDrawCount++;
+
+					if (ArcDrawCount % 10 == 0)
 					{
 						window.draw(arc.getArc());
 					}
-
-					arc.moveArc(tldt);
-					ArcDrawCount++;
 				}
 			}
+
+			cat.draw(window);
+			window.draw(girlSprite);
+
 			window.setView(scoreview);
 			window.draw(scoreboard);
 			window.draw(game_score);
