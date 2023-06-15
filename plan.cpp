@@ -210,10 +210,10 @@ public:
 //포물선 클래스
 class Arc
 {
-	//각도와 파워에 따라 포물선 조절(*파워게이지 따로 안 만들어도 됨)
+	//각도와 파워에 따라 포물선 조절
 private:
 	CircleShape arc;
-	//위치좌표, 크기, 각도
+	//위치좌표, 크기
 	float posX;
 	float posY;
 	float startArcPosX = 0;
