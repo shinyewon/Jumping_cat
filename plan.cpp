@@ -179,15 +179,6 @@ public:
 			}
 
 			sprite.setPosition(position);
-
-			/* 필요 없는 코드인 듯
-			if (position.y >= 600.f) // 고양이가 바닥에 닿으면
-			{
-				isFalling = false;
-				velocity = Vector2f(0.f, 0.f);
-				sprite.setRotation(0.f);
-			}
-			*/
 		}
 		else if (isFalling)
 		{
@@ -1630,7 +1621,7 @@ int main()
 
 		floodlight.swing();
 		
-		if (cat.getPositionY() > window.getSize().y) //고양이가 밑으로 떨어지거나 충돌횟수가 9번이면
+		if (cat.getPositionY() > window.getSize().y) //고양이가 밑으로 떨어지면
 		{
 			collisionNum = 0; //장애물 충돌 횟수 초기화
 
@@ -1678,7 +1669,7 @@ int main()
 			if (drag_dis <= 70)
 				cat.setScale((float)(1597 * 0.07 + drag_dis) / cat.getTextureSizeX(), (float)(1277 * 0.07 - drag_dis) / cat.getTextureSizeY());
 
-			//최대 속도 제한 수정
+			//최대 속도 제한
 			if (drag_dis > 70) {
 				float drag_ratio = 70 / drag_dis;
 				move_pos.x *= drag_ratio;
@@ -1757,9 +1748,6 @@ int main()
 				// 속도 업데이트
 				cat.setVelocity(bounceVelocity);
 
-				//장애물 충돌 횟수 증가
-				//if (cat.getIsFalling() == false) //전등에 부딪혀서 떨어지는 경우는 제외
-				//고양이 속도가 너무 빠르면 (눈으로 보기에) 한 번 충돌에 횟수 여러번 증가해버림
 				collisionNum += 1;
 			}
 		}
