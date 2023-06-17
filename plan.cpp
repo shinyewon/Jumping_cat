@@ -472,7 +472,7 @@ public:
 	}
 };
 
-//장애물1 클래스(컵, 병, 시계, 바구니, 전자레인)
+//장애물1 클래스(컵, 병, 시계, 바구니, 전자레인지)
 class Obstacle1
 {
 
@@ -790,11 +790,11 @@ public:
 	}
 };
 
-// 
+// 캔 충돌 시 점수 획득
 void Canned_Food::getFoodScore(Score* score, int size)
 {
 	//사이즈별로 점수부여
-	//ex) size 1 = 1000점
+	//    size 1 = 1000점
 	//    size 2 = 1500점
 	//    size 3 = 3000점 ...
 	if (size == 1) {//파랑
