@@ -11,6 +11,7 @@
 using namespace std;
 using namespace sf;
 
+//캔 종류별 개수 세팅
 #define BLUE_CAN	8
 #define RED_CAN		7
 #define GOLD_CAN	4
@@ -210,7 +211,8 @@ private:
 	float startArcPosX = 0;
 	float startArcPosY = 0;
 	float radius;
-
+	
+	//속도, 가속도
 	Vector2f velocity;
 	Vector2f startArcVelocity;
 	float velocityX;
