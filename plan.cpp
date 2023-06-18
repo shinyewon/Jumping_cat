@@ -202,17 +202,19 @@ public:
 //포물선 클래스
 class Arc
 {
-	//각도와 파워에 따라 포물선 조절
+	//마우스 드래그(각도 + 파워)에 따라 포물선 조절
 private:
 	CircleShape arc;
-	//위치좌표, 크기
+	//위치좌표
 	float posX;
 	float posY;
+	//포물선을 그리기 시작할 위치좌표
 	float startArcPosX = 0;
 	float startArcPosY = 0;
+	//크기(반지름)
 	float radius;
 	
-	//속도, 가속도
+	//속도(각도 + 파워), 시작속도(가속도 더해지기 전), 가속도(중력)
 	Vector2f velocity;
 	Vector2f startArcVelocity;
 	float velocityX;
@@ -222,7 +224,7 @@ private:
 	Color color;
 
 public:
-	//생성자, 소멸자
+	//생성자
 	Arc(float x, float y, float r)
 	{
 		posX = x;
@@ -245,7 +247,7 @@ public:
 		return arc;
 	}
 
-	//위치좌표, 크기, 각도 setter/getter
+	//위치좌표, 크기 setter/getter
 	void setArcPos(float x, float y)
 	{
 		posX = x;
@@ -268,6 +270,7 @@ public:
 		return radius;
 	}
 
+	//속도, 가속도 setter/getter
 	void setArcVelocity(Vector2f jumpVelocity)
 	{
 		velocity = jumpVelocity;
@@ -306,6 +309,7 @@ public:
 		return acceleration;
 	}
 
+	//시작위치좌표, 시작속도 setter/getter
 	void setStartArcPosition(float x, float y)
 	{
 		startArcPosX = x;
@@ -332,8 +336,8 @@ public:
 	//이동(move)
 	void moveArc(float dt)
 	{
-		setArcPos(getArcPosX() + getArcVelocityX() * dt, getArcPosY() + getArcVelocityY() * dt);
-		setArcVelocityY(getArcVelocityY() + getArcAcceleration() * dt);
+		setArcPos(getArcPosX() + getArcVelocityX() * dt, getArcPosY() + getArcVelocityY() * dt);	//위치좌표 + 속도 * 각 프레임 사이에 걸리는 시간
+		setArcVelocityY(getArcVelocityY() + getArcAcceleration() * dt);		//속도 + 가속도 * 각 프레임 사이에 걸리는 시간
 
 		arc.setPosition(getArcPosX(), getArcPosY());
 	}
