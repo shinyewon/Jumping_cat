@@ -802,7 +802,7 @@ void Canned_Food::getFoodScore(Score* score, int size)
 	//사이즈별로 점수부여
 	//    size 1 = 1000점
 	//    size 2 = 1500점
-	//    size 3 = 3000점 ...
+	//    size 3 = 3000점
 	if (size == 1) {//파랑
 		score->setCurrScore(score->getCurrScore() + 1000);
 	}
@@ -822,8 +822,10 @@ private:
 
 	//현재 별 개수
 	int curstar;
+	
 	//이 스테이지 누적 최대 별 개수
-	int stagemaxstar;//스테이지 종료시 업데이트
+	//스테이지 종료시 업데이트
+	int stagemaxstar;
 public:
 	//생성자
 	Star() {
@@ -1406,7 +1408,7 @@ int main()
 	backgroundSprite.setTexture(backgroundTexture);
 	backgroundSprite.setScale((float)(window.getSize().x * 2) / backgroundSize.x, (float)window.getSize().y / backgroundSize.y);
 
-	//배경 시점
+	//화면 이동
 	View view(Vector2f(window.getSize().x / 2, window.getSize().y / 2), Vector2f(window.getSize().x, window.getSize().y));
 	//게임 진행 중 점수 표시 이동,배경
 	View scoreview;
@@ -1457,7 +1459,7 @@ int main()
 	Vector2i pixelPos1;
 	Vector2i pixelPos2;
 	
-	//준비상태인가 0=발사전 1=발사후
+	//고양이 발사 전,후 확인 / 0=발사전 1=발사후
 	int ready = 0;
 
 	bool reset = false;
@@ -1801,7 +1803,7 @@ int main()
 			view.setCenter(cat.getPositionX(), window.getSize().y / 2);
 		}
 
-		if (cat.getIsJumping() == false) {
+		if (cat.getIsJumping() == false) { //고양이 발사 전 마우스 드래그로 화면 이동
 
 			if ((mouseispressed == 1) && (cat_is_clicked == false) && pixelPos1.x > 0 && pixelPos1.x < backgroundSize.x)
 			{
@@ -1811,12 +1813,12 @@ int main()
 				mcm.x /=5;
 				mcm.y = 0;
 
-				if (view.getCenter().x < window.getSize().x / 2 - mcm.x) // 화면이 배경 왼-밖으로 나가면 안됨
+				if (view.getCenter().x < window.getSize().x / 2 - mcm.x) // 화면이 배경 왼쪽-밖으로 나가면 안됨
 				{
 					if(mcm.x<0)
 					    mcm.x = 0;
 				}
-				if (view.getCenter().x > window.getSize().x * 2 - window.getSize().x / 2 - mcm.x) // 화면이 배경 오-밖으로 나가면 안됨
+				if (view.getCenter().x > window.getSize().x * 2 - window.getSize().x / 2 - mcm.x) // 화면이 배경 오른쪽-밖으로 나가면 안됨
 				{
 					if (mcm.x >0)
 						mcm.x = 0;
