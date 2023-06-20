@@ -718,13 +718,13 @@ private:
 	int clearScore;
 	//최고점수
 	int maxScore;
-	//위치, 크기(글자 크기 등)
+	//위치, 글자 크기
 	float posX;
 	float posY;
 	float size;
 
 public:
-	//생성자, 소멸자
+	//생성자
 	Score(float x, float y, float s)
 	{
 		posX = x;
@@ -736,7 +736,7 @@ public:
 		maxScore = 0;
 	}
 
-	//위치, 크기 등 setter/getter
+	//위치, 글자 크기 setter/getter
 	void setScorePos(float x, float y)
 	{
 		posX = x;
@@ -983,23 +983,25 @@ public:
 	}
 };
 
+//메인메뉴 클래스
 class MainMenu
 {
 private:
 	RectangleShape StartButton;
-	//위치좌표,크기
+	//시작 버튼 위치좌표, 크기
 	float SBposX;
 	float SBposY;
 	Vector2f SBsize;
 	Color SBcolor;
 
 	RectangleShape QuitButton;
-	//위치좌표,크기
+	//종료 버튼 위치좌표, 크기
 	float QBposX;
 	float QBposY;
 	Vector2f QBsize;
 	Color QBcolor;
 
+	//메인화면 텍스트 위치좌표, 글자 크기
 	float MainTposX;
 	float MainTposY;
 	float MainTsize;
